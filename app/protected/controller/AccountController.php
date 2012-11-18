@@ -27,6 +27,9 @@ class AccountController extends DooController{
     }
 
     public function register(){
+        if (md5(md5(md5(strtolower($_POST['captcha_code'])))) !=  @$_COOKIE['captcha']) {
+          return $this->view()->render('registration', $data);
+        }
         Doo::loadModel('User');
         $user = new User();
         $user->username = $_POST['username'];
