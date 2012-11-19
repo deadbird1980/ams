@@ -1298,6 +1298,9 @@
                             }
 
                             break;
+                        case 'captcha':
+                            if ($.md5($.md5($.md5(element.val()))) != $.cookie('captcha'))  control_is_valid = false;
+                            break;
 
                         case 'compare':
 

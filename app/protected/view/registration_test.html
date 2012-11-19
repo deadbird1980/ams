@@ -3,8 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- include 'header' -->
+        <script type="text/javascript" src="{{baseurl}}global/js/jquery.cookie.js"></script>
+        <script type="text/javascript" src="{{baseurl}}global/js/jquery.md5.js"></script>
     </head>
 	<body>
+        <div>
+            <span>{{message}}</span>
+        </div>
         <table>
             <tbody><tr>
                 <td valign="top">
@@ -37,12 +42,12 @@
         <tr class="row even"><td><label for="confirm_password" id="label_confirm_password">Confirm password:</label></td>
             <td><input name="confirm_password" id="confirm_password" value="asdfasdf" class="control password validate[compare(password)]" type="password"></td></tr>
         <tr class="row even">
-            <td></td><td><img src="{{baseurl}}process.php?captcha=1" alt=""><label for="captcha_code" id="label_captcha_code">Are you human?</label><input name="captcha_code" id="captcha_code" value="" class="control text validate[captcha]" type="text"><div class="note" id="note_captcha" style="width: 200px">You must enter the characters with black color that stand
+            <td></td><td><input name="confirm_captcha_code" id="confirm_captcha_code" type="hidden"><img src="{{baseurl}}process.php?captcha=1" alt=""><label for="captcha_code" id="label_captcha_code">Are you human?</label><input name="captcha_code" id="captcha_code" value="" class="control text validate[captcha]" type="text"><div class="note" id="note_captcha" style="width: 200px">You must enter the characters with black color that stand
     out from the other characters</div></td></tr>
     <tr class="row last"><td></td>
         <td><input name="btnsubmit" id="btnsubmit" value="Submit" class="submit" type="submit"></td></tr></tbody></table>
                       </form>
-                      <script type="text/javascript">function init_f4203791eba5d19407ff080f9022bb0f(){if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined"){setTimeout("init_f4203791eba5d19407ff080f9022bb0f()",100);return}$("#form").Zebra_Form({scroll_to_error:true,tips_position:'left',close_tips:true,validate_on_the_fly:false,validate_all:false,error_messages:{"firstname":{"required":"First name is required!"},"lastname":{"required":"Last name is required!"},"email":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},"confirm_password":{"compare":"Password not confirmed correctly!"},"captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}init_f4203791eba5d19407ff080f9022bb0f()</script>
+                      <script type="text/javascript">function init(){if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined"){setTimeout("init()",100);return}$("#form").Zebra_Form({scroll_to_error:true,tips_position:'left',close_tips:true,validate_on_the_fly:false,validate_all:false,error_messages:{"firstname":{"required":"First name is required!"},"lastname":{"required":"Last name is required!"},"email":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},"confirm_password":{"compare":"Password not confirmed correctly!"},"captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}init()</script>
                     </div>
 
 

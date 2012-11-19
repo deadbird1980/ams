@@ -22,12 +22,16 @@ class AccountController extends DooController{
     public function registration(){
         //labels
         $data['welcome'] = array('welcome');
+        $data['message'] = '';
         $data['baseurl'] = Doo::conf()->APP_URL;
+        $this->view()->render('header', $data);
         $this->view()->render('registration_test', $data);
     }
 
     public function register(){
+        $data['baseurl'] = Doo::conf()->APP_URL;
         if (md5(md5(md5(strtolower($_POST['captcha_code'])))) !=  @$_COOKIE['captcha']) {
+          $data['message'] = 'Please input right string from the image';
           return $this->view()->render('registration', $data);
         }
         Doo::loadModel('User');
@@ -35,7 +39,7 @@ class AccountController extends DooController{
         $user->username = $_POST['username'];
         $user->pwd = $_POST['password'];
         if ($user->find(array('select'=>'id', 'limit'=>1)) != Null) {
-          $data['msg'] = 'User name exists, please try another one';
+          $data['message'] = 'User name exists, please try another one';
           return $this->view()->render('registration', $data);
         }
         $user->insert();
