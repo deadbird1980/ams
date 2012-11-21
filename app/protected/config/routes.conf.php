@@ -23,26 +23,18 @@ $route['post']['/register'] = array('AccountController', 'register');
 $route['post']['/login'] = array('AccountController', 'login');
 $route['*']['/logout'] = array('AccountController', 'logout');
 
+//Admin pages
+$route['*']['/admin'] = array('AdminController', 'home');
+
 //User pages
-$route['*']['/users'] = array('UserController', 'index');
-$route['*']['/users/:username'] = array('UserController', 'edit');
-$route['*']['/users/create'] = array('UserController', 'create');
-
-//Blog
-$route['*']['/sns/blog'] = array('BlogController', 'index');
-$route['*']['/sns/blog/comments'] = array('BlogController', 'comments');
-$route['*']['/sns/blog/comments/delete'] = array('BlogController', 'deleteComment');
-$route['*']['/sns/blog/write'] = array('BlogController', 'writePost');
-
-//Sns
-$route['*']['/sns/games'] = array('SnsController', 'game');
-$route['*']['/sns/people/:uname'] = array('SnsController', 'viewProfile');
-$route['*']['/sns/ban'] = array('SnsController', 'banUser');
+$route['*']['/admin/users'] = array('UserController', 'index');
+$route['*']['/admin/users/:id'] = array('UserController', 'edit');
+$route['post']['/admin/users/:id'] = array('UserController', 'update');
+$route['*']['/admin/users/create'] = array('UserController', 'create');
 
 //Error
-$route['*']['/error/member'] = array('ErrorController', 'memberDefaultError');
-$route['*']['/error/member/sns/:error'] = array('ErrorController', 'memberSnsDeny');
-$route['*']['/error/member/blog/:error'] = array('ErrorController', 'memberBlogDeny');
+$route['*']['/error/user'] = array('ErrorController', 'userDefaultError');
+$route['*']['/error/user/admin/:error'] = array('ErrorController', 'userAdminDeny');
 
 $route['*']['/error/admin/sns/:error'] = array('ErrorController', 'adminSnsDeny');
 
