@@ -1,30 +1,45 @@
 <?php
+require_once 'AdminController.php';
 
-class UserController extends DooController {
-	
-	public function beforeRun($resource, $action){
-		session_start();
-		
-		//if not login, group = anonymous
-		$role = (isset($_SESSION['user']['group'])) ? $_SESSION['user']['group'] : 'anonymous';
-		
-		if($role!='anonymous'){
-				$role = 'admin';
-		}
-		
-		//check against the ACL rules
-		if($rs = $this->acl()->process($role, $resource, $action )){
-			//echo $role .' is not allowed for '. $resource . ' '. $action;
-			return $rs;
-		}
-	}
+class UserController extends AdminController {
 
     function index() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
+        Doo::loadHelper('DooPager');
         Doo::loadModel('User');
-        $user = new User();
-        $data['users'] = $user->find();
-		$this->render('user_list', $data);
+
+        $u = new User();
+        //if default, no sorting defined by user, show this as pager link
+        if($this->sortField=='username' && $this->orderType=='desc'){
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
+        }else{
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
+        }
+
+        if(isset($this->params['pindex']))
+            $pager->paginate(intval($this->params['pindex']));
+        else
+            $pager->paginate(1);
+
+        $data['rootUrl'] = Doo::conf()->APP_URL;
+        $data['baseurl'] = Doo::conf()->APP_URL;
+        $data['pager'] = $pager->output;
+
+        //Order by ASC or DESC
+        if($this->orderType=='desc'){
+            $data['users'] = $u->limit($pager->limit, null, $this->sortField,
+                                        //we don't want to select the Content (waste of resources)
+                                        array('select'=>'id,username,email,first_name,last_name')
+                                  );
+            $data['order'] = 'asc';
+        }else{
+            $data['users'] = $u->limit($pager->limit, $this->sortField, null,
+                                        //we don't want to select the Content (waste of resources)
+                                        array('select'=>'id,username,email,first_name,last_name')
+                                  );
+            $data['order'] = 'desc';
+        }
+
+        $this->render('admin', $data);
     }
 
 	function create() {
@@ -33,20 +48,15 @@ class UserController extends DooController {
 		$this->render('user', $data);
 	}
 
-	function viewProfile() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Profile of ' . $this->params['uname'];
-		$data['content'] = 'You can access this~';
-		$data['printr'] = 'Hi I am '. $this->params['uname'] . ' and I am a cool guy.';
-		$this->render('template', $data);
-	}
+	function edit() {
+		$this->data['title'] = 'User';
+        Doo::loadModel('User');
 
-	function banUser() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Banning User';
-		$data['content'] = 'You can access this~';
-		$data['printr'] = '<input type="button" value="Ban this user?" />';
-		$this->render('template', $data);
+        $u = new User();
+        $u->id = $this->params['id'];
+        $user = $this->db()->find($u, array('limit'=>1));
+		$this->data['user'] = $user;
+		$this->renderAction('admin_user');
 	}
 
 }

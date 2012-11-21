@@ -1,78 +1,50 @@
 <?php
+require 'BaseController.php';
 
-class ErrorController extends DooController {
+class ErrorController extends BaseController {
 
-	function memberDefaultError() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Member is not allowed!';
-		$data['content'] = 'Not allowed';
-		$data['printr'] = 'Access denied!';
-		$this->render('template', $data);
+	function userDefaultError() {
+		$this->data['title'] = 'Member is not allowed!';
+		$this->data['content'] = 'Not allowed';
+		$this->data['printr'] = 'Access denied!';
+		$this->renderAction('template');
 	}
 
-	function memberSnsDeny() {
+	function userAdminDeny() {
 		switch($this->params['error']){
-			case 'notAdmin': 
-				$error = 'You are not the SNS admin!';
+			case 'notAdmin':
+				$error = 'You are not admin!';
 				break;
-			case 'notVip': 
-				$error = 'Sorry, this is for VIP only.';
-				break;				
-			default: 
+			default:
 				$error = 'Not allowed';
-				break;				
-		}
-		
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Member is not allowed!';
-		$data['content'] = $error;
-		$data['printr'] = 'Access denied!';
-		$this->render('template', $data);
-	}
-
-	function memberBlogDeny() {
-		switch($this->params['error']){
-			case 'notAdmin': 
-				$error = 'You are not the Blog admin!';
 				break;
-			default: 
-				$error = 'Not allowed';
-				break;				
 		}
-		
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Member is not allowed!';
-		$data['content'] = $error;
-		$data['printr'] = 'Access denied!';
-		$this->render('template', $data);
+
+		$this->data['title'] = 'Member is not allowed!';
+		$this->data['content'] = $error;
+		$this->data['printr'] = 'Access denied!';
+		$this->renderAction('template');
 	}
 
-	function vipDefaultError() {
-		echo 'You are visiting '.$_SERVER['REQUEST_URI'];
-	}
-
-	function adminSnsDeny() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Admin is not allowed!';
-		$data['content'] = ($this->params['error']=='vipOnly') ? 'This is VIP only!' : 'Not allowed';
-		$data['printr'] = 'Access denied!';
-		$this->render('template', $data);
+	function adminUserDeny() {
+		$this->data['title'] = 'Admin is not allowed!';
+		$this->data['content'] = ($this->params['error']=='vipOnly') ? 'This is VIP only!' : 'Not allowed';
+		$this->data['printr'] = 'Access denied!';
+		$this->renderAction('template');
 	}
 
 	function error404() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Page not found!';
-		$data['content'] = 'default 404 error';
-		$data['printr'] = 'Nothing is found...';
-		$this->render('template', $data);
+		$this->data['title'] = 'Page not found!';
+		$this->data['content'] = 'default 404 error';
+		$this->data['printr'] = 'Nothing is found...';
+		$this->renderAction('template');
 	}
-	
+
 	function loginRequire() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'Login Required!';
-		$data['content'] = 'You cannot access this!';
-		$data['printr'] = 'You have to be logined to access this section.';
-		$this->render('template', $data);
+		$this->data['title'] = 'Login Required!';
+		$this->data['content'] = 'You cannot access this!';
+		$this->data['printr'] = 'You have to be logined to access this section.';
+		$this->renderAction('template');
 	}
 
 }
