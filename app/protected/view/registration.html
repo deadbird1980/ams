@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <!-- include 'header' -->
+        <script type="text/javascript" src="{{baseurl}}global/js/jquery.cookie.js"></script>
     </head>
 	<body>
         <table>
@@ -21,6 +22,9 @@
                                    <label for="zebra_honeypot_form" style="display:none">Leave this field blank</label>
 <input name="zebra_honeypot_form" id="zebra_honeypot_form" value="" class="control text" autocomplete="off" type="text">
 <input name="zebra_csrf_token_form" id="zebra_csrf_token_form" value="53ff8aae947bd4d2c98dde2cb6d02479" type="hidden"></div>
+        <div>
+            <span>{{message}}</span>
+        </div>
 <table><tbody>
         <tr class="row">
             <td><label for="firstname" id="label_firstname">First name:<span class="required">*</span></label></td>
@@ -45,7 +49,19 @@
     <tr class="row last"><td></td>
         <td><input name="btnsubmit" id="btnsubmit" value="Submit" class="submit" type="submit"></td></tr></tbody></table>
                       </form>
-                      <script type="text/javascript">function init_f4203791eba5d19407ff080f9022bb0f(){if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined"){setTimeout("init_f4203791eba5d19407ff080f9022bb0f()",100);return}$("#form").Zebra_Form({scroll_to_error:true,tips_position:'left',close_tips:true,validate_on_the_fly:false,validate_all:false,error_messages:{"firstname":{"required":"First name is required!"},"lastname":{"required":"Last name is required!"},"email":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},"confirm_password":{"compare":"Password not confirmed correctly!"},"captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}init_f4203791eba5d19407ff080f9022bb0f()</script>
+                      <script type="text/javascript">
+                          function init() {
+                              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+                                  setTimeout("init()",100);
+                                  return
+                              }
+                              $("#form").Zebra_Form({scroll_to_error:true,
+                                      tips_position:'left',
+                                      close_tips:true,
+                                      validate_on_the_fly:false,
+                                      validate_all:false,
+                                      error_messages:{"firstname":{"required":"First name is required!"},"lastname":{"required":"Last name is required!"},"email":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},"confirm_password":{"compare":"Password not confirmed correctly!"},
+                                      "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}init()</script>
                     </div>
 
 
