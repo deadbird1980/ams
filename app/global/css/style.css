@@ -1,8 +1,95 @@
 body { text-align: left; margin: 20px }
 
-.header { background: #888; padding: 10px 5px; font-weight: bold }
+.list
+{
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    width:100%;
+    border-collapse:collapse;
+}
+.list td, .list th 
+{
+    font-size:1em;
+    border:1px solid #98bf21;
+    padding:3px 7px 2px 7px;
+}
+.list th 
+{
+    font-size:1.1em;
+    text-align:left;
+    padding-top:5px;
+    padding-bottom:4px;
+    background-color:#A7C942;
+    color:#ffffff;
+}
+.list tr.alt td 
+{
+    color:#000000;
+    background-color:#EAF2D3;
+}
+.header {
+    height: 60px;
+    padding: 6px 6px 10px 5px;
+}
+a.logo {
+    background: url("../img/logo.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 60px;
+    text-decoration: none;
+    width: 300px;
+}
+.header-logo {
+    float: left;
+    margin-top: 5px;
+    text-align: left;
+}
+.headermenu {
+    background: none repeat scroll 0 0 #7692B9;
+    color: #FFFFFF;
+    font-size: 15px;
+    height: 20px;
+    letter-spacing: 1px;
+    margin: 0 5px;
+    padding: 8px 5px 9px;
+    text-align: center;
+    vertical-align: middle;
+}
+.headermenu ul {
+    margin: 0;
+    padding: 0;
+}
+.headermenu li {
+    display: inline;
+    list-style: none outside none;
+}
+.headermenu a {
+    color: #FFFFFF;
+    font-size: 0.9em;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+.header-selectors-wrapper {
+    float: right;
+    text-align: right;
+    width: 500px;
+}
+
+.header { background: #FFF; padding: 10px 5px; font-weight: bold }
 .header a { color: #FFF; text-decoration: none }
 .header span { font-weight: normal }
+.content {
+ align : center
+}
+.footer {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-top: 4px solid #666666;
+    clear: both;
+    height: 35px;
+    padding: 5px;
+}
 .example { background: #ABCDEF; padding: 10px 5px; font-weight: bold; margin: 0 0 20px }
 .example a { color: #123456; font-weight: normal }
 
