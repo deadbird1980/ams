@@ -3,4 +3,5 @@
 testserver/*log
 testserver/lock.*
 testserver/pid
-app/protected/cache/
+app/protected/cache/*
+app/protected/viewc/*
