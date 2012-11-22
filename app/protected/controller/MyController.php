@@ -3,11 +3,7 @@ require_once 'BaseController.php';
 
 class MyController extends BaseController {
 
-    //Default sort by createtime field
-    public $sortField = 'username';
-    public $orderType = 'desc';
-    public static $tags;
-
+    protected $user;
 	public function beforeRun($resource, $action){
         parent::beforeRun($resource, $action);
 		session_start();
@@ -22,49 +18,33 @@ class MyController extends BaseController {
 		//check against the ACL rules
 		if($rs = $this->acl()->process($role, $resource, $action )){
 			//echo $role .' is not allowed for '. $resource . ' '. $action;
-			return $rs;
+			//return $rs;
 		}
+
+        Doo::loadModel('User');
+
+        $u = new User();
+        $u->id = $this->params['id'];
+        $this->user = $this->db()->find($u, array('limit'=>1));
 	}
 
     /**
      * Display the list of paginated Posts (draft and published)
      */
 	function home() {
-        Doo::loadHelper('DooPager');
+        $this->renderAction('my');
+	}
+
+    function profile() {
+		$this->data['title'] = 'User';
         Doo::loadModel('User');
 
         $u = new User();
-        //if default, no sorting defined by user, show this as pager link
-        if($this->sortField=='username' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
-        }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
-        }
-
-        if(isset($this->params['pindex']))
-            $pager->paginate(intval($this->params['pindex']));
-        else
-            $pager->paginate(1);
-
-        $this->data['pager'] = $pager->output;
-
-        //Order by ASC or DESC
-        if($this->orderType=='desc'){
-            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                        //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,username,email,first_name,last_name')
-                                  );
-            $this->data['order'] = 'asc';
-        }else{
-            $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
-                                        //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,username,email,first_name,last_name')
-                                  );
-            $this->data['order'] = 'desc';
-        }
-
-        $this->renderAction('admin');
-	}
+        $u->id = $this->params['id'];
+        $user = $this->db()->find($u, array('limit'=>1));
+		$this->data['user'] = $user;
+		$this->renderAction('my_profile');
+    }
 
 }
 ?>
