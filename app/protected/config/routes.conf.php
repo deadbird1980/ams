@@ -32,6 +32,12 @@ $route['*']['/admin/users/:id'] = array('UserController', 'edit');
 $route['post']['/admin/users/:id'] = array('UserController', 'update');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
 
+//my page
+$route['*']['/my'] = array('MyController', 'home');
+$route['*']['/my/profile'] = array('MyController', 'profile');
+$route['post']['/my/user/update'] = array('UserController', 'update');
+$route['*']['/my/application/'] = array('ApplicationController', 'create');
+
 //Error
 $route['*']['/error/user'] = array('ErrorController', 'userDefaultError');
 $route['*']['/error/user/admin/:error'] = array('ErrorController', 'userAdminDeny');
