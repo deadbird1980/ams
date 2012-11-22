@@ -56,9 +56,13 @@ class AccountController extends BaseController{
                             $_SESSION['user'] = array(
                                                         'id'=>$user->id, 
                                                         'username'=>$user->username, 
-                                                        'group'=>'admin', 
+                                                        'group'=>$user->group, 
                                                     );
-                            return Doo::conf()->APP_URL . 'index.php/admin/';
+                            if ($user->isAdmin()) {
+                                return Doo::conf()->APP_URL . 'index.php/admin/';
+                            } else {
+                                return Doo::conf()->APP_URL . 'index.php/my/';
+                            }
                     }
             }
         }

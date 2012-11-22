@@ -21,5 +21,13 @@ class User extends DooSmartModel{
     function __construct(){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Food::_count(), Food::getById()
     }
+
+    function isAdmin() {
+      return $this->group == 'admin';
+    }
+
+    function isUser() {
+      return $this->group == 'user';
+    }
 }
 ?>
