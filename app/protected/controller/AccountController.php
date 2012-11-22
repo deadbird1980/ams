@@ -7,6 +7,7 @@ class AccountController extends BaseController{
 		session_start();
 		if(isset($_SESSION['user'])){
 			$this->data['user'] = $_SESSION['user'];
+            return $this->afterLogin();
 		}else{
 			$this->data['user'] = null;
 		}
@@ -37,6 +38,7 @@ class AccountController extends BaseController{
         $this->data['message'] = 'User registered';
         $this->renderAction('registered');
     }
+
 
     public function login(){
         if(isset($_POST['username']) && isset($_POST['password']) ){
@@ -76,6 +78,14 @@ class AccountController extends BaseController{
         unset($_SESSION['user']);
         session_destroy();
         return Doo::conf()->APP_URL;
+    }
+
+    protected function afterLogin() {
+        if ($_SESSION['user']['group'] == 'admin') {
+            return Doo::conf()->APP_URL . 'index.php/admin/';
+        } else {
+            return Doo::conf()->APP_URL . 'index.php/my/';
+        }
     }
 
 }
