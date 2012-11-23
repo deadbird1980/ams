@@ -1,0 +1,36 @@
+        <div class="list">
+        <!-- if {{isset(users)}} && !{{empty(users)}} -->
+        <table class="list">
+            <tbody>
+
+                <tr>
+                <th># </th>
+                <th>User Name </th>
+                <th>First Name </th>
+                <th>Last Name </th>
+                <th>Birthday </th>
+                <th>Address </th>
+                <th>Email </th>
+                <th>Phone</th>
+                <th>Applications</th>
+                </tr>
+                <!-- loop users -->
+                <tr>
+                    <td><a href='{{baseurl}}index.php/admin/users/{{users' value.@id}}'>{{users' value.@id}}</a></td>
+                <td>{{users' value.@username}}</td>
+                <td>{{users' value.@first_name}}</td>
+                <td>{{users' value.@last_name}}</td>
+                <td>{{users' value.@birthday}}</td>
+                <td>{{users' value.@local_address}}</td>
+                <td>{{users' value.@email}}</td>
+                <td>{{users' value.@phone}}</td>
+                <td>{{users' value.@phone}}</td>
+                </tr>
+                <!-- endloop -->
+
+        </tbody></table>
+        <!-- endif -->
+        </div>
+
+        <hr class="divider"/>
+        {{pager}}
