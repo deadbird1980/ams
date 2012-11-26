@@ -74,9 +74,7 @@ class AccountController extends BaseController{
     }
 
     public function logout(){
-        session_start();
-        unset($_SESSION['user']);
-        session_destroy();
+        $this->session->destroy();
         return Doo::conf()->APP_URL;
     }
 
