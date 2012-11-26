@@ -3,11 +3,17 @@
 class BaseController extends DooController {
 
     protected $data = array();
+    protected $session;
+    protected $auth;
 
 	public function beforeRun($resource, $action){
 
         $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
         $this->data['message'] = '';
+        Doo::loadCore('session/DooSession');
+        $this->session = new DooSession('ams');
+        Doo::loadCore('auth/DooAuth');
+        $this->auth = new DooAuth('ams');
 	}
 
     protected function renderAction($view, $useLayout = false) {

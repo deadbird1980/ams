@@ -4,9 +4,8 @@ require_once 'BaseController.php';
 class AccountController extends BaseController{
 
     public function index(){
-		session_start();
-		if(isset($_SESSION['user'])){
-			$this->data['user'] = $_SESSION['user'];
+		if(isset($this->session->user)){
+			$this->data['user'] = $session->user;
             return $this->afterLogin();
 		}else{
 			$this->data['user'] = null;
@@ -18,7 +17,7 @@ class AccountController extends BaseController{
     }
 
     public function registration(){
-        $this->renderAction('registration_test');
+        $this->renderAction('registration');
     }
 
     public function register(){
@@ -53,9 +52,10 @@ class AccountController extends BaseController{
                     $user = $this->db()->find($user, array('limit'=>1));
 
                     if($user){
-                            session_start();
-                            unset($_SESSION['user']);
-                            $_SESSION['user'] = array(
+                            Doo::loadCore('session/DooSession');
+                            $this->session->start();
+                            unset($this->session->user);
+                            $this->session->user = array(
                                                         'id'=>$user->id, 
                                                         'username'=>$user->username, 
                                                         'group'=>$user->group, 
