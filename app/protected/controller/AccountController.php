@@ -5,7 +5,7 @@ class AccountController extends BaseController{
 
     public function index(){
 		if(isset($this->session->user)){
-			$this->data['user'] = $session->user;
+			$this->data['user'] = $this->session->user;
             return $this->afterLogin();
 		}else{
 			$this->data['user'] = null;
@@ -79,7 +79,7 @@ class AccountController extends BaseController{
     }
 
     protected function afterLogin() {
-        if ($_SESSION['user']['group'] == 'admin') {
+        if ($this->session->user['group'] == 'admin') {
             return Doo::conf()->APP_URL . 'index.php/admin/';
         } else {
             return Doo::conf()->APP_URL . 'index.php/my/';

@@ -10,8 +10,7 @@ class BaseController extends DooController {
 
         $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
         $this->data['message'] = '';
-        Doo::loadCore('session/DooSession');
-        $this->session = new DooSession('ams');
+        $this->session = Doo::session('ams');
         Doo::loadCore('auth/DooAuth');
         $this->auth = new DooAuth('ams');
 	}
