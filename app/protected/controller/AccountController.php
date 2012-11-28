@@ -11,7 +11,35 @@ class AccountController extends BaseController{
 			$this->data['user'] = null;
 		}
 
+        $action = "index.php/login";
         $this->data['message'] = '';
+        Doo::loadHelper('DooForm');
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'login','class'=>'form'),
+             'elements' => array(
+                 'email' => array('text', array(
+                     'required' => true,
+                     'label' => 'Email:',
+                 'attributes' => array('class' => 'username'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'password' => array('password', array(
+                     'required' => true,
+                     'label' => 'Password:',
+                 'attributes' => array('class' => 'password'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "Login",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        $this->data['form'] = $form->render();
 
         $this->renderAction('login');
     }
@@ -27,7 +55,7 @@ class AccountController extends BaseController{
         }
         Doo::loadModel('User');
         $user = new User();
-        $user->username = $_POST['username'];
+        $user->email = $_POST['email'];
         $user->password = $_POST['password'];
         if ($user->find(array('select'=>'id', 'limit'=>1)) != Null) {
           $this->data['message'] = 'User name exists, please try another one';
@@ -40,14 +68,14 @@ class AccountController extends BaseController{
 
 
     public function login(){
-        if(isset($_POST['username']) && isset($_POST['password']) ){
+        if(isset($_POST['email']) && isset($_POST['password']) ){
 
-            $_POST['username'] = trim($_POST['username']);
+            $_POST['email'] = trim($_POST['email']);
             $_POST['password'] = trim($_POST['password']);
             //check User existance in DB, if so start session and redirect to home page.
-            if(!empty($_POST['username']) && !empty($_POST['password'])){
+            if(!empty($_POST['email']) && !empty($_POST['password'])){
                     $user = Doo::loadModel('User', true);
-                    $user->username = $_POST['username'];
+                    $user->email = $_POST['email'];
                     $user->password = $_POST['password'];
                     $user = $this->db()->find($user, array('limit'=>1));
 
@@ -57,7 +85,7 @@ class AccountController extends BaseController{
                             unset($this->session->user);
                             $this->session->user = array(
                                                         'id'=>$user->id, 
-                                                        'username'=>$user->username, 
+                                                        'email'=>$user->email, 
                                                         'group'=>$user->group, 
                                                     );
                             if ($user->isAdmin()) {
