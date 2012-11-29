@@ -276,7 +276,7 @@ label {
 }
 
 .textbox {
-	background-image: url(../images/16t.png);
+	background-image: url(../img/16t.png);
 	background-color:#FFFFFF;
 	background-repeat: no-repeat;
 	background-position:left;
@@ -290,7 +290,7 @@ label {
 }
 
 .username {
-    	background-image: url(../images/16m.png);
+    	background-image: url(../img/16m.png);
     	background-repeat: no-repeat;
     	background-position:left;
     	background-color:#FFFFFF;
@@ -304,7 +304,7 @@ label {
 }
    
 .password {
-    	background-image: url(../images/16s.png);
+    	background-image: url(../img/16s.png);
     	background-repeat: no-repeat;
    	background-position:left;
    	background-color:#FFFFFF;
