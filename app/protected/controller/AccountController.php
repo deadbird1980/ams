@@ -43,38 +43,37 @@ class AccountController extends BaseController{
 
     public function login(){
         $form = $this->getLoginForm();
-        $this->data['form'] = $this->getLoginForm()->render();
         if ($form->isValid($_POST)) {
-        }
-        if(isset($_POST['email']) && isset($_POST['password']) ){
+            if(isset($_POST['email']) && isset($_POST['password']) ){
 
-            $_POST['email'] = trim($_POST['email']);
-            $_POST['password'] = trim($_POST['password']);
-            //check User existance in DB, if so start session and redirect to home page.
-            if(!empty($_POST['email']) && !empty($_POST['password'])){
-                    $user = Doo::loadModel('User', true);
-                    $user->email = $_POST['email'];
-                    $user->password = $_POST['password'];
-                    $user = $this->db()->find($user, array('limit'=>1));
+                $_POST['email'] = trim($_POST['email']);
+                $_POST['password'] = trim($_POST['password']);
+                //check User existance in DB, if so start session and redirect to home page.
+                if(!empty($_POST['email']) && !empty($_POST['password'])){
+                        $user = Doo::loadModel('User', true);
+                        $user->email = $_POST['email'];
+                        $user->password = $_POST['password'];
+                        $user = $this->db()->find($user, array('limit'=>1));
 
-                    if($user){
-                            Doo::loadCore('session/DooSession');
-                            $this->session->start();
-                            unset($this->session->user);
-                            $this->session->user = array(
-                                                        'id'=>$user->id, 
-                                                        'email'=>$user->email, 
-                                                        'group'=>$user->group, 
-                                                    );
-                            if ($user->isAdmin()) {
-                                return Doo::conf()->APP_URL . 'index.php/admin/';
-                            } else {
-                                return Doo::conf()->APP_URL . 'index.php/my/';
-                            }
-                    }
+                        if($user){
+                                Doo::loadCore('session/DooSession');
+                                $this->session->start();
+                                unset($this->session->user);
+                                $this->session->user = array(
+                                                            'id'=>$user->id, 
+                                                            'email'=>$user->email, 
+                                                            'group'=>$user->group, 
+                                                        );
+                                if ($user->isAdmin()) {
+                                    return Doo::conf()->APP_URL . 'index.php/admin/';
+                                } else {
+                                    return Doo::conf()->APP_URL . 'index.php/my/';
+                                }
+                        }
+                }
             }
         }
-
+        $this->data['form'] = $form->render();
         $this->data['message'] = 'User with details below not found';
         $this->renderAction('login');
     }
@@ -102,12 +101,14 @@ class AccountController extends BaseController{
              'elements' => array(
                  'email' => array('text', array(
                      'required' => true,
+                     'validators' => array('email'),
                      'label' => 'Email:',
                  'attributes' => array('class' => 'username'),
                  'element-wrapper' => 'div'
                  )),
                  'password' => array('password', array(
                      'required' => true,
+                     'validators' => array('password'),
                      'label' => 'Password:',
                  'attributes' => array('class' => 'password'),
                  'element-wrapper' => 'div'
