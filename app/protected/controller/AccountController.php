@@ -11,35 +11,9 @@ class AccountController extends BaseController{
 			$this->data['user'] = null;
 		}
 
-        $action = "index.php/login";
         $this->data['message'] = '';
         Doo::loadHelper('DooForm');
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'login','class'=>'form'),
-             'elements' => array(
-                 'email' => array('text', array(
-                     'required' => true,
-                     'label' => 'Email:',
-                 'attributes' => array('class' => 'username'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'password' => array('password', array(
-                     'required' => true,
-                     'label' => 'Password:',
-                 'attributes' => array('class' => 'password'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
-                     'label' => "Login",
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ))
-             )
-        ));
-        $this->data['form'] = $form->render();
+        $this->data['form'] = $this->getLoginForm()->render();
 
         $this->renderAction('login');
     }
@@ -68,6 +42,10 @@ class AccountController extends BaseController{
 
 
     public function login(){
+        $form = $this->getLoginForm();
+        $this->data['form'] = $this->getLoginForm()->render();
+        if ($form->isValid($_POST)) {
+        }
         if(isset($_POST['email']) && isset($_POST['password']) ){
 
             $_POST['email'] = trim($_POST['email']);
@@ -112,6 +90,42 @@ class AccountController extends BaseController{
         } else {
             return Doo::conf()->APP_URL . 'index.php/my/';
         }
+    }
+
+    private function getLoginForm() {
+        Doo::loadHelper('DooForm');
+        $action = Doo::conf()->APP_URL . 'index.php/login';
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'login','class'=>'form'),
+             'elements' => array(
+                 'email' => array('text', array(
+                     'required' => true,
+                     'label' => 'Email:',
+                 'attributes' => array('class' => 'username'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'password' => array('password', array(
+                     'required' => true,
+                     'label' => 'Password:',
+                 'attributes' => array('class' => 'password'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "Login",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 )),
+
+                 'register' => array('display', array(
+                     'content' => '<a href=#1>Not a member?</a>',
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
     }
 
 }
