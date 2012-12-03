@@ -339,3 +339,120 @@ label {
 	text-transform:uppercase;
 	font-weight:bold;
 }
+
+.Zebra_Form_error_message {
+    position: absolute;
+    z-index: 21;
+    overflow: hidden;
+    background: transparent;
+}
+
+.Zebra_Form_error_message .message {
+    background: #000;
+    padding: 10px 18px 10px 10px;
+    color: #FFF;
+    line-height: 1em;
+    font-size: 11px;
+    font-weight: normal;
+    margin-right: 6px;
+    position: relative;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    *margin-right: 0;
+    max-width: 250px;
+    _width:expression(document.body.clientWidth > 250 ? '250px': 'auto'); /* max-width for IE6 */
+}
+
+.Zebra_Form_error_message .noclose { padding: 10px }
+
+.Zebra_Form_error_message .close {
+    position: absolute;
+    color: #FFF;
+    right: 5px;
+    top: 4px;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: url('close.png');
+    text-indent: -9000px;
+    overflow: hidden;
+    *right: 3px;
+    *top: 3px;
+}
+
+.Zebra_Form_error_message .close-ie6 {
+    position: absolute;
+    color: #FFF;
+    right: 4px;
+    top: 2px;
+    text-decoration: none;
+    font-family: arial, sans;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.Zebra_Form_error_message .arrow {
+    position:relative;
+    border-color: #000 transparent transparent transparent;
+    border-style: solid;
+    border-width: 10px;
+    height:0;
+    width:0;
+    left: 0;
+    bottom: 0;
+    z-index: 3;
+    float: left;
+    _border-left-color: pink;
+    _border-bottom-color: pink;
+    _border-right-color: pink;
+    _filter: chroma(color=pink);
+    _margin-bottom: -6px
+}
+
+.Zebra_Form div.error {
+    background: #444 url('ico-warning.png') no-repeat 8px 15px;
+    position: relative;
+    overflow: hidden;
+    _background-image: url('ico-warning.gif')
+}
+
+.Zebra_Form div.error div.container {
+    padding: 15px 65px 15px 35px;
+    border: 2px solid #000;
+    position: relative;
+    overflow: hidden
+}
+
+.Zebra_Form div.error div.container span {
+    color: #FFF;
+    font-weight: bold;
+    font-size: 90%;
+    display: block
+}
+
+.Zebra_Form div.error div.container div.close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #333;
+    height: 100%;
+    width: 50px;
+    padding: 15px 0;
+    _top: 2px;
+    _right: 2px;
+    _background: #444
+}
+
+.Zebra_Form div.error div.container div.close a {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url('ico-close.png') no-repeat;
+    text-indent: -9000px;
+    margin-left: 17px;
+    _background-image: url('ico-close.gif')
+}
