@@ -97,20 +97,20 @@ class AccountController extends BaseController{
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
-             'attributes'=> array('id'=>'login','class'=>'form'),
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array('email'),
                      'label' => 'Email:',
-                 'attributes' => array('class' => 'username'),
+                     'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
                  'password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
                      'label' => 'Password:',
-                 'attributes' => array('class' => 'password'),
+                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(

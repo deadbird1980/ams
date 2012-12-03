@@ -229,7 +229,7 @@ label {
 	line-height: 1.1;
 	color:#666;
 }
-.form {
+.Zebra_Form {
 	margin:0;
 	padding:0;
 }
@@ -264,7 +264,7 @@ label {
 	background-color:#fff;
 
 }
-.form div {
+.Zebra_Form div {
 	width:347px;
 	float:right;
 	background-color:#E6E6E6;
@@ -289,7 +289,7 @@ label {
 	background-color:#F0FFE6;
 }
 
-.username {
+.email {
     	background-image: url(../img/16m.png);
     	background-repeat: no-repeat;
     	background-position:left;
@@ -299,7 +299,7 @@ label {
     	color: #999999;
     	padding:3px 5px 3px 19px;
 }
-.username:focus, .username:hover {
+.email:focus, .email:hover {
 	background-color:#F0FFE6;
 }
    
