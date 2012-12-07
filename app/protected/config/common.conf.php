@@ -16,6 +16,7 @@ date_default_timezone_set('Europe/London');
 $config['SITE_PATH'] = realpath('..').'/app/';
 //$config['PROTECTED_FOLDER'] = 'protected/';
 $config['BASE_PATH'] = realpath('..').'/dooframework/';
+$config['TMP_PATH'] = realpath('..').'/tmp/';
 
 //for production mode use 'prod'
 $config['APP_MODE'] = 'dev';

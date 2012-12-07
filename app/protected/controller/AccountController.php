@@ -18,7 +18,14 @@ class AccountController extends BaseController{
         $this->renderAction('login');
     }
 
+    public function captcha() {
+        $f = $this->params['file'];
+        $this->setContentType('jpg');
+        echo file_get_contents(Doo::conf()->TMP_PATH.'/'.$f);
+    }
+
     public function registration(){
+        $this->data['form'] = $this->getRegisterForm()->render();
         $this->renderAction('registration');
     }
 
@@ -124,6 +131,55 @@ class AccountController extends BaseController{
                      'content' => '<a href=#1>Not a member?</a>',
                  'field-wrapper' => 'div'
                  ))
+             )
+        ));
+        return $form;
+    }
+
+    private function getRegisterForm() {
+        Doo::loadHelper('DooForm');
+        $action = Doo::conf()->APP_URL . 'index.php/register';
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'first_name' => array('text', array(
+                     'required' => true,
+                     'label' => 'First Name:',
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'last_name' => array('text', array(
+                     'required' => true,
+                     'label' => 'Last Name:',
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'email' => array('text', array(
+                     'required' => true,
+                     'validators' => array('email'),
+                     'label' => 'Email:',
+                     'attributes' => array('class' => 'control email validate[required,email]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'captcha' => array('captcha', array(
+                     'required' => true,
+                     'validators' => array('captcha'),
+                     'image' => Doo::conf()->SITE_PATH.'/global/img/captcha.jpg',
+                     'directory' => Doo::conf()->TMP_PATH,
+                     'url' => Doo::conf()->APP_URL.'index.php/captcha/',
+                     'label' => 'Email:',
+                     'attributes' => array('class' => 'control textbox validate[required,captcha]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "Register",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 )),
+
              )
         ));
         return $form;

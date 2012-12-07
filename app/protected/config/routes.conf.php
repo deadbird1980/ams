@@ -17,6 +17,7 @@
  */
 
 $route['*']['/'] = array('AccountController', 'index');
+$route['get']['/captcha/:file'] = array('AccountController', 'captcha');
 $route['*']['/registration'] = array('AccountController', 'registration');
 $route['post']['/register'] = array('AccountController', 'register');
 

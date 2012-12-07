@@ -7,70 +7,32 @@
 	<body>
 <!-- include 'top' -->
 <div class="content">
-        <table>
-            <tbody><tr>
-                <td valign="top">
-                </td>
-
-                <td valign="top">
-                    <div class="tab clearfix" style="display:block">
-
-                      <h2>Registration</h2>
-
-                      <form name="form" id="form" action="{{baseurl}}index.php/register" method="post" class="Zebra_Form">
-                           <div class="hidden">
-                               <input name="name_form" id="name_form" value="form" type="hidden">
-                                   <label for="zebra_honeypot_form" style="display:none">Leave this field blank</label>
-<input name="zebra_honeypot_form" id="zebra_honeypot_form" value="" class="control text" autocomplete="off" type="text">
-<input name="zebra_csrf_token_form" id="zebra_csrf_token_form" value="53ff8aae947bd4d2c98dde2cb6d02479" type="hidden"></div>
-        <div>
-            <span>{{message}}</span>
-        </div>
-<table><tbody>
-        <tr class="row">
-            <td><label for="firstname" id="label_firstname">First name:<span class="required">*</span></label></td>
-            <td><input name="firstname" id="firstname" value="" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row even">
-            <td><label for="lastname" id="label_lastname">Last name:<span class="required">*</span></label></td>
-            <td><input name="lastname" id="lastname" value="" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="email" id="label_email">Email address:<span class="required">*</span></label></td>
-            <td><input name="email" id="email" value="" class="control text validate[required,email]" type="text">
-                    <div class="note" id="note_email" style="width:200px">Please enter a valid email address. An email will be sent to this
-    address with a link you need to click on in order to activate your account</div></td></tr>
-        <tr class="row even">
-            <td><label for="password" id="label_password">Choose a password:<span class="required">*</span></label></td>
-            <td><input name="password" id="password" value="" class="control password validate[required,length(6,10)]" maxlength="10" type="password">
-                <div class="note" id="note_password">Password must be have between 6 and 10 characters.</div></td></tr>
-        <tr class="row"><td><label for="confirm_password" id="label_confirm_password">Confirm password:</label></td>
-            <td><input name="confirm_password" id="confirm_password" value="" class="control password validate[compare(password)]" type="password"></td></tr>
-        <tr class="row even">
-            <td></td><td><img src="{{baseurl}}process.php?captcha=1&amp;nocache=1352933504" alt=""><label for="captcha_code" id="label_captcha_code">Are you human?</label><input name="captcha_code" id="captcha_code" value="" class="control text validate[captcha]" type="text"><div class="note" id="note_captcha" style="width: 200px">You must enter the characters with black color that stand
-    out from the other characters</div></td></tr>
-    <tr class="row last"><td></td>
-        <td><input name="btnsubmit" id="btnsubmit" value="Submit" class="submit" type="submit"></td></tr></tbody></table>
-                      </form>
-                      <script type="text/javascript">
-                          function init() {
-                              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
-                                  setTimeout("init()",100);
-                                  return
-                              }
-                              $("#form").Zebra_Form({scroll_to_error:true,
-                                      tips_position:'left',
-                                      close_tips:true,
-                                      validate_on_the_fly:false,
-                                      validate_all:false,
-                                      error_messages:{"firstname":{"required":"First name is required!"},"lastname":{"required":"Last name is required!"},"email":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},"confirm_password":{"compare":"Password not confirmed correctly!"},
-                                      "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}init()</script>
-                    </div>
-
-
-                </td>
-
-            </tr>
-
-        </tbody></table>
+    <div class="container">
+<div id="top">
+    <h1>Please complete the form below</h1>
+  </div>
+  <div id="leftSide">
+  <fieldset>
+<legend>Registration details</legend>
+    {{form}}
+        </fieldset>
+    </div>
+      <script type="text/javascript">
+          function init() {
+              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              $("#form").Zebra_Form({scroll_to_error:true,
+                      tips_position:'left',
+                      close_tips:true,
+                      validate_on_the_fly:false,
+                      validate_all:false,
+                      error_messages:{"email-element":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password-element":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},
+                      "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}
+          init()
+      </script>
+</div>
 </div>
 <!-- include 'nav' -->
 <!-- include 'footer' -->
