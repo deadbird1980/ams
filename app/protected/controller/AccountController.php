@@ -163,16 +163,6 @@ class AccountController extends BaseController{
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
-                 'captcha' => array('captcha', array(
-                     'required' => true,
-                     'validators' => array('captcha'),
-                     'image' => Doo::conf()->SITE_PATH.'/global/img/captcha.jpg',
-                     'directory' => Doo::conf()->TMP_PATH,
-                     'url' => Doo::conf()->APP_URL.'index.php/captcha/',
-                     'label' => 'Email:',
-                     'attributes' => array('class' => 'control textbox validate[required,captcha]'),
-                 'element-wrapper' => 'div'
-                 )),
                  'submit' => array('submit', array(
                      'label' => "Register",
                      'attributes' => array('class' => 'buttons'),
