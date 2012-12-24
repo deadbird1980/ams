@@ -11,6 +11,7 @@ date_default_timezone_set('Europe/London');
  */
 //$config['START_TIME'] = microtime(true);
 
+$config['SITE_ID'] = 'b42dbf13b55235ca5e4d0042f015da38';
 
 //framework use, must defined, user full absolute path and end with / eg. /var/www/project/
 $config['SITE_PATH'] = realpath('..').'/app/';

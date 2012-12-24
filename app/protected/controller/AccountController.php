@@ -30,21 +30,29 @@ class AccountController extends BaseController{
     }
 
     public function register(){
-        if (md5(md5(md5(strtolower($_POST['captcha_code'])))) !=  @$_COOKIE['captcha']) {
-          $this->data['message'] = 'Please input right string from the image';
-          return $this->renderAction('registration');
+        $form = $this->getRegisterForm();
+        if ($form->isValid($_POST)) {
+            Doo::loadModel('User');
+            $user = new User();
+            $user->email = $_POST['email'];
+            if ($user->find(array('select'=>'id', 'limit'=>1)) != Null) {
+              $this->data['message'] = 'Email address exists, please try another one';
+              $this->data['form'] = $form->render();
+              $this->renderAction('registration');
+              return;
+            }
+            $user->first_name = $_POST['first_name'];
+            $user->last_name = $_POST['last_name'];
+            // calculate confirm key
+            $user->confirm_key = md5($user->email . '@' . Doo::conf()->SITE_ID);
+            $user->insert();
+            $this->data['message'] = 'User registered';
+            $this->renderAction('registered');
+        } else {
+            $this->data['message'] = 'User with details below not found';
+            $this->data['form'] = $form->render();
+            $this->renderAction('registration');
         }
-        Doo::loadModel('User');
-        $user = new User();
-        $user->email = $_POST['email'];
-        $user->password = $_POST['password'];
-        if ($user->find(array('select'=>'id', 'limit'=>1)) != Null) {
-          $this->data['message'] = 'User name exists, please try another one';
-          return $this->renderAction('registration');
-        }
-        $user->insert();
-        $this->data['message'] = 'User registered';
-        $this->renderAction('registered');
     }
 
 
