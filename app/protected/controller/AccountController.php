@@ -35,12 +35,6 @@ class AccountController extends BaseController{
             Doo::loadModel('User');
             $user = new User();
             $user->email = $_POST['email'];
-            if ($user->find(array('select'=>'id', 'limit'=>1)) != Null) {
-              $this->data['message'] = 'Email address exists, please try another one';
-              $this->data['form'] = $form->render();
-              $this->renderAction('registration');
-              return;
-            }
             $user->first_name = $_POST['first_name'];
             $user->last_name = $_POST['last_name'];
             // calculate confirm key
@@ -116,7 +110,7 @@ class AccountController extends BaseController{
              'elements' => array(
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array('email'),
+                     'validators' => array(array('email')),
                      'label' => 'Email:',
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
@@ -166,7 +160,7 @@ class AccountController extends BaseController{
                  )),
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array('email'),
+                     'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
                      'label' => 'Email:',
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
