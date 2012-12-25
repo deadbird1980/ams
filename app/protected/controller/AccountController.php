@@ -110,7 +110,7 @@ class AccountController extends BaseController{
              'elements' => array(
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array(array('email')),
+                     'validators' => array(array('email'), array('dbExist', 'User', 'email', 'User/Password Wrong!')),
                      'label' => 'Email:',
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
