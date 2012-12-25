@@ -1,79 +1,25 @@
-        <table>
-            <tbody><tr>
-                <td valign="top">
-                </td>
-
-                <td valign="top">
-                    <div class="tab clearfix" style="display:block">
-
-                      <h2>User</h2>
-
-                      <form name="form" id="form" action="{{baseurl}}index.php/admin/user/{{user.@id}}/edit" method="post" class="Zebra_Form">
-                           <div class="hidden">
-                               <input name="name_form" id="name_form" value="form" type="hidden">
-                                   <label for="zebra_honeypot_form" style="display:none">Leave this field blank</label>
-<input name="zebra_honeypot_form" id="zebra_honeypot_form" value="" class="control text" autocomplete="off" type="text">
-<input name="zebra_csrf_token_form" id="zebra_csrf_token_form" value="53ff8aae947bd4d2c98dde2cb6d02479" type="hidden"></div>
-        <div>
-            <span>{{message}}</span>
-        </div>
-<table><tbody>
-        <tr class="row">
-            <td><label for="username" id="label_username">User name:<span class="required">*</span></label></td>
-            <td><input name="username" id="username" value="{{user.@username}}" class="control text validate[required]" type="text"></td></tr>
-        </tr>
-        <tr class="row even">
-            <td><label for="firstname" id="label_firstname">First name:<span class="required">*</span></label></td>
-            <td><input name="firstname" id="firstname" value="{{user.@first_name}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="lastname" id="label_lastname">Last name:<span class="required">*</span></label></td>
-            <td><input name="lastname" id="lastname" value="{{user.@last_name}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row even">
-            <td><label for="firstname_alphabet" id="label_firstname_alphabet">First name(alphabet):<span class="required">*</span></label></td>
-            <td><input name="firstname_alphabet" id="firstname_alphabet" value="{{user.@first_name_alphabet}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="lastname_alphabet" id="label_lastname_alphabet">Last name:<span class="required">*</span></label></td>
-            <td><input name="lastname_alphabet" id="lastname_alphabet" value="{{user.@last_name_alphabet}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row even">
-            <td><label for="birthday" id="label_birthday">Birthday:<span class="required">*</span></label></td>
-            <td><input name="birthday" id="birthday" value="{{user.@birthday}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="home_address" id="label_home_address">Home address:<span class="required">*</span></label></td>
-            <td><input name="home_address" id="home_address" value="{{user.@home_address}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="local_address" id="label_local_address">Local address:<span class="required">*</span></label></td>
-            <td><input name="local_address" id="local_address" value="" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="post_code" id="label_post_code">Post code:<span class="required">*</span></label></td>
-            <td><input name="post_code" id="post_code" value="{{user.@post_code}}" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="phone" id="label_phone">Phone:<span class="required">*</span></label></td>
-            <td><input name="phone" id="phone" value="" class="control text validate[required]" type="text"></td></tr>
-        <tr class="row">
-            <td><label for="email" id="label_email">Email address:<span class="required">*</span></label></td>
-            <td><input name="email" id="email" value="" class="control text validate[required,email]" type="text">
-        <tr class="row even">
-    <tr class="row last"><td></td>
-        <td><input name="btnsubmit" id="btnsubmit" value="Submit" class="submit" type="submit"></td></tr></tbody></table>
-                      </form>
-                      <script type="text/javascript">
-                          function init() {
-                              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
-                                  setTimeout("init()",100);
-                                  return
-                              }
-                              $("#form").Zebra_Form({scroll_to_error:true,
-                                      tips_position:'left',
-                                      close_tips:true,
-                                      validate_on_the_fly:false,
-                                      validate_all:false,
-                                      error_messages:{"firstname":{"required":"First name is required!"},"lastname":{"required":"Last name is required!"},"email":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},"confirm_password":{"compare":"Password not confirmed correctly!"},
-                                      "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}init()</script>
-                    </div>
-
-
-                </td>
-
-            </tr>
-
-        </tbody></table>
+<div class="content">
+    <div class="container">
+  <div id="leftSide">
+  <fieldset>
+<legend>User details</legend>
+    {{form}}
+        </fieldset>
+    </div>
+      <script type="text/javascript">
+          function init() {
+              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              $("#form").Zebra_Form({scroll_to_error:true,
+                      tips_position:'left',
+                      close_tips:true,
+                      validate_on_the_fly:false,
+                      validate_all:false,
+                      error_messages:{"email-element":{"required":"Email is required!","email":"Email address seems to be invalid!"},"first_name-element":{"required":"First name is required!"},"last_name-element":{"required":"Last name is required!"},
+                      "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}
+          init()
+      </script>
+</div>
+</div>

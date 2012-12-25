@@ -4,16 +4,15 @@ require_once 'BaseController.php';
 class AdminController extends BaseController {
 
     //Default sort by createtime field
-    public $sortField = 'username';
+    public $sortField = 'email';
     public $orderType = 'desc';
     public static $tags;
 
 	public function beforeRun($resource, $action){
         parent::beforeRun($resource, $action);
-		session_start();
 
 		//if not login, group = anonymous
-		$role = (isset($_SESSION['user']['group'])) ? $_SESSION['user']['group'] : 'anonymous';
+		$role = (isset($this->session->user['group'])) ? $this->session->user['group'] : 'anonymous';
 
 		if($role!='anonymous'){
 				$role = 'admin';
@@ -21,7 +20,7 @@ class AdminController extends BaseController {
 
 		//check against the ACL rules
 		if($rs = $this->acl()->process($role, $resource, $action )){
-			//echo $role .' is not allowed for '. $resource . ' '. $action;
+            echo $role .' is not allowed for '. $resource . ' '. $action;
 			return $rs;
 		}
 	}
@@ -35,7 +34,7 @@ class AdminController extends BaseController {
 
         $u = new User();
         //if default, no sorting defined by user, show this as pager link
-        if($this->sortField=='username' && $this->orderType=='desc'){
+        if($this->sortField=='email' && $this->orderType=='desc'){
             $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
         }else{
             $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
@@ -51,14 +50,13 @@ class AdminController extends BaseController {
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                        //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,username,email,first_name,last_name')
+                                        array('select'=>'id,email,first_name,last_name')
                                   );
             $this->data['order'] = 'asc';
         }else{
             $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,username,email,first_name,last_name')
+                                        array('select'=>'id,email,first_name,last_name')
                                   );
             $this->data['order'] = 'desc';
         }
@@ -94,8 +92,7 @@ class AdminController extends BaseController {
             return array('/error/postNotFound/'.$p->id,'internal');
         }
         
-        $data['rootUrl'] = Doo::conf()->APP_URL;
-        $this->render('admin_edit_post', $data);
+        $this->renderAction('admin_edit_post');
 	}
 
     /**
@@ -181,7 +178,7 @@ class AdminController extends BaseController {
             $data['title'] =  'Error Occured!';
             $data['content'] =  '<p style="color:#ff0000;">'.$error.'</p>';
             $data['content'] .=  '<p>Go <a href="javascript:history.back();">back</a> to edit.</p>';
-            $this->render('admin_msg', $data);
+            $this->renderAction('admin_msg', $data);
         }
         else{
             Doo::loadModel('Post');
@@ -213,17 +210,12 @@ class AdminController extends BaseController {
             //clear the sidebar cache
             Doo::cache('front')->flushAllParts();
             
-            $data['rootUrl'] = Doo::conf()->APP_URL;
-            $data['title'] =  'Post Updated!';
-            $data['content'] =  '<p>Your changes is saved successfully.</p>';
-            $data['content'] .=  '<p>Click  <a href="'.$data['rootUrl'].'article/'.$p->id.'">here</a> to view the post.</p>';
-            $this->render('admin_msg', $data);
+            $this->data['rootUrl'] = Doo::conf()->APP_URL;
+            $this->data['title'] =  'Post Updated!';
+            $this->data['content'] =  '<p>Your changes is saved successfully.</p>';
+            $this->data['content'] .=  '<p>Click  <a href="'.$this->data['rootUrl'].'article/'.$p->id.'">here</a> to view the post.</p>';
+            $this->renderAction('admin_msg');
         }
-    }
-
-    function createPost(){
-        $data['rootUrl'] = Doo::conf()->APP_URL;
-        $this->render('admin_new_post', $data);
     }
 
     function saveNewPost(){
@@ -240,7 +232,7 @@ class AdminController extends BaseController {
             $data['title'] =  'Error Occured!';
             $data['content'] =  '<p style="color:#ff0000;">'.$error.'</p>';
             $data['content'] .=  '<p>Go <a href="javascript:history.back();">back</a> to edit.</p>';
-            $this->render('admin_msg', $data);
+            $this->renderAction('admin_msg', $data);
         }
         else{
             Doo::loadModel('Post');
@@ -272,7 +264,7 @@ class AdminController extends BaseController {
             $data['content'] =  '<p>Your post is created successfully!</p>';
             if($p->status==1)
                 $data['content'] .=  '<p>Click  <a href="'.$data['rootUrl'].'article/'.$id.'">here</a> to view the published post.</p>';
-            $this->render('admin_msg', $data);
+            $this->renderAction('admin_msg', $data);
         }
     }
 
@@ -294,7 +286,7 @@ class AdminController extends BaseController {
             $data['rootUrl'] = Doo::conf()->APP_URL;
             $data['title'] =  'Post Deleted!';
             $data['content'] =  "<p>Post with ID $pid is deleted successfully!</p>";
-            $this->render('admin_msg', $data);
+            $this->renderAction('admin_msg', $data);
         }
     }
     
@@ -303,7 +295,7 @@ class AdminController extends BaseController {
         $c = new User;
         $data['users'] = $c->find(array('desc'=>'createtime'));
         $data['rootUrl'] = Doo::conf()->APP_URL;
-        $this->render('admin_users', $data);
+        $this->renderAction('admin_users', $data);
     }
 
     function approveComment(){
@@ -334,7 +326,7 @@ class AdminController extends BaseController {
         $data['title'] =  'Comment Approved!';
         $data['content'] =  "<p>Comment is approved successfully!</p>";
         $data['content'] .=  "<p>View the comment <a href=\"{$data['rootUrl']}article/$p->id#comment$comment->id\">here</a></p>";
-        $this->render('admin_msg', $data);
+        $this->renderAction('admin_msg', $data);
     }
 
     /**
@@ -350,7 +342,7 @@ class AdminController extends BaseController {
         $data['rootUrl'] = Doo::conf()->APP_URL;
         $data['title'] =  'Comment Rejected!';
         $data['content'] =  "<p>Comment is rejected &amp; deleted successfully!</p>";
-        $this->render('admin_msg', $data);
+        $thisrenderAction('admin_msg', $data);
     }
 
 }

@@ -2,6 +2,10 @@
 require_once 'AdminController.php';
 
 class UserController extends AdminController {
+	public function beforeRun($resource, $action){
+        parent::beforeRun($resource, $action);
+        $this->setUser();
+    }
 
     function index() {
         Doo::loadHelper('DooPager');
@@ -50,14 +54,84 @@ class UserController extends AdminController {
 
 	function edit() {
 		$this->data['title'] = 'User';
-        Doo::loadModel('User');
-
-        $u = new User();
-        $u->id = $this->params['id'];
-        $user = $this->db()->find($u, array('limit'=>1));
-		$this->data['user'] = $user;
+        $form = $this->getUserForm();
+        $this->data['form'] = $form->render();
 		$this->renderAction('admin_user');
 	}
+
+    private function setUser() {
+        if (isset($this->params['id'])) {
+            Doo::loadModel('User');
+            $u = new User();
+            $u->id = $this->params['id'];
+            $user = $this->db()->find($u, array('limit'=>1));
+            $this->data['user'] = $user;
+        }
+    }
+
+    private function getUserForm() {
+        Doo::loadHelper('DooForm');
+        $action = Doo::conf()->APP_URL . 'index.php/admin/users';
+        $u = $this->data['user'];
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'first_name' => array('text', array(
+                     'required' => true,
+                     'label' => 'First Name:',
+                     'value' => $u->first_name,
+                     'attributes' => array('class' => 'control first_name validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'last_name' => array('text', array(
+                     'required' => true,
+                     'label' => 'Last Name:',
+                     'value' => $u->last_name,
+                     'attributes' => array('class' => 'control last_name validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'password' => array('password', array(
+                     'required' => true,
+                     'validators' => array('password'),
+                     'label' => 'Password:',
+                     'value' => $u->password,
+                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'email' => array('text', array(
+                     'required' => true,
+                     'validators' => array(array('email')),
+                     'label' => 'Email:',
+                     'value' => $u->email,
+                     'attributes' => array('class' => 'control email validate[required,email]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'qq' => array('text', array(
+                     'required' => true,
+                     'label' => 'QQ:',
+                     'value' => $u->qq,
+                     'attributes' => array('class' => 'control qq validate[required,email]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'confirm_code' => array('text', array(
+                     'required' => true,
+                     'label' => 'Confirm Code:',
+                     'value' => $u->confirm_code,
+                 'attributes' => array('class' => 'control confirm_code'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "Save",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
 
 }
 ?>
