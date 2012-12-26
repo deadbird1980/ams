@@ -7,13 +7,13 @@ class UserController extends AdminController {
         $this->setUser();
     }
 
-    function index() {
+    public function index() {
         Doo::loadHelper('DooPager');
         Doo::loadModel('User');
 
         $u = new User();
         //if default, no sorting defined by user, show this as pager link
-        if($this->sortField=='username' && $this->orderType=='desc'){
+        if($this->sortField=='email' && $this->orderType=='desc'){
             $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
         }else{
             $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
@@ -32,13 +32,13 @@ class UserController extends AdminController {
         if($this->orderType=='desc'){
             $data['users'] = $u->limit($pager->limit, null, $this->sortField,
                                         //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,username,email,first_name,last_name')
+                                        array('select'=>'id,email,first_name,last_name')
                                   );
             $data['order'] = 'asc';
         }else{
             $data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,username,email,first_name,last_name')
+                                        array('select'=>'id,email,first_name,last_name')
                                   );
             $data['order'] = 'desc';
         }
@@ -46,15 +46,32 @@ class UserController extends AdminController {
         $this->render('admin', $data);
     }
 
-	function create() {
+	public function create() {
 		$data['baseurl'] = Doo::conf()->APP_URL;
 		$data['title'] = 'new User';
 		$this->render('user', $data);
 	}
 
-	function edit() {
+	public function edit() {
 		$this->data['title'] = 'User';
         $form = $this->getUserForm();
+        $this->data['form'] = $form->render();
+		$this->renderAction('admin_user');
+	}
+
+	public function update() {
+		$this->data['title'] = 'User';
+        $form = $this->getUserForm();
+        if ($form->isValid($_POST)) {
+            $u = $this->data['user'];
+            $u->first_name = $_POST['first_name'];
+            $u->last_name = $_POST['last_name'];
+            $u->qq = $_POST['qq'];
+            $u->confirm_code = $_POST['confirm_code'];
+            $u->update(array('field'=>'first_name,last_name,qq,confirm_code'));
+            $this->data['message'] = 'updated';
+            $form = $this->getUserForm();
+        }
         $this->data['form'] = $form->render();
 		$this->renderAction('admin_user');
 	}
@@ -62,7 +79,7 @@ class UserController extends AdminController {
     private function setUser() {
         if (isset($this->params['id'])) {
             Doo::loadModel('User');
-            $u = new User();
+            $u = new User;
             $u->id = $this->params['id'];
             $user = $this->db()->find($u, array('limit'=>1));
             $this->data['user'] = $user;
@@ -71,8 +88,8 @@ class UserController extends AdminController {
 
     private function getUserForm() {
         Doo::loadHelper('DooForm');
-        $action = Doo::conf()->APP_URL . 'index.php/admin/users';
         $u = $this->data['user'];
+        $action = Doo::conf()->APP_URL . 'index.php/admin/users/'.$u->id;
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
