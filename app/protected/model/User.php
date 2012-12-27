@@ -4,30 +4,31 @@ Doo::loadCore('db/DooSmartModel');
 class User extends DooSmartModel{
 
     public $id;
-    public $username;
+    public $email;
     public $password;
-    public $group;
+    public $type; // admin/staff/customer
     public $first_name;
     public $last_name;
-    public $first_name_alphabet;
-    public $last_name_alphabet;
-    public $home_address;
-    public $local_address;
-    public $birthday;
     public $phone;
+    public $qq;
+    public $confirm_code;
     public $_table = 'user';
     public $_primarykey = 'id';
-    public $_fields = array('id','username','pwd','group','first_name','last_name','first_name_alphabet','last_name_alphabet','address');
+    public $_fields = array('id','email','password','type','first_name','last_name','phone','qq','confirm_code');
     function __construct(){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Food::_count(), Food::getById()
     }
 
     function isAdmin() {
-      return $this->group == 'admin';
+      return $this->type == 'admin';
+    }
+
+    function isStaff() {
+      return $this->type == 'staff';
     }
 
     function isUser() {
-      return $this->group == 'user';
+      return $this->type == 'user';
     }
 }
 ?>

@@ -66,9 +66,12 @@ class UserController extends AdminController {
             $u = $this->data['user'];
             $u->first_name = $_POST['first_name'];
             $u->last_name = $_POST['last_name'];
+            $u->email = $_POST['email'];
+            $u->password = $_POST['password'];
             $u->qq = $_POST['qq'];
             $u->confirm_code = $_POST['confirm_code'];
-            $u->update(array('field'=>'first_name,last_name,qq,confirm_code'));
+            $u->type = $_POST['type'];
+            $u->update(array('where'=>"id={$u->id}",'field'=>'email,type,first_name,last_name,password,qq,confirm_code'));
             $this->data['message'] = 'updated';
             $form = $this->getUserForm();
         }
@@ -136,8 +139,16 @@ class UserController extends AdminController {
                      'required' => true,
                      'label' => 'Confirm Code:',
                      'value' => $u->confirm_code,
-                 'attributes' => array('class' => 'control confirm_code'),
-                 'element-wrapper' => 'div'
+                     'attributes' => array('class' => 'control confirm_code'),
+                     'element-wrapper' => 'div'
+                 )),
+                 'type' => array('select', array(
+                     'required' => true,
+                     'multioptions' => array('' => '' , 'admin' => 'admin', 'staff' => 'staff', 'customer' => 'customer'),
+                     'label' => 'Type:',
+                     'value' => $u->type,
+                     'attributes' => array('class' => 'control type'),
+                     'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
                      'label' => "Save",
