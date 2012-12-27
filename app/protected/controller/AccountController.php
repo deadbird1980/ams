@@ -71,7 +71,7 @@ class AccountController extends BaseController{
                                 $this->session->user = array(
                                                             'id'=>$user->id, 
                                                             'email'=>$user->email, 
-                                                            'group'=>$user->group, 
+                                                            'type'=>$user->type, 
                                                         );
                                 if ($user->isAdmin()) {
                                     return Doo::conf()->APP_URL . 'index.php/admin/';
@@ -93,7 +93,7 @@ class AccountController extends BaseController{
     }
 
     protected function afterLogin() {
-        if ($this->session->user['group'] == 'admin') {
+        if ($this->session->user['type'] == 'admin') {
             return Doo::conf()->APP_URL . 'index.php/admin/';
         } else {
             return Doo::conf()->APP_URL . 'index.php/my/';

@@ -8,7 +8,7 @@ class MyController extends BaseController {
         parent::beforeRun($resource, $action);
 
 		//if not login, group = anonymous
-		$role = (isset($this->session->user['group'])) ? $this->session->user['group'] : 'anonymous';
+		$role = (isset($this->session->user['type'])) ? $this->session->user['type'] : 'anonymous';
 
 		if($role!='anonymous'){
 				$role = 'student';
