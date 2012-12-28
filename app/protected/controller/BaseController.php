@@ -15,16 +15,16 @@ class BaseController extends DooController {
         $this->auth = new DooAuth('ams');
 	}
 
-    protected function renderAction($view, $useLayout = false) {
+    protected function renderAction($view, $layout = false) {
 
       //$this->view()->setDefaultRootViewPath(Doo::conf()->SITE_PATH . 'templates/' . $templateName . '/');
       //$this->view()->setRootCompiledPath(Doo::conf()->SITE_PATH . Doo::conf()->PROTECTED_FOLDER . "viewc/$userLanguage/$templateName/");
 
-      if ($useLayout) {
-         $this->view()->renderLayout($view, $this->data, NULL, Doo::conf()->TEMPLATE_COMPILE_ALWAYS);
+      if ($layout) {
+         $this->view()->renderLayout($layout, $view, $this->data, NULL, Doo::conf()->TEMPLATE_COMPILE_ALWAYS);
       } else {
          $this->view()->render($view, $this->data, NULL, Doo::conf()->TEMPLATE_COMPILE_ALWAYS);
       }
-   }
+    }
 }
 ?>

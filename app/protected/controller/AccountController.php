@@ -15,7 +15,7 @@ class AccountController extends BaseController{
         Doo::loadHelper('DooForm');
         $this->data['form'] = $this->getLoginForm()->render();
 
-        $this->renderAction('login');
+        $this->renderAction('login', 'main');
     }
 
     public function captcha() {
