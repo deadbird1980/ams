@@ -9,12 +9,14 @@ class User extends DooSmartModel{
     public $type; // admin/staff/customer
     public $first_name;
     public $last_name;
+    public $first_name_alphabet;
+    public $last_name_alphabet;
     public $phone;
     public $qq;
     public $confirm_code;
     public $_table = 'user';
     public $_primarykey = 'id';
-    public $_fields = array('id','email','password','type','first_name','last_name','phone','qq','confirm_code');
+    public $_fields = array('id','email','password','type','first_name','last_name','first_name_alphabet','last_name_alphabet','phone','qq','confirm_code');
     function __construct(){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Food::_count(), Food::getById()
     }

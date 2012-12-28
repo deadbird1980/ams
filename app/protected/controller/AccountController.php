@@ -33,14 +33,11 @@ class AccountController extends BaseController{
         $form = $this->getRegisterForm();
         if ($form->isValid($_POST)) {
             Doo::loadModel('User');
-            $user = new User();
-            $user->email = $_POST['email'];
-            $user->first_name = $_POST['first_name'];
-            $user->last_name = $_POST['last_name'];
+            $user = new User($_POST);
             // calculate confirm key
-            $user->confirm_key = md5($user->email . '@' . Doo::conf()->SITE_ID);
+            $user->confirm_key = md5($user->email . '@' . Doo::conf()->SITE_ID).'@' . time();
             $user->insert();
-            $this->data['message'] = 'User registered';
+            $this->data['message'] = 'Registered, please contact your customer service with this code:'. $user->confirm_code;
             $this->renderAction('registered');
         } else {
             $this->data['message'] = 'User with details below not found';
@@ -158,11 +155,42 @@ class AccountController extends BaseController{
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
+                 'first_name_alphabet' => array('text', array(
+                     'required' => true,
+                     'label' => 'First Name(pinyin):',
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'last_name_alphabet' => array('text', array(
+                     'required' => true,
+                     'label' => 'Last Name(pinyin):',
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'password' => array('password', array(
+                     'required' => true,
+                     'validators' => array('password'),
+                     'label' => 'Password:',
+                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                 'element-wrapper' => 'div'
+                 )),
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
                      'label' => 'Email:',
                      'attributes' => array('class' => 'control email validate[required,email]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'phone' => array('text', array(
+                     'required' => true,
+                     'label' => 'Phone:',
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'qq' => array('text', array(
+                     'required' => true,
+                     'label' => 'QQ:',
+                     'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
