@@ -66,6 +66,8 @@ class UserController extends AdminController {
             $u = $this->data['user'];
             $u->first_name = $_POST['first_name'];
             $u->last_name = $_POST['last_name'];
+            $u->first_name_alphabet = $_POST['first_name_alphabet'];
+            $u->last_name_alphabet = $_POST['last_name_alphabet'];
             $u->email = $_POST['email'];
             $u->password = $_POST['password'];
             $u->qq = $_POST['qq'];
@@ -102,14 +104,28 @@ class UserController extends AdminController {
                      'required' => true,
                      'label' => 'First Name:',
                      'value' => $u->first_name,
-                     'attributes' => array('class' => 'control first_name validate[required]'),
+                     'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name' => array('text', array(
                      'required' => true,
                      'label' => 'Last Name:',
                      'value' => $u->last_name,
-                     'attributes' => array('class' => 'control last_name validate[required]'),
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'first_name_alphabet' => array('text', array(
+                     'required' => true,
+                     'label' => 'First Name(Pinyin):',
+                     'value' => $u->first_name_alphabet,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'last_name_alphabet' => array('text', array(
+                     'required' => true,
+                     'label' => 'Last Name(Pinyin):',
+                     'value' => $u->last_name_alphabet,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'password' => array('password', array(
@@ -128,18 +144,25 @@ class UserController extends AdminController {
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
+                 'phone' => array('text', array(
+                     'required' => true,
+                     'label' => 'Phone:',
+                     'value' => $u->phone,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
                  'qq' => array('text', array(
                      'required' => true,
                      'label' => 'QQ:',
                      'value' => $u->qq,
-                     'attributes' => array('class' => 'control qq validate[required,email]'),
+                     'attributes' => array('class' => 'control textbox'),
                  'element-wrapper' => 'div'
                  )),
                  'confirm_code' => array('text', array(
                      'required' => true,
                      'label' => 'Confirm Code:',
                      'value' => $u->confirm_code,
-                     'attributes' => array('class' => 'control confirm_code'),
+                     'attributes' => array('class' => 'control textbox'),
                      'element-wrapper' => 'div'
                  )),
                  'type' => array('select', array(
