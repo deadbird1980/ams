@@ -15,7 +15,7 @@ class BaseController extends DooController {
         $this->auth = new DooAuth('ams');
 	}
 
-    protected function renderAction($view, $layout = false) {
+    protected function renderAction($view, $layout = 'main') {
 
       //$this->view()->setDefaultRootViewPath(Doo::conf()->SITE_PATH . 'templates/' . $templateName . '/');
       //$this->view()->setRootCompiledPath(Doo::conf()->SITE_PATH . Doo::conf()->PROTECTED_FOLDER . "viewc/$userLanguage/$templateName/");
