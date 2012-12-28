@@ -6,7 +6,7 @@ class User extends DooSmartModel{
     public $id;
     public $email;
     public $password;
-    public $type; // admin/staff/customer
+    public $type; // customer/counselor/executor/admin
     public $first_name;
     public $last_name;
     public $first_name_alphabet;

@@ -34,6 +34,7 @@ class AccountController extends BaseController{
         if ($form->isValid($_POST)) {
             Doo::loadModel('User');
             $user = new User($_POST);
+            $user->type = 'customer';
             // calculate confirm key
             $user->confirm_key = md5($user->email . '@' . Doo::conf()->SITE_ID).'@' . time();
             $user->insert();

@@ -46,10 +46,36 @@ class UserController extends AdminController {
         $this->render('admin', $data);
     }
 
+	public function save() {
+		$this->data['title'] = 'new User';
+		$this->data['message'] = '';
+        $this->data['user'] = new User();
+        $form = $this->getUserForm();
+        if ($form->isValid($_POST)) {
+            $u = $this->data['user'];
+            $u->first_name = $_POST['first_name'];
+            $u->last_name = $_POST['last_name'];
+            $u->first_name_alphabet = $_POST['first_name_alphabet'];
+            $u->last_name_alphabet = $_POST['last_name_alphabet'];
+            $u->email = $_POST['email'];
+            $u->password = $_POST['password'];
+            $u->qq = $_POST['qq'];
+            $u->confirm_code = $_POST['confirm_code'];
+            $u->type = $_POST['type'];
+            $u->insert();
+            $form = $this->getUserForm();
+        }
+        $this->data['form'] = $form->render();
+		$this->renderAction('admin_user');
+	}
+
 	public function create() {
-		$data['baseurl'] = Doo::conf()->APP_URL;
-		$data['title'] = 'new User';
-		$this->render('user', $data);
+		$this->data['title'] = 'new User';
+		$this->data['message'] = '';
+        $this->data['user'] = new User;
+        $form = $this->getUserForm();
+        $this->data['form'] = $form->render();
+		$this->renderAction('admin_user');
 	}
 
 	public function edit() {
@@ -82,8 +108,8 @@ class UserController extends AdminController {
 	}
 
     private function setUser() {
+        Doo::loadModel('User');
         if (isset($this->params['id'])) {
-            Doo::loadModel('User');
             $u = new User;
             $u->id = $this->params['id'];
             $user = $this->db()->find($u, array('limit'=>1));
@@ -94,7 +120,11 @@ class UserController extends AdminController {
     private function getUserForm() {
         Doo::loadHelper('DooForm');
         $u = $this->data['user'];
-        $action = Doo::conf()->APP_URL . 'index.php/admin/users/'.$u->id;
+        if ($u->id) {
+            $action = Doo::conf()->APP_URL . 'index.php/admin/users/'.$u->id;
+        } else {
+            $action = Doo::conf()->APP_URL . 'index.php/admin/users/save';
+        }
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
@@ -118,14 +148,14 @@ class UserController extends AdminController {
                      'required' => true,
                      'label' => 'First Name(Pinyin):',
                      'value' => $u->first_name_alphabet,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name_alphabet' => array('text', array(
                      'required' => true,
                      'label' => 'Last Name(Pinyin):',
                      'value' => $u->last_name_alphabet,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
                  'element-wrapper' => 'div'
                  )),
                  'password' => array('password', array(
@@ -138,7 +168,7 @@ class UserController extends AdminController {
                  )),
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array(array('email')),
+                     'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
                      'label' => 'Email:',
                      'value' => $u->email,
                      'attributes' => array('class' => 'control email validate[required,email]'),
@@ -148,14 +178,14 @@ class UserController extends AdminController {
                      'required' => true,
                      'label' => 'Phone:',
                      'value' => $u->phone,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'attributes' => array('class' => 'control textbox validate[number()]'),
                  'element-wrapper' => 'div'
                  )),
                  'qq' => array('text', array(
                      'required' => true,
                      'label' => 'QQ:',
                      'value' => $u->qq,
-                     'attributes' => array('class' => 'control textbox'),
+                     'attributes' => array('class' => 'control textbox validate[number()]'),
                  'element-wrapper' => 'div'
                  )),
                  'confirm_code' => array('text', array(
@@ -167,10 +197,10 @@ class UserController extends AdminController {
                  )),
                  'type' => array('select', array(
                      'required' => true,
-                     'multioptions' => array('' => '' , 'admin' => 'admin', 'staff' => 'staff', 'customer' => 'customer'),
+                     'multioptions' => array('' => '' , 'customer'=>'客户', 'counselor'=>'咨询员', 'executor'=>'执行员', 'admin'=>'管理员'),
                      'label' => 'Type:',
                      'value' => $u->type,
-                     'attributes' => array('class' => 'control type'),
+                     'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(

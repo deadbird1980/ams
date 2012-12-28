@@ -32,6 +32,7 @@ $route['*']['/admin/users'] = array('UserController', 'index');
 $route['*']['/admin/users/:id'] = array('UserController', 'edit');
 $route['post']['/admin/users/:id'] = array('UserController', 'update');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
+$route['post']['/admin/users/save'] = array('UserController', 'save');
 
 //my page
 $route['*']['/my'] = array('MyController', 'home');
