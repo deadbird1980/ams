@@ -47,16 +47,17 @@ class AdminController extends BaseController {
 
         $this->data['pager'] = $pager->output;
 
+        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                        array('select'=>'id,email,first_name,last_name')
+                                        array('select'=>$columns)
                                   );
             $this->data['order'] = 'asc';
         }else{
             $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,email,first_name,last_name')
+                                        array('select'=>$columns)
                                   );
             $this->data['order'] = 'desc';
         }

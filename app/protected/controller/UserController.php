@@ -28,17 +28,18 @@ class UserController extends AdminController {
         $data['baseurl'] = Doo::conf()->APP_URL;
         $data['pager'] = $pager->output;
 
+        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $data['users'] = $u->limit($pager->limit, null, $this->sortField,
                                         //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,email,first_name,last_name')
+                                        array('select'=>$columns)
                                   );
             $data['order'] = 'asc';
         }else{
             $data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
-                                        array('select'=>'id,email,first_name,last_name')
+                                        array('select'=>$columns)
                                   );
             $data['order'] = 'desc';
         }
@@ -168,7 +169,7 @@ class UserController extends AdminController {
                  )),
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
+                     'validators' => array(array('email')),
                      'label' => 'Email:',
                      'value' => $u->email,
                      'attributes' => array('class' => 'control email validate[required,email]'),
