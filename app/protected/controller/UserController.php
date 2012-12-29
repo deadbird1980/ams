@@ -28,7 +28,7 @@ class UserController extends AdminController {
         $data['baseurl'] = Doo::conf()->APP_URL;
         $data['pager'] = $pager->output;
 
-        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq';
+        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $data['users'] = $u->limit($pager->limit, null, $this->sortField,
@@ -100,7 +100,8 @@ class UserController extends AdminController {
             $u->qq = $_POST['qq'];
             $u->confirm_code = $_POST['confirm_code'];
             $u->type = $_POST['type'];
-            $u->update(array('where'=>"id={$u->id}",'field'=>'email,type,first_name,last_name,password,qq,confirm_code'));
+            $u->status = $_POST['status'];
+            $u->update(array('where'=>"id={$u->id}",'field'=>'email,type,first_name,last_name,password,qq,confirm_code,phone,status'));
             $this->data['message'] = 'updated';
             $form = $this->getUserForm();
         }
@@ -194,6 +195,14 @@ class UserController extends AdminController {
                      'label' => 'Confirm Code:',
                      'value' => $u->confirm_code,
                      'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div'
+                 )),
+                 'status' => array('select', array(
+                     'required' => true,
+                     'multioptions' => array('registered'=>'注册', 'active'=>'激活', 'obsolete'=>'过期'),
+                     'label' => 'Status:',
+                     'value' => $u->status,
+                     'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
                  )),
                  'type' => array('select', array(

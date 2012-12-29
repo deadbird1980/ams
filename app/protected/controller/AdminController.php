@@ -47,7 +47,7 @@ class AdminController extends BaseController {
 
         $this->data['pager'] = $pager->output;
 
-        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq';
+        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
