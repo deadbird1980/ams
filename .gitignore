@@ -1,5 +1,6 @@
 *.swp
 *~
+.*
 testserver/*log
 testserver/lock.*
 testserver/pid
