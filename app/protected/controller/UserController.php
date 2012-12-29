@@ -113,7 +113,11 @@ class UserController extends AdminController {
         Doo::loadModel('User');
         if (isset($this->params['id'])) {
             $u = new User;
-            $u->id = $this->params['id'];
+            if (is_numeric($this->params['id'])) {
+                $u->id = $this->params['id'];
+            } else {
+                $u->confirm_code = $this->params['id'];
+            }
             $user = $this->db()->find($u, array('limit'=>1));
             $this->data['user'] = $user;
         }
