@@ -26,5 +26,9 @@ class BaseController extends DooController {
          $this->view()->render($view, $this->data, NULL, Doo::conf()->TEMPLATE_COMPILE_ALWAYS);
       }
     }
+
+    protected function isPost() {
+        return $_SERVER['REQUEST_METHOD'] == 'POST';
+    }
 }
 ?>

@@ -31,6 +31,7 @@ $route['*']['/admin'] = array('AdminController', 'home');
 $route['*']['/admin/users'] = array('UserController', 'index');
 $route['*']['/admin/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:id'] = array('UserController', 'edit');
+$route['*']['/users/:code/active'] = array('UserController', 'active');
 $route['post']['/admin/users/:id'] = array('UserController', 'update');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
 $route['post']['/admin/users/save'] = array('UserController', 'save');
@@ -38,8 +39,12 @@ $route['post']['/admin/users/save'] = array('UserController', 'save');
 //my page
 $route['*']['/my'] = array('MyController', 'home');
 $route['*']['/my/profile'] = array('MyController', 'profile');
-$route['post']['/my/user/update'] = array('UserController', 'update');
-$route['*']['/my/application/'] = array('ApplicationController', 'create');
+$route['get']['/my/users'] = array('MyController', 'listUsers');
+$route['post']['/my/users/:id/edit'] = array('UserController', 'update');
+$route['*']['/my/users/activate'] = array('MyController', 'activateUser');
+$route['*']['/my/applications/'] = array('MyController', 'index');
+$route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
+
 
 //Error
 $route['*']['/error/user'] = array('ErrorController', 'userDefaultError');

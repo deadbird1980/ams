@@ -109,6 +109,10 @@ class UserController extends AdminController {
 		$this->renderAction('admin_user');
 	}
 
+    public function activate() {
+        $u = $this->data['user'];
+    }
+
     private function setUser() {
         Doo::loadModel('User');
         if (isset($this->params['id'])) {
