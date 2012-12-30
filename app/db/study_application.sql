@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS `visa_application`;
+DROP TABLE IF EXISTS `study_application`;
 
-CREATE TABLE `visa_application` (
+CREATE TABLE `study_application` (
   `id` int(11) NOT NULL,
   `application_id` int(11) NOT NULL,
   `type` char(10) NOT NULL DEFAULT '',
