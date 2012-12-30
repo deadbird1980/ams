@@ -93,7 +93,41 @@ class MyController extends BaseController {
         $this->renderAction('/my/user/activate');
     }
 
-    public function applyVisa() {
+    public function apply() {
+        $form = $this->getEuropeVisaForm();
+        if ($this->isPost() && $form->isValid($_POST)) {
+            Doo::loadModel('Application');
+            $a = new Application();
+            $a->user_id = $this->user->id;
+            if ($this->user->activated_by) {
+                $a->assignee_id = $this->user->activated_by;
+            }
+            $this->data['message'] = "User activated!";
+            $a->type = 'visa';
+            $a->status = 'in_progress';
+            $id = $a->insert();
+            return $this->APP_URL . "index.php/my/application/{$id}/files";
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/create');
+    }
+
+    public function uploadFile() {
+        Doo::loadClass('UploadHandler');
+        $handler = new UploadHandler();
+        $handler->post(true);
+    }
+
+    public function uploadFiles() {
+        $form = $this->getFilesForm();
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $u = new User();
+            $u->findByConfirm_code($_POST['confirm_code']);
+            $u->activate($this->user);
+            $this->data['message'] = "User activated!";
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/file');
     }
 
     private function getActivateUserForm() {
@@ -113,6 +147,129 @@ class MyController extends BaseController {
                  )),
                  'submit' => array('submit', array(
                      'label' => "激活",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
+
+    private function getFilesForm() {
+        Doo::loadHelper('DooForm');
+        $action = Doo::conf()->APP_URL . 'index.php/my/users/activate';
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'files' => array('display', array(
+                     'content' => '文件:',
+                 )),
+                 'attachment' => array('file', array(
+                     'required' => true,
+                     'attributes' => array('class' => 'control multi max-15 accept-png|jpg validate[filesize]'),
+                 'field-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "下一步",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
+    private function getEuropeVisaForm() {
+        Doo::loadHelper('DooForm');
+        $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'. $this->params['type'];
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'start_date' => array('text', array(
+                     'label' => 'Start Date:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport' => array('display', array(
+                     'content' => '护照信息:',
+                 )),
+                 'passport_no' => array('text', array(
+                     'label' => '护照号码:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport_name' => array('text', array(
+                     'label' => '护照姓名:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'birthday' => array('text', array(
+                     'label' => '生日:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport_start_date' => array('text', array(
+                     'label' => '护照生效期:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport_end_date' => array('text', array(
+                     'label' => '护照截止日期:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa' => array('display', array(
+                     'content' => '当前签证状态:',
+                 )),
+                 'address' => array('text', array(
+                     'label' => '英国地址:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa_start_date' => array('text', array(
+                     'label' => '签证开始日期:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa_end_date' => array('text', array(
+                     'label' => '签证结束日期:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'work' => array('display', array(
+                     'content' => '目前工作学习状况:',
+                 )),
+                 'company' => array('text', array(
+                     'label' => '公司名称:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'university' => array('text', array(
+                     'label' => '学校名称:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'files' => array('display', array(
+                     'content' => '文件:',
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "下一步",
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

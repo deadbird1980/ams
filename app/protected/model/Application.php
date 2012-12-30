@@ -10,7 +10,7 @@ class Application extends DooSmartModel{
     public $start_date;
     public $end_date;
     public $paid;
-    public $_table = 'user';
+    public $_table = 'application';
     public $_primarykey = 'id';
     public $_fields = array('id','user_id','type','status','start_date','end_date','paid');
     function __construct(){
