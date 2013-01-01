@@ -127,7 +127,7 @@ class MyController extends BaseController {
             $this->data['message'] = "User activated!";
         }
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/file');
+        $this->renderAction('/my/application/files');
     }
 
     private function getActivateUserForm() {
