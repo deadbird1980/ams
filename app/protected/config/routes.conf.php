@@ -42,9 +42,15 @@ $route['*']['/my/profile'] = array('MyController', 'profile');
 $route['get']['/my/users'] = array('MyController', 'listUsers');
 $route['post']['/my/users/:id/edit'] = array('UserController', 'update');
 $route['*']['/my/users/activate'] = array('MyController', 'activateUser');
-$route['*']['/my/applications/'] = array('MyController', 'index');
+$route['*']['/my/applications'] = array('MyController', 'listApplications');
+$route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
+$route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
+$route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
+$route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 
+//files
+$route['*']['/files/upload'] = array('FileController', 'upload');
 
 //Error
 $route['*']['/error/user'] = array('ErrorController', 'userDefaultError');
