@@ -33,6 +33,42 @@ class MyController extends BaseController {
         $this->renderAction('/my/'.$this->session->user['type'].'/index');
 	}
 
+	public function listApplications() {
+        Doo::loadHelper('DooPager');
+        Doo::loadModel('Application');
+        $u = $this->user;
+        $app = new Application();
+        //if default, no sorting defined by user, show this as pager link
+        if($this->sortField=='email' && $this->orderType=='desc'){
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $app->count($app->scopeSeenByUser($u)), 6, 10);
+        }else{
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $app->count($app->seenByUser($u)), 6, 10);
+        }
+
+        if(isset($this->params['pindex']))
+            $pager->paginate(intval($this->params['pindex']));
+        else
+            $pager->paginate(1);
+
+        $this->data['pager'] = $pager->output;
+
+        $columns = 'id,type,start_date,status,assignee_id,user_id';
+        //Order by ASC or DESC
+        if($this->orderType=='desc'){
+            $this->data['applications'] = $app->limit($pager->limit, null, $this->sortField,
+                                        array_merge(array('select'=>$columns), $app->scopeSeenByMe($u))
+                                  );
+            $this->data['order'] = 'asc';
+        }else{
+            $this->data['applications'] = $app->limit($pager->limit, $this->sortField, null,
+                                        //we don't want to select the Content (waste of resources)
+                                        array_merge(array('select'=>$columns), $app->scopeSeenByUser($u))
+                                  );
+            $this->data['order'] = 'desc';
+        }
+        $this->renderAction('/my/'.$this->session->user['type'].'/applications');
+	}
+
 	public function listUsers() {
         Doo::loadHelper('DooPager');
         $user = $this->user;
@@ -93,7 +129,33 @@ class MyController extends BaseController {
         $this->renderAction('/my/user/activate');
     }
 
+    public function editApplication() {
+        Doo::loadModel('Application');
+
+        $app = new Application();
+        $this->data['application'] = $app->getById_first($this->params['id']);
+
+        $form = $this->getEuropeVisaForm();
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $id = $this->params['id'];
+            $app = new Application();
+            $app = $app->getById_first($id);
+            $visaapp = new VisaApplication();
+            $visaapp = $visaapp->getById_first($id);
+            $app = new VisaApplication($_POST);
+            $app->id = $id;
+            $app->update_attributes($_POST, array('where'=>"id=${id}"));
+            return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/edit');
+    }
+
     public function apply() {
+        Doo::loadModel('Application');
+        $app = new Application();
+        $app->type = $this->params['type'];
+        $this->data['application'] = $app;
         $form = $this->getEuropeVisaForm();
         if ($this->isPost() && $form->isValid($_POST)) {
             Doo::loadModel('Application');
@@ -106,10 +168,17 @@ class MyController extends BaseController {
             $a->type = 'visa';
             $a->status = 'in_progress';
             $id = $a->insert();
-            return $this->APP_URL . "index.php/my/application/{$id}/files";
+            // application detail
+            if ($this->params['type'] == 'visa') {
+                Doo::loadModel('VisaApplication');
+                $a = new VisaApplication($_POST);
+                $a->id = $id;
+                $a->insert();
+            }
+            return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
         }
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/create');
+        $this->renderAction('/my/application/edit');
     }
 
     public function uploadFile() {
@@ -184,15 +253,31 @@ class MyController extends BaseController {
     }
     private function getEuropeVisaForm() {
         Doo::loadHelper('DooForm');
-        $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'. $this->params['type'];
+        $app = $this->data['application'];
+        if ($app) {
+            if ($app->id) {
+            $action = Doo::conf()->APP_URL . 'index.php/my/applications/'. $app->id;
+            } else {
+            $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'.$app->type;
+            }
+        } else {
+            $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'. $this->params['type'];
+        }
+        Doo::loadModel('VisaApplication');
+        $visaapp = new VisaApplication();
+        $visaapp = $visaapp->getById_first($app->id);
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
+                 'type' => array('hidden', array(
+                     'value' => $app->type,
+                 )),
                  'start_date' => array('text', array(
                      'label' => 'Start Date:',
                      'required' => true,
+                     'value' => $visaapp->start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
@@ -202,30 +287,35 @@ class MyController extends BaseController {
                  'passport_no' => array('text', array(
                      'label' => '护照号码:',
                      'required' => true,
+                     'value' => $visaapp->passport_no,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_name' => array('text', array(
                      'label' => '护照姓名:',
                      'required' => true,
+                     'value' => $visaapp->passport_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'birthday' => array('text', array(
                      'label' => '生日:',
                      'required' => true,
+                     'value' => $visaapp->birthday,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
                      'label' => '护照生效期:',
                      'required' => true,
+                     'value' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('text', array(
                      'label' => '护照截止日期:',
                      'required' => true,
+                     'value' => $visaapp->passport_end_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
@@ -235,33 +325,31 @@ class MyController extends BaseController {
                  'address' => array('text', array(
                      'label' => '英国地址:',
                      'required' => true,
+                     'value' => $visaapp->address,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_start_date' => array('text', array(
                      'label' => '签证开始日期:',
                      'required' => true,
+                     'value' => $visaapp->visa_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_end_date' => array('text', array(
                      'label' => '签证结束日期:',
                      'required' => true,
+                     'value' => $visaapp->visa_end_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'work' => array('display', array(
                      'content' => '目前工作学习状况:',
                  )),
-                 'company' => array('text', array(
-                     'label' => '公司名称:',
+                 'organization' => array('text', array(
+                     'label' => '公司/学校名称:',
                      'required' => true,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'university' => array('text', array(
-                     'label' => '学校名称:',
-                     'required' => true,
+                     'value' => $visaapp->organization,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
