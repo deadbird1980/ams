@@ -13,9 +13,10 @@ class Application extends DooSmartModel{
     public $paid;
     public $_table = 'application';
     public $_primarykey = 'id';
-    public $_fields = array('id','user_id','type','status','start_date','end_date','paid');
+    public $_fields = array('id','user_id','type','status','assignee_id','start_date','end_date','paid');
     function __construct(){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()
+        //parent::setupModel(__CLASS__);
     }
 
     public function scopeSeenByUser($user) {

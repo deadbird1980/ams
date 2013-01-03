@@ -8,6 +8,7 @@ CREATE TABLE `visa_application` (
   `passport_start_date` date NOT NULL,
   `passport_end_date` date NOT NULL,
   `birthday` date NOT NULL,
+  `organization` char(50) NOT NULL,
   `name` char(50) NOT NULL DEFAULT '',
   `visa_start_date` date NOT NULL,
   `visa_end_date` date NOT NULL,
