@@ -5,6 +5,7 @@ class BaseController extends DooController {
     protected $data = array();
     protected $session;
     protected $auth;
+    protected $translator;
 
 	public function beforeRun($resource, $action){
 
@@ -13,6 +14,9 @@ class BaseController extends DooController {
         $this->session = Doo::session('ams');
         Doo::loadCore('auth/DooAuth');
         $this->auth = new DooAuth('ams');
+        // “apc”, “php”, “xcache” and “eaccelerator”.
+        // Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('cache' => 'php', 'delimiter' => '|'));
+        Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('delimiter' => '|'));
 	}
 
     protected function renderAction($view, $layout = 'main') {
@@ -29,6 +33,10 @@ class BaseController extends DooController {
 
     protected function isPost() {
         return $_SERVER['REQUEST_METHOD'] == 'POST';
+    }
+
+    protected function t($msg) {
+        return Doo::getTranslator()->translate($msg);
     }
 }
 ?>

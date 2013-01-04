@@ -1,7 +1,7 @@
   <!-- block:content -->
       <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" id="theme">
     <div class="left">
-        <h1>My Users</h1>
+        <h1>{{t('my_application')}}</h1>
 <div class="message">
     {{message}}
 </div>
@@ -9,7 +9,7 @@
     <div class="container">
   <div id="leftSide">
   <fieldset>
-<legend>User details</legend>
+      <legend>{{t('application_details')}}</legend>
     {{form}}
         </fieldset>
     </div>
@@ -20,8 +20,8 @@
                   setTimeout("init()",100);
                   return
               }
-              var required_error = "This field must be filled in!";
-              var pinyin_error = "Pinyin must be filled in!";
+              var required_error = "{{t('required_error')}}";
+              var pinyin_error = "{{t('pinyin_error')}}";
               $("#form").Zebra_Form({scroll_to_error:true,
                       tips_position:'left',
                       close_tips:true,

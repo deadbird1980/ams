@@ -52,7 +52,7 @@ $config['TEMPLATE_COMPILE_ALWAYS'] = TRUE;
 //$config['ERROR_404_DOCUMENT'] = 'error.php';
 $config['ERROR_404_ROUTE'] = '/error';
 
-$config['lang'] = 'en';
+$config['lang'] = 'zh';
 $config['default_lang'] = 'en';
 
 /**

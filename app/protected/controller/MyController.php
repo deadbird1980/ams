@@ -135,7 +135,7 @@ class MyController extends BaseController {
         $app = new Application();
         $this->data['application'] = $app->getById_first($this->params['id']);
 
-        $form = $this->getEuropeVisaForm();
+        $form = $this->getEuropeVisaForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
             $id = $this->params['id'];
             $app = new Application();
@@ -296,89 +296,86 @@ class MyController extends BaseController {
                      'value' => $app->type,
                  )),
                  'start_date' => array('text', array(
-                     'label' => 'Start Date:',
+                     'label' => $this->t('start_date'),
                      'required' => true,
                      'value' => $visaapp->start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport' => array('display', array(
-                     'content' => '护照信息:',
+                     'content' => $this->t('passport_information'),
                  )),
                  'passport_no' => array('text', array(
-                     'label' => '护照号码:',
+                     'label' => $this->t('passport_no'),
                      'required' => true,
                      'value' => $visaapp->passport_no,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_name' => array('text', array(
-                     'label' => '护照姓名:',
+                     'label' => $this->t('passport_name'),
                      'required' => true,
                      'value' => $visaapp->passport_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'birthday' => array('text', array(
-                     'label' => '生日:',
+                     'label' => $this->t('birthday'),
                      'required' => true,
                      'value' => $visaapp->birthday,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
-                     'label' => '护照生效期:',
+                     'label' => $this->t('start_date'),
                      'required' => true,
                      'value' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('text', array(
-                     'label' => '护照截止日期:',
+                     'label' => $this->t('end_date'),
                      'required' => true,
                      'value' => $visaapp->passport_end_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'visa' => array('display', array(
-                     'content' => '当前签证状态:',
+                     'content' => $this->t('visa_status'),
                  )),
                  'address' => array('text', array(
-                     'label' => '英国地址:',
+                     'label' => $this->t('uk_address'),
                      'required' => true,
                      'value' => $visaapp->address,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_start_date' => array('text', array(
-                     'label' => '签证开始日期:',
+                     'label' => $this->t('start_date'),
                      'required' => true,
                      'value' => $visaapp->visa_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_end_date' => array('text', array(
-                     'label' => '签证结束日期:',
+                     'label' => $this->t('end_date'),
                      'required' => true,
                      'value' => $visaapp->visa_end_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'work' => array('display', array(
-                     'content' => '目前工作学习状况:',
+                     'content' => $this->t('work_study_information'),
                  )),
                  'organization' => array('text', array(
-                     'label' => '公司/学校名称:',
+                     'label' => $this->t('organization'),
                      'required' => true,
                      'value' => $visaapp->organization,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
-                 'files' => array('display', array(
-                     'content' => '文件:',
-                 )),
                  'submit' => array('submit', array(
-                     'label' => "下一步",
+                     'label' => $this->t('next'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

@@ -81,13 +81,7 @@ function url2($controller, $method, $param=null, $addRootUrl=false){
 }
 
 function t($str){
-    if(Doo::conf()->lang==Doo::conf()->default_lang)
-        return $str;
-
-    include 'lang/' . Doo::conf()->lang .'.lang.php';
-
-    if(isset($lang[$str]))
-        return $lang[$str];
+    return Doo::getTranslator()->translate($str);
 }
 
 ?>
