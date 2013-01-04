@@ -145,7 +145,8 @@ class MyController extends BaseController {
             $app = new VisaApplication($_POST);
             $app->id = $id;
             $app->update_attributes($_POST, array('where'=>"id=${id}"));
-            return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
+            Doo::loadHelper('DooUrlBuilder');
+            return DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$id), true);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/edit');
@@ -223,7 +224,8 @@ class MyController extends BaseController {
 
     private function getActivateUserForm() {
         Doo::loadHelper('DooForm');
-        $action = Doo::conf()->APP_URL . 'index.php/my/users/activate';
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('MyController', 'activateUser', true);
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
@@ -275,15 +277,12 @@ class MyController extends BaseController {
     }
     private function getEuropeVisaForm() {
         Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
         $app = $this->data['application'];
-        if ($app) {
-            if ($app->id) {
-            $action = Doo::conf()->APP_URL . 'index.php/my/applications/'. $app->id;
-            } else {
-            $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'.$app->type;
-            }
+        if ($app && $app->id) {
+            $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
         } else {
-            $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'. $this->params['type'];
+            $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
         }
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
