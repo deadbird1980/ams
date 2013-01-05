@@ -25,18 +25,19 @@ class FileController extends BaseController {
         $u = new User();
         $u->id = $this->session->user['id'];
         $this->user = $this->db()->find($u, array('limit'=>1));
-        $this->sortField = '';
-        $this->orderType = '';
+        $this->setHandler();
 	}
 
 	public function home() {
         $this->renderAction('/file/index');
 	}
 
+    public function view() {
+        $this->handler->get(true);
+    }
+
     public function upload() {
-        Doo::loadClass('UploadHandler');
-        $handler = new UploadHandler(null, false);
-        $handler->post(true);
+        $this->handler->post(true);
     }
 
     public function create() {
@@ -49,6 +50,22 @@ class FileController extends BaseController {
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/file');
+    }
+
+    protected function setHandler() {
+        Doo::loadClass('UploadHandler');
+        Doo::loadModel('Attachment');
+        $attachment = new Attachment();
+        if (isset($_GET['application_id'])) {
+            $attachment->application_id = $_GET['application_id'];
+        }
+        Doo::loadHelper('DooUrlBuilder');
+        $url = DooUrlBuilder::url2('FileController', 'upload', null, true);
+        $script_url = DooUrlBuilder::url2('FileController', 'view', null, true);
+        $this->handler = new UploadHandler(array('script_url'=>$script_url,
+                                           'upload_url'=>$script_url,
+                                           'upload_model'=>$attachment,
+                                           'download_via_php'=>true), false);
     }
 }
 ?>

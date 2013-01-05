@@ -47,9 +47,11 @@ $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
 $route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
+$route['*']['/my/applications/:id/confirm'] = array('MyController', 'confirmApplication');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 
 //files
+$route['*']['/files/view'] = array('FileController', 'view');
 $route['*']['/files/upload'] = array('FileController', 'upload');
 
 //Error

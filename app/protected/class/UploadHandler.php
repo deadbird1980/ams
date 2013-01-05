@@ -38,6 +38,7 @@ class UploadHandler
         $this->options = array(
             'script_url' => $this->get_full_url().'/',
             'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/files/',
+            'upload_model' => false,
             'upload_url' => $this->get_full_url().'/files/',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
@@ -738,6 +739,14 @@ class UploadHandler
                 $content_range
             );
         }
+
+        if ($this->options['upload_model']) {
+            foreach($files as $file) {
+                $id = $this->options['upload_model']->importFile($file);
+                $file->delete_url = '';
+            }
+        }
+
         return $this->generate_response(
             array($this->options['param_name'] => $files),
             $print_response

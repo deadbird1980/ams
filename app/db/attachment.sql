@@ -6,6 +6,5 @@ CREATE TABLE `attachment` (
   `file_name` char(50) DEFAULT NULL,
   `file_size` char(50) DEFAULT NULL,
   `file_type` char(50) DEFAULT NULL,
-  `content` longblob,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
