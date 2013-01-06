@@ -15,6 +15,7 @@ include $config['BASE_PATH'].'diagnostic/debug.php';
 Doo::acl()->rules = $acl;
 Doo::acl()->defaultFailedRoute = '/error';
 
+Doo::db()->setMap($dbmap);
 Doo::db()->setDb($dbconfig, $config['APP_MODE']);
 //Doo::db()->sql_tracking = true;
 
