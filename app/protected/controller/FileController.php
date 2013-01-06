@@ -32,6 +32,9 @@ class FileController extends BaseController {
         $this->renderAction('/file/index');
 	}
 
+    public function json() {
+    }
+
     public function view() {
         $this->handler->get(true);
     }
@@ -53,19 +56,20 @@ class FileController extends BaseController {
     }
 
     protected function setHandler() {
-        Doo::loadClass('UploadHandler');
-        Doo::loadModel('Attachment');
-        $attachment = new Attachment();
-        if (isset($_GET['application_id'])) {
-            $attachment->application_id = $_GET['application_id'];
-        }
         Doo::loadHelper('DooUrlBuilder');
         $url = DooUrlBuilder::url2('FileController', 'upload', null, true);
         $script_url = DooUrlBuilder::url2('FileController', 'view', null, true);
-        $this->handler = new UploadHandler(array('script_url'=>$script_url,
-                                           'upload_url'=>$script_url,
-                                           'upload_model'=>$attachment,
-                                           'download_via_php'=>true), false);
+        $options = array('script_url'=>$script_url,
+                       'upload_url'=>$script_url,
+                       'download_via_php'=>true);
+        if (isset($_GET['application_id'])) {
+            Doo::loadModel('Attachment');
+            $attachment = new Attachment();
+            $attachment->application_id = $_GET['application_id'];
+            $options['upload_model'] = $attachment;
+        }
+        Doo::loadClass('UploadHandler');
+        $this->handler = new UploadHandler($options, false);
     }
 }
 ?>

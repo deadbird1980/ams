@@ -12,9 +12,9 @@
     <div class="container">
   <div id="leftSide">
     <!-- The file upload form used as target for the file upload widget -->
-<form id="fileupload" action="{{rootUrl}}index.php/files/upload?application_id=1" method="POST" enctype="multipart/form-data">
+<form id="fileupload" action="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
-<noscript><input type="hidden" name="redirect" value="{{rootUrl}}index.php/files/upload?application_id=1"></noscript>
+<noscript><input type="hidden" name="redirect" value="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
             <div class="span7">
@@ -127,17 +127,16 @@
 $(function () {
     //'use strict';
 
+    var files_url = "{{url2('FileController', 'view')}}";
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-url: '{{rootUrl}}index.php/files/upload?application_id=1'
+        url: files_url + '?application_id={{application.@id}}'
     });
 
-    if (true || window.location.hostname === 'blueimp.github.com') {
         // Demo settings:
         $('#fileupload').fileupload('option', {
-        url: '{{rootUrl}}index.php/files/upload?application_id=1',
             maxFileSize: 5000000,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             process: [
@@ -156,7 +155,6 @@ url: '{{rootUrl}}index.php/files/upload?application_id=1'
                 }
             ]
         });
-    } else {
         // Load existing files:
         $.ajax({
             // Uncomment the following to send cross-domain cookies:
@@ -168,7 +166,6 @@ url: '{{rootUrl}}index.php/files/upload?application_id=1'
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
         });
-    }
 
     // Initialize the Image Gallery widget:
     $('#fileupload .files').imagegallery();

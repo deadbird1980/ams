@@ -37,7 +37,7 @@ class UploadHandler
     function __construct($options = null, $initialize = true) {
         $this->options = array(
             'script_url' => $this->get_full_url().'/',
-            'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/files/',
+            'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/uploads/',
             'upload_model' => false,
             'upload_url' => $this->get_full_url().'/files/',
             'user_dirs' => false,
@@ -246,9 +246,17 @@ class UploadHandler
         if (!is_dir($upload_dir)) {
             return array();
         }
+        if ($att = $this->options['upload_model']) {
+            $atts = $att->sameApplication();
+            foreach($atts as $att) {
+                $files[] = $att->file_name;
+            }
+        } else {
+            $files = scandir($upload_dir);
+        }
         return array_values(array_filter(array_map(
             array($this, $iteration_method),
-            scandir($upload_dir)
+            $files
         )));
     }
 

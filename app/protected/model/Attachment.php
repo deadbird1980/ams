@@ -22,5 +22,9 @@ class Attachment extends DooSmartModel{
         $this->file_type = $file->type;
         return $this->insert();
     }
+
+    public function sameApplication() {
+        return $this->find(array('where'=>"application_id={$this->application_id}"));
+    }
 }
 ?>
