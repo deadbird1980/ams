@@ -24,27 +24,25 @@ class UserController extends AdminController {
         else
             $pager->paginate(1);
 
-        $data['rootUrl'] = Doo::conf()->APP_URL;
-        $data['baseurl'] = Doo::conf()->APP_URL;
-        $data['pager'] = $pager->output;
+        $this->data['pager'] = $pager->output;
 
         $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
-            $data['users'] = $u->limit($pager->limit, null, $this->sortField,
+            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
                                         //we don't want to select the Content (waste of resources)
                                         array('select'=>$columns)
                                   );
-            $data['order'] = 'asc';
+            $this->data['order'] = 'asc';
         }else{
-            $data['users'] = $u->limit($pager->limit, $this->sortField, null,
+            $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
                                         array('select'=>$columns)
                                   );
-            $data['order'] = 'desc';
+            $this->data['order'] = 'desc';
         }
 
-        $this->render('admin', $data);
+        $this->renderAction('admin');
     }
 
 	public function save() {
