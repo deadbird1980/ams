@@ -183,6 +183,10 @@ class UploadHandler
     protected function set_file_delete_properties($file) {
         $file->delete_url = $this->options['script_url']
             .'?file='.rawurlencode($file->name);
+        if (isset($file->id)) {
+            $file->delete_url .= '&id='.$file->id;
+            $file->delete_url .= '&application_id='.$file->application_id;
+        }
         $file->delete_type = $this->options['delete_type'];
         if ($file->delete_type !== 'DELETE') {
             $file->delete_url .= '&_method=DELETE';
@@ -218,8 +222,17 @@ class UploadHandler
     }
 
     protected function get_file_object($file_name) {
+        // get information from attachment model
+        if (!is_string($file_name)) {
+            $att = $file_name;
+            $file_name = $att->file_name;
+        }
         if ($this->is_valid_file_object($file_name)) {
             $file = new stdClass();
+            if (isset($att)) {
+                $file->id = $att->id;
+                $file->application_id = $att->application_id;
+            }
             $file->name = $file_name;
             $file->size = $this->get_file_size(
                 $this->get_upload_path($file_name)
@@ -249,7 +262,7 @@ class UploadHandler
         if ($att = $this->options['upload_model']) {
             $atts = $att->sameApplication();
             foreach($atts as $att) {
-                $files[] = $att->file_name;
+                $files[] = $att;
             }
         } else {
             $files = scandir($upload_dir);
@@ -608,6 +621,10 @@ class UploadHandler
         return isset($_GET['file']) ? basename(stripslashes($_GET['file'])) : null;
     }
 
+    protected function get_file_id_param() {
+        return isset($_GET['id']) ? $_GET['id'] : null;
+    }
+
     protected function get_file_type($file_path) {
         switch (strtolower(pathinfo($file_path, PATHINFO_EXTENSION))) {
             case 'jpeg':
@@ -763,7 +780,13 @@ class UploadHandler
 
     public function delete($print_response = true) {
         $file_name = $this->get_file_name_param();
+        $file_id = $this->get_file_id_param();
         $file_path = $this->get_upload_path($file_name);
+        if ($file_id) {
+            $att = $this->options['upload_model'];
+            $att = $att->getById_first($file_id);
+            $att->delete();
+        }
         $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
         if ($success) {
             foreach($this->options['image_versions'] as $version => $options) {

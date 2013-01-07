@@ -61,6 +61,7 @@ class FileController extends BaseController {
         $script_url = DooUrlBuilder::url2('FileController', 'view', null, true);
         $options = array('script_url'=>$script_url,
                        'upload_url'=>$script_url,
+                       'delete_type'=>'POST',
                        'download_via_php'=>true);
         if (isset($_GET['application_id'])) {
             Doo::loadModel('Attachment');
