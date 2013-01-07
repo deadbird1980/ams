@@ -62,7 +62,7 @@ class AdminController extends BaseController {
             $this->data['order'] = 'desc';
         }
 
-        $this->renderAction('admin');
+        $this->renderAction('admin/index');
 	}
 
     /**
