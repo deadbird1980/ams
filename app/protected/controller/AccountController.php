@@ -61,7 +61,11 @@ class AccountController extends BaseController{
                         $user = Doo::loadModel('User', true);
                         $user->email = $_POST['email'];
                         $user->password = $_POST['password'];
-                        $user = $this->db()->find($user, array('limit'=>1));
+                        if (Doo::conf()->APP_MODE == 'dev') {
+                            $user = $user->getByEmail_first($_POST['email']);
+                        } else {
+                            $user = $this->db()->find($user, array('limit'=>1));
+                        }
 
                         if($user){
                                 Doo::loadCore('session/DooSession');
@@ -102,11 +106,7 @@ class AccountController extends BaseController{
     private function getLoginForm() {
         Doo::loadHelper('DooForm');
         $action = Doo::conf()->APP_URL . 'index.php/login';
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
+        $elements = array(
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email'), array('dbExist', 'User', 'email', 'User/Password Wrong!')),
@@ -132,7 +132,27 @@ class AccountController extends BaseController{
                      'content' => '<a href=#1>Not a member?</a>',
                  'field-wrapper' => 'div'
                  ))
-             )
+             );
+        if (Doo::conf()->APP_MODE == 'dev') {
+            $elements['email'][0] = 'select';
+            Doo::loadModel('User');
+            $user = new User();
+            $options = array(''=>'');
+            $users = $user->find();
+            foreach($users as $u) {
+                $options[$u->email] = $u->email;
+            }
+            $elements['email'][1]['multioptions'] = $options;
+            $elements['password'] = array('hidden', array(
+                                 'value'=>'password'
+                                 ));
+        }
+
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
         ));
         return $form;
     }
