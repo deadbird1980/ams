@@ -28,6 +28,10 @@ class FileController extends BaseController {
         $this->setHandler();
 	}
 
+	public function index() {
+        $this->renderAction('/file/index');
+	}
+
 	public function home() {
         $this->renderAction('/file/index');
 	}
@@ -68,6 +72,7 @@ class FileController extends BaseController {
             $attachment = new Attachment();
             $attachment->application_id = $_GET['application_id'];
             $options['upload_model'] = $attachment;
+            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
         }
         Doo::loadClass('UploadHandler');
         $this->handler = new UploadHandler($options, false);

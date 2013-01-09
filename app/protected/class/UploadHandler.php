@@ -160,16 +160,27 @@ class UploadHandler
         return '';
     }
 
+    protected function get_application_path() {
+        if ($this->options['upload_model']) {
+            return $this->options['upload_model']->application_id.'/';
+        }
+        return '';
+    }
+
     protected function get_upload_path($file_name = null, $version = null) {
         $file_name = $file_name ? $file_name : '';
         $version_path = empty($version) ? '' : $version.'/';
         return $this->options['upload_dir'].$this->get_user_path()
+            .$this->get_application_path()
             .$version_path.$file_name;
     }
 
     protected function get_download_url($file_name, $version = null) {
         if ($this->options['download_via_php']) {
             $url = $this->options['script_url'].'?file='.rawurlencode($file_name);
+            if ($this->options['upload_model']) {
+                $url .= '&application_id='.$this->options['upload_model']->application_id;
+            }
             if ($version) {
                 $url .= '&version='.rawurlencode($version);
             }

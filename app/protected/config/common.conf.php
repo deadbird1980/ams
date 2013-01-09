@@ -18,6 +18,7 @@ $config['SITE_PATH'] = realpath('..').'/app/';
 //$config['PROTECTED_FOLDER'] = 'protected/';
 $config['BASE_PATH'] = realpath('..').'/dooframework/';
 $config['TMP_PATH'] = realpath('..').'/tmp/';
+$config['UPLOAD_PATH'] = realpath('..').'/app/uploads/';
 
 //for production mode use 'prod'
 $config['APP_MODE'] = 'dev';
