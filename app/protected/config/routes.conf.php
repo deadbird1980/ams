@@ -26,6 +26,9 @@ $route['*']['/logout'] = array('AccountController', 'logout');
 
 //Admin pages
 $route['*']['/admin'] = array('AdminController', 'home');
+$route['*']['/admin/applications'] = array('ApplicationController', 'index');
+$route['*']['/admin/files'] = array('FileController', 'index');
+$route['*']['/admin/emails'] = array('EmailController', 'index');
 
 //User pages
 $route['*']['/admin/users'] = array('UserController', 'index');
@@ -51,8 +54,8 @@ $route['*']['/my/applications/:id/confirm'] = array('MyController', 'confirmAppl
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 
 //files
-$route['*']['/files/view'] = array('FileController', 'view');
-$route['*']['/files/upload'] = array('FileController', 'upload');
+$route['get']['/files'] = array('FileController', 'view');
+$route['post']['/files'] = array('FileController', 'upload');
 
 //Error
 $route['*']['/error/user'] = array('ErrorController', 'userDefaultError');
