@@ -189,6 +189,10 @@ class MyController extends BaseController {
     }
 
     public function uploadFiles() {
+        Doo::loadModel('Application');
+        $app = new Application();
+        $this->data['application'] = $app->getById_first($this->params['id']);
+
         $form = $this->getFilesForm();
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User();
@@ -196,6 +200,9 @@ class MyController extends BaseController {
             $u->activate($this->user);
             $this->data['message'] = "User activated!";
         }
+        Doo::loadHelper('DooUrlBuilder');
+        $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
+        $this->data['next_url'] = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$this->params['id']), true);
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/files');
     }

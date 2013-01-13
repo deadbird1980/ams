@@ -114,6 +114,10 @@
                 .button({icons: {primary: 'ui-icon-cancel'}})
                 .end().find('.delete')
                 .button({icons: {primary: 'ui-icon-trash'}})
+                .end().find('.next')
+                .button({icons: {primary: 'ui-icon-circle-arrow-e'}})
+                .end().find('.prev')
+                .button({icons: {primary: 'ui-icon-circle-arrow-w'}})
                 .end().find('.progress').empty().progressbar();
         },
         _destroy: function () {

@@ -53,6 +53,22 @@
         <br>
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <br>
+        <br>
+        <div class="row fileupload-buttonbar">
+            <div class="span7">
+                <span class="btn btn-success fileinput-button prev">
+                    <i class="icon-plus icon-white"></i>
+                    <a href="{{prev_url}}">Prev</a>
+                </span>
+                <span class="btn btn-success fileinput-button next">
+                    <i class="icon-plus icon-white"></i>
+                    <a href="{{next_url}}">Next</a>
+                </span>
+            </div>
+            <!-- The global progress information -->
+        </div>
     </form>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
