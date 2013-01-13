@@ -5,20 +5,19 @@ $acl['anonymous']['allow'] = array(
 							'AccountController'=>array('*')
 						);
 
-$acl['user']['allow'] = array(
+// customer/counselor/executor/admin
+
+$acl['customer']['allow'] = array(
 							'MyController'=>'*', 
 						);
 
-$acl['user']['deny'] = array(
+$acl['customer']['deny'] = array(
 							'AdminController'=>array('*'), 
 							'UserController' =>array('*')
 						);
 
 
 $acl['admin']['allow'] = '*';
-$acl['admin']['deny'] = array(
-							'SnsController'=>array('showVipHome')
-						);
 
 $acl['user']['failRoute'] = array(
 								'_default'=>'/error/user',	//if not found this will be used
