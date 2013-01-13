@@ -139,21 +139,27 @@ class MyController extends BaseController {
         $app = new Application();
         $this->data['application'] = $app->getById_first($this->params['id']);
 
-        $form = $this->getEuropeVisaForm($app);
-        if ($this->isPost() && $form->isValid($_POST)) {
-            $id = $this->params['id'];
-            $app = new Application();
-            $app = $app->getById_first($id);
-            $visaapp = new VisaApplication();
-            $visaapp = $visaapp->getById_first($id);
-            $app = new VisaApplication($_POST);
-            $app->id = $id;
-            $app->update_attributes($_POST, array('where'=>"id=${id}"));
-            Doo::loadHelper('DooUrlBuilder');
-            return DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$id), true);
+        if ($this->data['application']->isSubmitted()) {
+            $form = $this->getConfirmApplicationForm();
+            $this->data['form'] = $form->render();
+            $this->renderAction('/my/application/confirm');
+        } else {
+            $form = $this->getEuropeVisaForm($app);
+            if ($this->isPost() && $form->isValid($_POST)) {
+                $id = $this->params['id'];
+                $app = new Application();
+                $app = $app->getById_first($id);
+                $visaapp = new VisaApplication();
+                $visaapp = $visaapp->getById_first($id);
+                $app = new VisaApplication($_POST);
+                $app->id = $id;
+                $app->update_attributes($_POST, array('where'=>"id=${id}"));
+                Doo::loadHelper('DooUrlBuilder');
+                return DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$id), true);
+            }
+            $this->data['form'] = $form->render();
+            $this->renderAction('/my/application/edit');
         }
-        $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/edit');
     }
 
     public function apply() {
@@ -404,11 +410,7 @@ class MyController extends BaseController {
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
         $visaapp = $visaapp->getById_first($app->id);
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
+        $elements =  array(
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
@@ -480,14 +482,20 @@ class MyController extends BaseController {
                      'content' => $visaapp->organization,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
+                 )));
+        if (!$app->isSubmitted()) {
+            $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
-                 ))
-             )
+                 ));
+        }
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
         ));
         return $form;
     }
