@@ -10,10 +10,6 @@ class MyController extends BaseController {
 		//if not login, group = anonymous
 		$role = (isset($this->session->user['type'])) ? $this->session->user['type'] : 'anonymous';
 
-		if($role!='anonymous'){
-				$role = 'student';
-		}
-
 		//check against the ACL rules
 		if($rs = $this->acl()->process($role, $resource, $action )){
 			//echo $role .' is not allowed for '. $resource . ' '. $action;
@@ -127,6 +123,14 @@ class MyController extends BaseController {
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/user/activate');
+    }
+
+    public function submitApplication() {
+        Doo::loadModel('Application');
+
+        $app = new Application();
+        $app->update_attributes(array("status"=>"submitted"), array('where'=>"id={$this->params['id']}"));
+        $this->renderAction('/my/application/submitted');
     }
 
     public function editApplication() {
@@ -394,16 +398,9 @@ class MyController extends BaseController {
 
     private function getConfirmApplicationForm() {
         Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
         $app = $this->data['application'];
-        if ($app) {
-            if ($app->id) {
-            $action = Doo::conf()->APP_URL . 'index.php/my/applications/'. $app->id;
-            } else {
-            $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'.$app->type;
-            }
-        } else {
-            $action = Doo::conf()->APP_URL . 'index.php/my/applications/create/'. $this->params['type'];
-        }
+        $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
         $visaapp = $visaapp->getById_first($app->id);
@@ -416,7 +413,7 @@ class MyController extends BaseController {
                      'value' => $app->type,
                  )),
                  'start_date' => array('display', array(
-                     'label' => 'Start Date:',
+                     'label' => $this->t('start_date'),
                      'content' => $visaapp->start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -425,31 +422,31 @@ class MyController extends BaseController {
                      'content' => '护照信息:',
                  )),
                  'passport_no' => array('display', array(
-                     'label' => '护照号码:',
+                     'label' => $this->t('passport_no'),
                      'content' => $visaapp->passport_no,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_name' => array('display', array(
-                     'label' => '护照姓名:',
+                     'label' => $this->t('passport_name'),
                      'content' => $visaapp->passport_name,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'birthday' => array('display', array(
-                     'label' => '生日:',
+                     'label' => $this->t('birthday'),
                      'content' => $visaapp->birthday,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('display', array(
-                     'label' => '护照生效期:',
+                     'label' => $this->t('start_date'),
                      'content' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('display', array(
-                     'label' => '护照截止日期:',
+                     'label' => $this->t('end_date'),
                      'content' => $visaapp->passport_end_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -458,19 +455,19 @@ class MyController extends BaseController {
                      'content' => '当前签证状态:',
                  )),
                  'address' => array('display', array(
-                     'label' => '英国地址:',
+                     'label' => $this->t('uk_address'),
                      'content' => $visaapp->address,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_start_date' => array('display', array(
-                     'label' => '签证开始日期:',
+                     'label' => $this->t('start_date'),
                      'content' => $visaapp->visa_start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_end_date' => array('display', array(
-                     'label' => '签证结束日期:',
+                     'label' => $this->t('end_date'),
                      'content' => $visaapp->visa_end_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -479,16 +476,13 @@ class MyController extends BaseController {
                      'content' => '目前工作学习状况:',
                  )),
                  'organization' => array('display', array(
-                     'label' => '公司/学校名称:',
+                     'label' => $this->t('organization'),
                      'content' => $visaapp->organization,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
-                 'files' => array('display', array(
-                     'content' => '文件:',
-                 )),
                  'submit' => array('submit', array(
-                     'label' => "提交",
+                     'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
