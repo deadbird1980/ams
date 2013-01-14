@@ -214,7 +214,11 @@ class MyController extends BaseController {
         $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
         $this->data['next_url'] = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$this->params['id']), true);
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/files');
+        if ($this->data['application']->isSubmitted()) {
+            $this->renderAction('/my/application/file/view');
+        } else {
+            $this->renderAction('/my/application/file/edit');
+        }
     }
 
     public function confirmApplication() {
