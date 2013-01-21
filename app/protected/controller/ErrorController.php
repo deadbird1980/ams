@@ -2,6 +2,11 @@
 require_once 'BaseController.php';
 
 class ErrorController extends BaseController {
+	public function beforeRun($resource, $action){
+
+        $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
+        $this->data['message'] = '';
+    }
 
 	function userDefaultError() {
 		$this->data['title'] = 'Member is not allowed!';
