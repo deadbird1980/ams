@@ -2,7 +2,7 @@
 
 // anonymous user can only access Account index page.
 $acl['anonymous']['allow'] = array(
-							'AccountController'=>array('*')
+							'AccountController'=>'*'
 						);
 
 // customer/counselor/executor/admin
