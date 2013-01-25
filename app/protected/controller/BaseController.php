@@ -14,6 +14,15 @@ class BaseController extends DooController {
         $this->session = Doo::session('ams');
         Doo::loadCore('auth/DooAuth');
         $this->auth = new DooAuth('ams');
+		//if not login, group = anonymous
+        $role = (isset($this->session->user['type'])) ? $this->session->user['type'] : 'anonymous';
+
+        if($rs = $this->acl()->process($role, $resource, $action )){
+            //echo $role .' is not allowed for '. $resource . ' '. $action;
+            //print_r($rs);
+            return $rs;
+        }
+        $this->data['role'] = $role;
         // “apc”, “php”, “xcache” and “eaccelerator”.
         // Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('cache' => 'php', 'delimiter' => '|'));
         Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('delimiter' => '|'));

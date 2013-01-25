@@ -2,9 +2,13 @@
         <h2>My</h2>
         <ul>
             <li>
+            <!-- if {{role}}=='customer' -->
+                <a href="{{rootUrl}}index.php/my/profile">Profile</a>
+            <!-- else -->
                 <a href="{{rootUrl}}index.php/my/users">Users</a>
-                <a href="{{rootUrl}}index.php/my/application/">Application</a>
-                <a href="{{rootUrl}}my/email/">Email</a>
+            <!-- endif -->
+                <a href="{{rootUrl}}index.php/my/applications/">Application</a>
+                <a href="{{rootUrl}}my/emails/">Email</a>
                 <a href="{{rootUrl}}logout/">Logout</a>
             </li>
         </ul>
