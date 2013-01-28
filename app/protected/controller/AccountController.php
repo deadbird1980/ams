@@ -105,31 +105,32 @@ class AccountController extends BaseController{
 
     private function getLoginForm() {
         Doo::loadHelper('DooForm');
-        $action = Doo::conf()->APP_URL . 'index.php/login';
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('AccountController', 'login', null, true);
         $elements = array(
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email'), array('dbExist', 'User', 'email', 'User/Password Wrong!')),
-                     'label' => 'Email:',
+                     'label' => $this->t('email'),
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
                  'password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
-                     'label' => 'Password:',
+                     'label' => $this->t('password'),
                  'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
-                     'label' => "Login",
+                     'label' => $this->t('login'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
                  )),
 
                  'register' => array('display', array(
-                     'content' => '<a href=#1>Not a member?</a>',
+                     'content' => "<a href=".DooUrlBuilder::url2('AccountController', 'registration', null, true).">{$this->t('register')}</a>",
                  'field-wrapper' => 'div'
                  ))
              );
@@ -167,56 +168,56 @@ class AccountController extends BaseController{
              'elements' => array(
                  'first_name' => array('text', array(
                      'required' => true,
-                     'label' => 'First Name:',
+                     'label' => $this->t('first_name'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name' => array('text', array(
                      'required' => true,
-                     'label' => 'Last Name:',
+                     'label' => $this->t('last_name'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'first_name_alphabet' => array('text', array(
                      'required' => true,
-                     'label' => 'First Name(pinyin):',
+                     'label' => $this->t('first_name_pinyin'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name_alphabet' => array('text', array(
                      'required' => true,
-                     'label' => 'Last Name(pinyin):',
+                     'label' => $this->t('last_name_pinyin'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
-                     'label' => 'Password:',
+                     'label' => $this->t('password'),
                  'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
                  'element-wrapper' => 'div'
                  )),
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
-                     'label' => 'Email:',
+                     'label' => $this->t('email'),
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
                  'phone' => array('text', array(
                      'required' => true,
-                     'label' => 'Phone:',
+                     'label' => $this->t('phone'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'qq' => array('text', array(
                      'required' => true,
-                     'label' => 'QQ:',
+                     'label' => $this->t('qq'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
-                     'label' => "Register",
+                     'label' => $this->t('register'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

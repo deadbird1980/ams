@@ -19,3 +19,15 @@ file|"文件"
 
 required_error|"请填写本项目!"
 pinyin_error|"请填写拼音!"
+
+first_name|"名"
+last_name|"姓"
+first_name_pinyin|"名（拼音）"
+last_name_pinyin|"姓（拼音）"
+password|"密码"
+phone|"电话"
+email|"邮箱"
+qq|"QQ号码"
+register|"注册"
+
+login|"登录"
