@@ -20,7 +20,7 @@ class MyController extends BaseController {
 	}
 
 	public function home() {
-        $this->renderAction('/my/'.$this->session->user['type'].'/index');
+        $this->renderAction('/my/index');
 	}
 
 	public function listApplications() {
