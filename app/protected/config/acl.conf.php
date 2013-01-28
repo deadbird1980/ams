@@ -8,7 +8,16 @@ $acl['anonymous']['allow'] = array(
 // customer/counselor/executor/admin
 
 $acl['customer']['allow'] = array(
-							'MyController'=>'*', 
+							'MyController'=>'*',
+							'AccountController'=>'*'
+						);
+$acl['counselor']['allow'] = array(
+							'MyController'=>'*',
+							'AccountController'=>'*'
+						);
+$acl['executor']['allow'] = array(
+							'MyController'=>'*',
+							'AccountController'=>'*'
 						);
 
 $acl['customer']['deny'] = array(
@@ -19,7 +28,7 @@ $acl['customer']['deny'] = array(
 
 $acl['admin']['allow'] = '*';
 
-$acl['user']['failRoute'] = array(
+$acl['customer']['failRoute'] = array(
 								'_default'=>'/error/user',	//if not found this will be used
 								'AdminController/banUser'=>'/error/user/notAdmin', 
 							);
