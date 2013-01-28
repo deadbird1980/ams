@@ -5,16 +5,10 @@ class MyController extends BaseController {
 
     protected $user;
 	public function beforeRun($resource, $action){
-        parent::beforeRun($resource, $action);
+        if ($rtn = parent::beforeRun($resource, $action)) {
+            return $rtn;
+        }
 
-		//if not login, group = anonymous
-		$role = (isset($this->session->user['type'])) ? $this->session->user['type'] : 'anonymous';
-
-		//check against the ACL rules
-		if($rs = $this->acl()->process($role, $resource, $action )){
-			//echo $role .' is not allowed for '. $resource . ' '. $action;
-			//return $rs;
-		}
 
         Doo::loadModel('User');
 
@@ -62,7 +56,7 @@ class MyController extends BaseController {
                                   );
             $this->data['order'] = 'desc';
         }
-        $this->renderAction('/my/'.$this->session->user['type'].'/applications');
+        $this->renderAction('/my/application/index');
 	}
 
 	public function listUsers() {
@@ -105,12 +99,12 @@ class MyController extends BaseController {
     public function profile() {
 		$this->data['title'] = 'User';
         Doo::loadModel('User');
-
         $u = new User();
-        $u->id = $this->params['id'];
-        $user = $this->db()->find($u, array('limit'=>1));
-		$this->data['user'] = $user;
-		$this->renderAction('my_profile');
+        $this->data['user'] = $u->getById_first($this->session->user['id']);
+        $form = $this->getProfileForm();
+        $this->data['form'] = $form->render();
+
+		$this->renderAction('/my/profile');
     }
 
     public function activateUser() {
@@ -500,6 +494,88 @@ class MyController extends BaseController {
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => $elements
+        ));
+        return $form;
+    }
+
+    private function getProfileForm() {
+        Doo::loadHelper('DooForm');
+        $u = $this->data['user'];
+        if ($u->id) {
+            $action = Doo::conf()->APP_URL . 'index.php/admin/users/'.$u->id;
+        } else {
+            $action = Doo::conf()->APP_URL . 'index.php/admin/users/save';
+        }
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'first_name' => array('text', array(
+                     'required' => true,
+                     'label' => 'First Name:',
+                     'value' => $u->first_name,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'last_name' => array('text', array(
+                     'required' => true,
+                     'label' => 'Last Name:',
+                     'value' => $u->last_name,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'first_name_alphabet' => array('text', array(
+                     'required' => true,
+                     'label' => 'First Name(Pinyin):',
+                     'value' => $u->first_name_alphabet,
+                     'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'last_name_alphabet' => array('text', array(
+                     'required' => true,
+                     'label' => 'Last Name(Pinyin):',
+                     'value' => $u->last_name_alphabet,
+                     'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'password' => array('password', array(
+                     'required' => true,
+                     'validators' => array('password'),
+                     'label' => 'Password:',
+                     'value' => $u->password,
+                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'email' => array('text', array(
+                     'required' => true,
+                     'validators' => array(array('email')),
+                     'label' => 'Email:',
+                     'value' => $u->email,
+                     'attributes' => array('class' => 'control email validate[required,email]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'phone' => array('text', array(
+                     'required' => true,
+                     'label' => 'Phone:',
+                     'value' => $u->phone,
+                     'attributes' => array('class' => 'control textbox validate[number()]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'qq' => array('text', array(
+                     'required' => true,
+                     'label' => 'QQ:',
+                     'value' => $u->qq,
+                     'attributes' => array('class' => 'control textbox validate[number()]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "Save",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
         ));
         return $form;
     }
