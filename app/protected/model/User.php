@@ -19,8 +19,9 @@ class User extends DooSmartModel{
     public $_table = 'user';
     public $_primarykey = 'id';
     public $_fields = array('id','email','password','type','first_name','last_name','first_name_alphabet','last_name_alphabet','phone','qq','confirm_code','status','activated_by');
-    public function __construct(){
+    public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Food::_count(), Food::getById()
+        parent::__construct($properties);
     }
 
     public function scopeSeenByMe() {
