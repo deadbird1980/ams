@@ -51,6 +51,13 @@ class User extends DooSmartModel{
       return $this->type == 'customer';
     }
 
+    public function isRegistered() {
+        if ($this->status == 'registered') {
+            return true;
+        }
+        return false;
+    }
+
     public function activate($user_id) {
         if ($this->status == 'registered') {
             $this->status = 'active';

@@ -51,6 +51,7 @@ class AccountController extends BaseController{
 
     public function login(){
         $form = $this->getLoginForm();
+        $this->data['message'] = $this->t('wrong_email_password');
         if ($form->isValid($_POST)) {
             if(isset($_POST['email']) && isset($_POST['password']) ){
 
@@ -68,6 +69,9 @@ class AccountController extends BaseController{
                         }
 
                         if($user){
+                            if ($user->isRegistered()) {
+                                $this->data['message'] = $this->t('not_activated');
+                            } else {
                                 Doo::loadCore('session/DooSession');
                                 $this->session->start();
                                 unset($this->session->user);
@@ -81,12 +85,12 @@ class AccountController extends BaseController{
                                 } else {
                                     return Doo::conf()->APP_URL . 'index.php/my/';
                                 }
+                            }
                         }
                 }
             }
         }
         $this->data['form'] = $form->render();
-        $this->data['message'] = 'User with details below not found';
         $this->renderAction('login');
     }
 
