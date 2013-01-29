@@ -27,6 +27,8 @@ $route['*']['/logout'] = array('AccountController', 'logout');
 //Admin pages
 $route['*']['/admin'] = array('AdminController', 'home');
 $route['*']['/admin/applications'] = array('ApplicationController', 'index');
+$route['*']['/admin/applications/:id'] = array('MyController', 'editApplication');
+$route['*']['/admin/applications/:id/files'] = array('MyController', 'uploadFiles');
 $route['*']['/admin/files'] = array('FileController', 'index');
 $route['*']['/admin/emails'] = array('EmailController', 'index');
 
