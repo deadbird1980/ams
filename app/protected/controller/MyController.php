@@ -114,9 +114,14 @@ class MyController extends BaseController {
         $form = $this->getActivateUserForm();
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User();
-            $u->findByConfirm_code($_POST['confirm_code']);
-            $u->activate($this->user);
-            $this->data['message'] = "User activated!";
+            $u->confirm_code = $_POST['confirm_code'];
+            $u = $this->db()->find($u, array('limit'=>1));
+            if (!$u->isRegistered()) {
+                $this->data['message'] = "User already activiated!";
+            } else {
+                $u->activate($this->user->id);
+                $this->data['message'] = "User activated!";
+            }
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/user/activate');
