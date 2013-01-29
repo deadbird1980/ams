@@ -42,7 +42,7 @@ class UserController extends AdminController {
             $this->data['order'] = 'desc';
         }
 
-        $this->renderAction('admin');
+        $this->renderAction('/admin/user/index');
     }
 
 	public function save() {
@@ -65,7 +65,7 @@ class UserController extends AdminController {
             $form = $this->getUserForm();
         }
         $this->data['form'] = $form->render();
-		$this->renderAction('admin_user');
+		$this->renderAction('/admin/user/edit');
 	}
 
 	public function create() {
@@ -74,14 +74,14 @@ class UserController extends AdminController {
         $this->data['user'] = new User;
         $form = $this->getUserForm();
         $this->data['form'] = $form->render();
-		$this->renderAction('admin_user');
+		$this->renderAction('/admin/user/edit');
 	}
 
 	public function edit() {
 		$this->data['title'] = 'User';
         $form = $this->getUserForm();
         $this->data['form'] = $form->render();
-		$this->renderAction('admin_user');
+		$this->renderAction('/admin/user/edit');
 	}
 
 	public function update() {
@@ -104,7 +104,7 @@ class UserController extends AdminController {
             $form = $this->getUserForm();
         }
         $this->data['form'] = $form->render();
-		$this->renderAction('admin_user');
+		$this->renderAction('/admin/user/edit');
 	}
 
     public function activate() {

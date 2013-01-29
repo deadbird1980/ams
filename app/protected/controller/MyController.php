@@ -63,37 +63,40 @@ class MyController extends BaseController {
         Doo::loadHelper('DooPager');
         $user = $this->user;
         $u = new User;
+        if ($u->count($user->scopeSeenByMe()) > 0) {
         //if default, no sorting defined by user, show this as pager link
-        if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count($user->scopeSeenByMe()), 6, 10);
-        }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count($user->scopeSeenByMe()), 6, 10);
-        }
+            if($this->sortField=='email' && $this->orderType=='desc'){
+                $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count($user->scopeSeenByMe()), 6, 10);
+            }else{
+                $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count($user->scopeSeenByMe()), 6, 10);
+            }
 
-        if(isset($this->params['pindex']))
-            $pager->paginate(intval($this->params['pindex']));
-        else
-            $pager->paginate(1);
+            if(isset($this->params['pindex']))
+                $pager->paginate(intval($this->params['pindex']));
+            else
+                $pager->paginate(1);
 
-        $this->data['pager'] = $pager->output;
+            $this->data['pager'] = $pager->output;
 
-        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
-        //Order by ASC or DESC
-        if($this->orderType=='desc'){
-            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                        array_merge(array('select'=>$columns), $user->scopeSeenByMe())
-                                  );
-            $this->data['order'] = 'asc';
-        }else{
-            $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
-                                        //we don't want to select the Content (waste of resources)
-                                        array_merge(array('select'=>$columns), $user->scopeSeenByMe())
-                                  );
-            $this->data['order'] = 'desc';
+            $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
+            //Order by ASC or DESC
+            if($this->orderType=='desc'){
+                $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
+                                            array_merge(array('select'=>$columns), $user->scopeSeenByMe())
+                                      );
+                $this->data['order'] = 'asc';
+            }else{
+                $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
+                                            //we don't want to select the Content (waste of resources)
+                                            array_merge(array('select'=>$columns), $user->scopeSeenByMe())
+                                      );
+                $this->data['order'] = 'desc';
+            }
         }
         $form = $this->getActivateUserForm();
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/'.$this->session->user['type'].'/users');
+        //$this->renderAction('/my/'.$this->session->user['type'].'/users');
+        $this->renderAction('/my/user/index');
 	}
 
     public function profile() {
@@ -240,7 +243,7 @@ class MyController extends BaseController {
     private function getActivateUserForm() {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
-        $action = DooUrlBuilder::url2('MyController', 'activateUser', true);
+        $action = DooUrlBuilder::url2('MyController', 'activateUser', null, true);
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
