@@ -37,9 +37,9 @@ class AccountController extends BaseController{
             $user->type = 'customer';
             $user->status = 'registered';
             // calculate confirm key
-            $user->confirm_key = md5($user->email . '@' . Doo::conf()->SITE_ID).'@' . time();
+            $user->confirm_code = md5($user->email . '@' . Doo::conf()->SITE_ID.'@' . time());
             $user->insert();
-            $this->data['message'] = 'Registered, please contact your customer service with this code:'. $user->confirm_code;
+            $this->data['message'] = $this->t('registered'). $user->confirm_code;
             $this->renderAction('registered');
         } else {
             $this->data['message'] = 'User with details below not found';
