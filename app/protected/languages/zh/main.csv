@@ -31,3 +31,10 @@ qq|"QQ号码"
 register|"注册"
 
 login|"登录"
+my_users|"我的客户"
+no_records|"无记录"
+profile|"个人信息"
+application|"申请"
+user|"用户"
+logout|"退出"
+

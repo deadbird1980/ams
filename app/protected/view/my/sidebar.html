@@ -1,15 +1,14 @@
     <div class="listmenu">
-        <h2>My</h2>
+        <h2>{{t('my')}}</h2>
         <ul>
             <li>
-            <!-- if {{role}}=='customer' -->
-                <a href="{{rootUrl}}index.php/my/profile">Profile</a>
-            <!-- else -->
-                <a href="{{rootUrl}}index.php/my/users">Users</a>
+                <a href="{{rootUrl}}index.php/my/profile">{{t('profile')}}</a>
+            <!-- if {{role}}!='customer' -->
+                <a href="{{rootUrl}}index.php/my/users">{{t('user')}}</a>
             <!-- endif -->
-                <a href="{{rootUrl}}index.php/my/applications/">Application</a>
-                <a href="{{rootUrl}}my/emails/">Email</a>
-                <a href="{{rootUrl}}logout/">Logout</a>
+                <a href="{{rootUrl}}index.php/my/applications/">{{t('application')}}</a>
+                <a href="{{rootUrl}}my/emails/">{{t('email')}}</a>
+                <a href="{{rootUrl}}logout/">{{t('logout')}}</a>
             </li>
         </ul>
     </div>
