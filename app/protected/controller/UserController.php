@@ -87,7 +87,7 @@ class UserController extends BaseController {
 		$this->data['title'] = 'User';
         $form = $this->getUserForm();
         $this->data['form'] = $form->render();
-		$this->renderAction('/admin/user/edit');
+		$this->renderAction('/my/user/edit');
 	}
 
 	public function update() {
@@ -152,11 +152,7 @@ class UserController extends BaseController {
         } else {
             $action = Doo::conf()->APP_URL . 'index.php/admin/users/save';
         }
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
+        $elements = array(
                  'first_name' => array('text', array(
                      'required' => true,
                      'label' => 'First Name:',
@@ -230,21 +226,28 @@ class UserController extends BaseController {
                      'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
                  )),
-                 'type' => array('select', array(
+             );
+        if ($this->user->isAdmin()) {
+        $elements['type'] = array('select', array(
                      'required' => true,
                      'multioptions' => array('' => '' , 'customer'=>'客户', 'counselor'=>'咨询员', 'executor'=>'执行员', 'admin'=>'管理员'),
                      'label' => 'Type:',
                      'value' => $u->type,
                      'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
+                 ));
+        }
+        $elements['submit'] = array('submit', array(
                      'label' => "Save",
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
-                 ))
-             )
+                 ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
         ));
         return $form;
     }
