@@ -6,6 +6,7 @@ class BaseController extends DooController {
     protected $session;
     protected $auth;
     protected $translator;
+    protected $user;
 
 	public function beforeRun($resource, $action){
 
@@ -26,6 +27,11 @@ class BaseController extends DooController {
         // “apc”, “php”, “xcache” and “eaccelerator”.
         // Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('cache' => 'php', 'delimiter' => '|'));
         Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('delimiter' => '|'));
+        if ($this->session->user['id']) {
+            Doo::loadModel('User');
+            $u = new User();
+            $this->user = $u->getById_first($this->session->user['id']);
+        }
 	}
 
     protected function renderAction($view, $layout = 'main') {
