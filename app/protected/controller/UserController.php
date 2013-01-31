@@ -1,49 +1,55 @@
 <?php
-require_once 'AdminController.php';
+require_once 'BaseController.php';
 
-class UserController extends AdminController {
+class UserController extends BaseController {
 	public function beforeRun($resource, $action){
-        parent::beforeRun($resource, $action);
+        if ($rtn = parent::beforeRun($resource, $action)) {
+            return $rtn;
+        }
         $this->setUser();
+        $this->sortField = '';
+        $this->orderType = '';
     }
 
-    public function index() {
+	public function index() {
         Doo::loadHelper('DooPager');
-        Doo::loadModel('User');
-
-        $u = new User();
+        $user = $this->user;
+        $u = new User;
+        $scope = $user->scopeSeenByMe();
+        if ($user_count = $u->count($scope) > 0) {
         //if default, no sorting defined by user, show this as pager link
-        if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
-        }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
+            if($this->sortField=='email' && $this->orderType=='desc'){
+                $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $user_count, 6, 10);
+            }else{
+                $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $user_count, 6, 10);
+            }
+
+            if(isset($this->params['pindex']))
+                $pager->paginate(intval($this->params['pindex']));
+            else
+                $pager->paginate(1);
+
+            $this->data['pager'] = $pager->output;
+
+            $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
+            //Order by ASC or DESC
+            if($this->orderType=='desc'){
+                $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
+                                            array_merge(array('select'=>$columns), $scope)
+                                      );
+                $this->data['order'] = 'asc';
+            }else{
+                $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
+                                            //we don't want to select the Content (waste of resources)
+                                            array_merge(array('select'=>$columns), $scope)
+                                      );
+                $this->data['order'] = 'desc';
+            }
         }
-
-        if(isset($this->params['pindex']))
-            $pager->paginate(intval($this->params['pindex']));
-        else
-            $pager->paginate(1);
-
-        $this->data['pager'] = $pager->output;
-
-        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
-        //Order by ASC or DESC
-        if($this->orderType=='desc'){
-            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                        //we don't want to select the Content (waste of resources)
-                                        array('select'=>$columns)
-                                  );
-            $this->data['order'] = 'asc';
-        }else{
-            $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
-                                        //we don't want to select the Content (waste of resources)
-                                        array('select'=>$columns)
-                                  );
-            $this->data['order'] = 'desc';
-        }
-
-        $this->renderAction('/admin/user/index');
-    }
+        $form = $this->getActivateUserForm();
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/user/index');
+	}
 
 	public function save() {
 		$this->data['title'] = 'new User';
@@ -108,7 +114,20 @@ class UserController extends AdminController {
 	}
 
     public function activate() {
-        $u = $this->data['user'];
+        $form = $this->getActivateUserForm();
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $u = new User();
+            $u->confirm_code = $_POST['confirm_code'];
+            $u = $this->db()->find($u, array('limit'=>1));
+            if (!$u->isRegistered()) {
+                $this->data['message'] = $this->t('already_activated');
+            } else {
+                $u->activate($this->user->id);
+                $this->data['message'] = $this->t('user_activated');
+            }
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/user/activate');
     }
 
     private function setUser() {
@@ -221,6 +240,33 @@ class UserController extends AdminController {
                  )),
                  'submit' => array('submit', array(
                      'label' => "Save",
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
+
+    private function getActivateUserForm() {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('UserController', 'activate', null, true);
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'confirm_code' => array('text', array(
+                     'validators' => array(array('dbExist', 'User', 'confirm_code', 'The confirm code does not exist!')),
+                     'label' => 'Confirm Code:',
+                     'required' => true,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => "激活",
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

@@ -4,20 +4,6 @@ require_once 'BaseController.php';
 class MyController extends BaseController {
 
     protected $user;
-	public function beforeRun($resource, $action){
-        if ($rtn = parent::beforeRun($resource, $action)) {
-            return $rtn;
-        }
-
-
-        Doo::loadModel('User');
-
-        $u = new User();
-        $u->id = $this->session->user['id'];
-        $this->user = $this->db()->find($u, array('limit'=>1));
-        $this->sortField = '';
-        $this->orderType = '';
-	}
 
 	public function home() {
         $this->renderAction('/my/index');
@@ -59,47 +45,6 @@ class MyController extends BaseController {
         $this->renderAction('/my/application/index');
 	}
 
-	public function listUsers() {
-        Doo::loadHelper('DooPager');
-        $user = $this->user;
-        $u = new User;
-        $scope = $user->scopeSeenByMe();
-        if ($user_count = $u->count($scope) > 0) {
-        //if default, no sorting defined by user, show this as pager link
-            if($this->sortField=='email' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $user_count, 6, 10);
-            }else{
-                $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $user_count, 6, 10);
-            }
-
-            if(isset($this->params['pindex']))
-                $pager->paginate(intval($this->params['pindex']));
-            else
-                $pager->paginate(1);
-
-            $this->data['pager'] = $pager->output;
-
-            $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
-            //Order by ASC or DESC
-            if($this->orderType=='desc'){
-                $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                            array_merge(array('select'=>$columns), $scope)
-                                      );
-                $this->data['order'] = 'asc';
-            }else{
-                $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
-                                            //we don't want to select the Content (waste of resources)
-                                            array_merge(array('select'=>$columns), $scope)
-                                      );
-                $this->data['order'] = 'desc';
-            }
-        }
-        $form = $this->getActivateUserForm();
-        $this->data['form'] = $form->render();
-        //$this->renderAction('/my/'.$this->session->user['type'].'/users');
-        $this->renderAction('/my/user/index');
-	}
-
     public function profile() {
 		$this->data['title'] = 'User';
         Doo::loadModel('User');
@@ -109,23 +54,6 @@ class MyController extends BaseController {
         $this->data['form'] = $form->render();
 
 		$this->renderAction('/my/profile');
-    }
-
-    public function activateUser() {
-        $form = $this->getActivateUserForm();
-        if ($this->isPost() && $form->isValid($_POST)) {
-            $u = new User();
-            $u->confirm_code = $_POST['confirm_code'];
-            $u = $this->db()->find($u, array('limit'=>1));
-            if (!$u->isRegistered()) {
-                $this->data['message'] = $this->t('already_activated');
-            } else {
-                $u->activate($this->user->id);
-                $this->data['message'] = $this->t('user_activated');
-            }
-        }
-        $this->data['form'] = $form->render();
-        $this->renderAction('/my/user/activate');
     }
 
     public function submitApplication() {
@@ -244,33 +172,6 @@ class MyController extends BaseController {
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/edit');
-    }
-
-    private function getActivateUserForm() {
-        Doo::loadHelper('DooForm');
-        Doo::loadHelper('DooUrlBuilder');
-        $action = DooUrlBuilder::url2('MyController', 'activateUser', null, true);
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
-                 'confirm_code' => array('text', array(
-                     'validators' => array(array('dbExist', 'User', 'confirm_code', 'The confirm code does not exist!')),
-                     'label' => 'Confirm Code:',
-                     'required' => true,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
-                     'label' => "激活",
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ))
-             )
-        ));
-        return $form;
     }
 
     private function getFilesForm() {

@@ -44,9 +44,9 @@ $route['post']['/admin/users/save'] = array('UserController', 'save');
 //my page
 $route['*']['/my'] = array('MyController', 'home');
 $route['*']['/my/profile'] = array('MyController', 'profile');
-$route['get']['/my/users'] = array('MyController', 'listUsers');
+$route['get']['/my/users'] = array('UserController', 'index');
 $route['post']['/my/users/:id/edit'] = array('UserController', 'update');
-$route['*']['/my/users/activate'] = array('MyController', 'activateUser');
+$route['*']['/my/users/activate'] = array('UserController', 'activate');
 $route['*']['/my/applications'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');

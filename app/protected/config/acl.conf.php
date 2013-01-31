@@ -13,16 +13,24 @@ $acl['customer']['allow'] = array(
 						);
 $acl['counselor']['allow'] = array(
 							'MyController'=>'*',
-							'AccountController'=>'*'
+							'AccountController'=>'*',
+							'UserController'=>'*'
 						);
 $acl['executor']['allow'] = array(
 							'MyController'=>'*',
-							'AccountController'=>'*'
+							'AccountController'=>'*',
+							'UserController'=>'*'
 						);
 
 $acl['customer']['deny'] = array(
 							'AdminController'=>array('*'), 
 							'UserController' =>array('*')
+						);
+$acl['counselor']['deny'] = array(
+							'AdminController'=>array('*'),
+						);
+$acl['executor']['deny'] = array(
+							'AdminController'=>array('*'),
 						);
 
 
