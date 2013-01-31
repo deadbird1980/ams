@@ -40,4 +40,6 @@ logout|"退出"
 wrong_email_password|"用户名或密码错误！"
 not_activated|"账号尚未激活，请耐心等待！"
 registered|"注册成功！请告知咨询员如下代码："
+already_activated|"用户已激活"
+user_activated|"用户激活成功!"
 
