@@ -63,12 +63,13 @@ class MyController extends BaseController {
         Doo::loadHelper('DooPager');
         $user = $this->user;
         $u = new User;
-        if ($u->count($user->scopeSeenByMe()) > 0) {
+        $scope = $user->scopeSeenByMe();
+        if ($user_count = $u->count($scope) > 0) {
         //if default, no sorting defined by user, show this as pager link
             if($this->sortField=='email' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count($user->scopeSeenByMe()), 6, 10);
+                $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $user_count, 6, 10);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count($user->scopeSeenByMe()), 6, 10);
+                $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $user_count, 6, 10);
             }
 
             if(isset($this->params['pindex']))
@@ -82,13 +83,13 @@ class MyController extends BaseController {
             //Order by ASC or DESC
             if($this->orderType=='desc'){
                 $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                            array_merge(array('select'=>$columns), $user->scopeSeenByMe())
+                                            array_merge(array('select'=>$columns), $scope)
                                       );
                 $this->data['order'] = 'asc';
             }else{
                 $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                             //we don't want to select the Content (waste of resources)
-                                            array_merge(array('select'=>$columns), $user->scopeSeenByMe())
+                                            array_merge(array('select'=>$columns), $scope)
                                       );
                 $this->data['order'] = 'desc';
             }
@@ -117,10 +118,10 @@ class MyController extends BaseController {
             $u->confirm_code = $_POST['confirm_code'];
             $u = $this->db()->find($u, array('limit'=>1));
             if (!$u->isRegistered()) {
-                $this->data['message'] = "User already activiated!";
+                $this->data['message'] = $this->t('already_activated');
             } else {
                 $u->activate($this->user->id);
-                $this->data['message'] = "User activated!";
+                $this->data['message'] = $this->t('user_activated');
             }
         }
         $this->data['form'] = $form->render();
