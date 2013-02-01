@@ -35,6 +35,17 @@ class User extends DooSmartModel{
         return array();
     }
 
+    public function isAvailabeTo($user) {
+        if ($user->isAdmin()) {
+            return true;
+        } elseif ($user->isCounselor() || $user->isExecutor()) {
+            return $this->activated_by == $user->id;
+        } elseif ($this->isCustomer()) {
+            return $this->id == $user->id;
+        }
+        return false;
+    }
+
     public function isAdmin() {
       return $this->type == 'admin';
     }
