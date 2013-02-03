@@ -1,3 +1,5 @@
+forgotten_password|"忘记密码"
+input_email|"请输入电子邮箱地址"
 my_application|"我的申请"
 application_details|"申请细节"
 start_date|"开始日期"
@@ -61,3 +63,4 @@ pre-master|"硕士预科"
 doctor|"博士"
 
 activate_user|"激活用户"
+

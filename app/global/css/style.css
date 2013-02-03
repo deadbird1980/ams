@@ -339,6 +339,9 @@ label {
 	text-transform:uppercase;
 	font-weight:bold;
 }
+.link {
+    text-align:right;
+}
 
 .Zebra_Form_error_message {
     position: absolute;

@@ -29,6 +29,27 @@ class AccountController extends BaseController{
         $this->renderAction('registration');
     }
 
+    public function forgottenPassword(){
+        $form = $this->getForgottenPasswordForm();
+        if ($this->isPost()) {
+            if ($form->isValid($_POST)) {
+                Doo::loadHelper('DooMailer');
+                $mail = new DooMailer();
+                $mail->addTo($_POST['email']);
+                $mail->setSubject($this->t('forgotten_password'));
+                $mail->setBodyText("This is plain text body");
+                $mail->setFrom('noreply@ams.com', 'no reply');
+                if ($mail->send()) {
+                    $this->data['message'] = $this->t('forgotten_password_email_sent');
+                } else {
+                    $this->data['message'] = $this->t('fail_to_send_email');
+                }
+            }
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('forgotten_password');
+    }
+
     public function register(){
         $form = $this->getRegisterForm();
         if ($form->isValid($_POST)) {
@@ -134,7 +155,8 @@ class AccountController extends BaseController{
                  )),
 
                  'register' => array('display', array(
-                     'content' => "<a href=".DooUrlBuilder::url2('AccountController', 'registration', null, true).">{$this->t('register')}</a>",
+                     'content' => "<a href=".DooUrlBuilder::url2('AccountController', 'registration', null, true).">{$this->t('register')}</a>&nbsp;&nbsp;&nbsp;<a href=".DooUrlBuilder::url2('AccountController', 'forgottenPassword', null, true).">{$this->t('forgotten_password')}</a>",
+                     'attributes' => array('class'=>'link'),
                  'field-wrapper' => 'div'
                  ))
              );
@@ -222,6 +244,33 @@ class AccountController extends BaseController{
                  )),
                  'submit' => array('submit', array(
                      'label' => $this->t('register'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 )),
+
+             )
+        ));
+        return $form;
+    }
+
+    private function getForgottenPasswordForm() {
+        Doo::loadHelper('DooForm');
+        $action = Doo::conf()->APP_URL . 'index.php/forgotten_password';
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'email' => array('text', array(
+                     'required' => true,
+                     'validators' => array(array('email'), array('dbExist', 'User','email','Email not exists, please choose another one!')),
+                     'label' => $this->t('email'),
+                     'attributes' => array('class' => 'control email validate[required,email]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

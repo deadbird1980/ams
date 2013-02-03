@@ -19,6 +19,7 @@
 $route['*']['/'] = array('AccountController', 'index');
 $route['get']['/captcha/:file'] = array('AccountController', 'captcha');
 $route['*']['/registration'] = array('AccountController', 'registration');
+$route['*']['/forgotten_password'] = array('AccountController', 'forgottenPassword');
 $route['post']['/register'] = array('AccountController', 'register');
 
 $route['post']['/login'] = array('AccountController', 'login');
