@@ -1,0 +1,43 @@
+  <!-- block:content -->
+      <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" id="theme">
+    <div class="left">
+        <h1>{{t('my_application')}}</h1>
+<div class="message">
+    {{message}}
+</div>
+<div class="content">
+    <div class="container">
+  <div id="leftSide">
+  <fieldset>
+      <legend>{{t('application_details')}}</legend>
+    {{form}}
+        </fieldset>
+    </div>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+      <script type="text/javascript">
+          function init() {
+              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              var required_error = "{{t('required_error')}}";
+              $("#form").Zebra_Form({scroll_to_error:true,
+                      tips_position:'left',
+                      close_tips:true,
+                      validate_on_the_fly:false,
+                      validate_all:false,
+                      error_messages:{"type-element":{"required":required_error},
+                      }})
+              var dp_options = { dateFormat: "yy-mm-dd" };
+          }
+          init()
+      </script>
+</div>
+</div>
+    </div>
+    <div class="right">
+        <!-- include '/my/sidebar' -->
+    </div>
+
+    <div style="clear: both;"> </div>
+  <!-- endblock -->
