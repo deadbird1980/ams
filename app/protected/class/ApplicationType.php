@@ -21,10 +21,10 @@ class ApplicationType {
     }
 
     public static function isVisa($type) {
-        return strpos('visa_', $type) === true;
+        return strpos($type, 'visa_') !== false;
     }
 
     public static function isSchool($type) {
-        return strpos('visa_', $type) === false;
+        return strpos($type, 'visa_') === false;
     }
 }
