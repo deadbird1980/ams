@@ -45,7 +45,7 @@ user_activated|"用户激活成功!"
 
 create|"创建"
 type|"类型"
-europe_visa|"欧洲签证"
+visa_europe|"欧洲签证"
 visa_t1|"T1签证"
 visa_t2|"T2签证"
 visa_t4|"T4签证"

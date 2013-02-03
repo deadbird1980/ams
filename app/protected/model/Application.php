@@ -50,7 +50,7 @@ class Application extends DooSmartModel{
     public function createDetailApplication() {
         if (ApplicationType::isVisa($this->type)) {
             $a = new VisaApplication();
-            if (!($a = $a->getByid($this->id))) {
+            if (!($a = $a->getByid_first($this->id))) {
                 $a = new VisaApplication();
                 $a->id = $this->id;
                 $a->application_id = $this->id;
@@ -58,7 +58,7 @@ class Application extends DooSmartModel{
             }
         } else {
             $a = new SchoolApplication();
-            if (!($a = $a->getByid($this->id))) {
+            if (!($a = $a->getByid_first($this->id))) {
                 $a = new SchoolApplication();
                 $a->id = $this->id;
                 $a->application_id = $this->id;
