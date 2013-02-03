@@ -1,5 +1,7 @@
 <?php
 Doo::loadCore('db/DooSmartModel');
+Doo::loadClass('ApplicationType');
+Doo::loadModel('SchoolApplication');
 
 class Application extends DooSmartModel{
 
@@ -14,6 +16,8 @@ class Application extends DooSmartModel{
     public $_table = 'application';
     public $_primarykey = 'id';
     public $_fields = array('id','user_id','type','status','assignee_id','start_date','end_date','paid');
+
+    //status
     const CREATED = 'created';
     const IN_PROGRESS = 'in_progress';
     const SUBMITTED = 'submitted';
@@ -41,6 +45,27 @@ class Application extends DooSmartModel{
 
     public function isSubmitted() {
         return $this->status == 'submitted';
+    }
+
+    public function createDetailApplication() {
+        if (ApplicationType::isVisa($this->type)) {
+            $a = new VisaApplication();
+            if (!($a = $a->getByid($this->id))) {
+                $a = new VisaApplication();
+                $a->id = $this->id;
+                $a->application_id = $this->id;
+                $a->insert();
+            }
+        } else {
+            $a = new SchoolApplication();
+            if (!($a = $a->getByid($this->id))) {
+                $a = new SchoolApplication();
+                $a->id = $this->id;
+                $a->application_id = $this->id;
+                $a->insert();
+            }
+        }
+        return $a;
     }
 }
 ?>

@@ -208,8 +208,7 @@ class MyController extends BaseController {
             $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
         }
         Doo::loadModel('VisaApplication');
-        $visaapp = new VisaApplication();
-        $visaapp = $visaapp->getById_first($app->id);
+        $visaapp = $app->createDetailApplication();
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
