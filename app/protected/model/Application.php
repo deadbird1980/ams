@@ -14,6 +14,13 @@ class Application extends DooSmartModel{
     public $_table = 'application';
     public $_primarykey = 'id';
     public $_fields = array('id','user_id','type','status','assignee_id','start_date','end_date','paid');
+    const CREATED = 'created';
+    const IN_PROGRESS = 'in_progress';
+    const SUBMITTED = 'submitted';
+    const CONFIRMED = 'confirmed';
+    const SENT = 'sent';
+    const REPLIED = 'replied';
+    const DONE = 'done';
 
     public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()

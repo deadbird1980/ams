@@ -41,13 +41,11 @@ $route['post']['/admin/users/:id'] = array('UserController', 'update');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
 $route['post']['/admin/users/save'] = array('UserController', 'save');
 
-//my page
+//-------------
+//-- my page
+//-------------
 $route['*']['/my'] = array('MyController', 'home');
 $route['*']['/my/profile'] = array('MyController', 'profile');
-$route['get']['/my/users'] = array('UserController', 'index');
-$route['*']['/my/users/:id/edit'] = array('UserController', 'update');
-$route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
-$route['*']['/my/users/activate'] = array('UserController', 'activate');
 $route['*']['/my/applications'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
@@ -56,6 +54,12 @@ $route['*']['/my/applications/:id/files/upload'] = array('MyController', 'upload
 $route['*']['/my/applications/:id/confirm'] = array('MyController', 'confirmApplication');
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
+// admin/counselor/executor
+$route['get']['/my/users'] = array('UserController', 'index');
+$route['*']['/my/users/:id/edit'] = array('UserController', 'update');
+$route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
+$route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
+$route['*']['/my/users/activate'] = array('UserController', 'activate');
 
 //files
 $route['get']['/files'] = array('FileController', 'view');

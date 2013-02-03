@@ -4,14 +4,15 @@ require_once 'BaseController.php';
 class ApplicationController extends BaseController {
 
     protected $user;
-    protected $sortField;
+    protected $sortField = 'Application.id';
     protected $orderType;
 
 	public function index() {
         Doo::loadHelper('DooPager');
         Doo::loadModel('Application');
+        $app = new Application();
+        $options = $app->scopeSeenByUser($this->user);
         if(isset($this->params['user_id'])) {
-            $scope = $this->user->seenByMe();
             if ($u = $this->user->getById_first($this->params['user_id'])) {
                 if ($u->isAvailabeTo($this->user)) {
                 } else {
@@ -24,12 +25,11 @@ class ApplicationController extends BaseController {
         } else {
             $u = $this->user;
         }
-        $app = new Application();
         //if default, no sorting defined by user, show this as pager link
         if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $app->count($app->scopeSeenByUser($u)), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL.'my/user/page', $app->count($options), 6, 10);
         }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $app->count($app->seenByUser($u)), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL."my/user/sort/$this->sortField/$this->orderType/page", $app->count($options), 6, 10);
         }
 
         if(isset($this->params['pindex']))
@@ -39,28 +39,46 @@ class ApplicationController extends BaseController {
 
         $this->data['pager'] = $pager->output;
 
-        $columns = 'id,type,start_date,status,assignee_id,user_id';
+        $options['limit'] = $pager->limit;
+
         //Order by ASC or DESC
         if($this->orderType=='desc'){
-            $this->data['applications'] = $app->limit($pager->limit, null, $this->sortField,
-                                        array_merge(array('select'=>$columns), $app->scopeSeenByMe($u))
-                                  );
+            $options['asc'] = $this->sortField;
             $this->data['order'] = 'asc';
         }else{
-            $this->data['applications'] = $app->limit($pager->limit, $this->sortField, null,
-                                        //we don't want to select the Content (waste of resources)
-                                        array_merge(array('select'=>$columns), $app->scopeSeenByUser($u))
-                                  );
+            $options['desc'] = $this->sortField;
             $this->data['order'] = 'desc';
         }
+
+        $this->data['applications'] = $app->relateUser($options);
         $this->renderAction('/my/application/index');
 	}
 
-    public function editApplication() {
+    public function create() {
+        if ($this->isPost()) {
+            Doo::loadModel('Application');
+            $app = new Application($_POST);
+            $app->user_id = $this->params['user_id'];
+            $app->assignee_id = $this->user->id;
+            $app->status = Application::CREATED;
+            if ($app->insert()) {
+                $this->data['message'] = $this->t('created');
+            }
+            $this->renderAction('/my/application/created');
+        } else {
+            $form = $this->getTypeForm();
+            $this->data['form'] = $form->render();
+            $this->renderAction('/my/application/type');
+        }
+    }
+    public function edit() {
         Doo::loadModel('Application');
 
         $app = new Application();
-        $this->data['application'] = $app->getById_first($this->params['id']);
+        $this->data['application'] = $app;
+        if (isset($this->params['id'])) {
+            $this->data['application'] = $app->getById_first($this->params['id']);
+        }
 
         $form = $this->getEuropeVisaForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
@@ -174,6 +192,50 @@ class ApplicationController extends BaseController {
         return $form;
     }
 
+    private function getTypeForm() {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('ApplicationController', 'create', array('user_id'=>$this->params['user_id']), true);
+        $options = array('' => '----------',
+                         'visa_europe' => $this->t('europe_visa'),
+                         '-' => '----'.$this->t('europe_visa').'----',
+                         'visa_t1' => $this->t('visa_t1'),
+                         'visa_t2' => $this->t('visa_t2'),
+                         'visa_t4' => $this->t('visa_t4'),
+                         'visa_other' => $this->t('visa_other'),
+                         '--' => '----'.$this->t('school').'----',
+                         'language' => $this->t('language'),
+                         'gcse' => $this->t('gcse'),
+                         'a-level' => $this->t('a-level'),
+                         'pre-bachelor' => $this->t('pre-bachelor'),
+                         'bachelor' => $this->t('bachelor'),
+                         'pre-master' => $this->t('pre-master'),
+                         'master' => $this->t('master'),
+                         'doctor' => $this->t('doctor'),
+                        );
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'type' => array('select', array(
+                     'label' => $this->t('type'),
+                     'required' => true,
+                     'value' => array(''),
+                     'multioptions' => $options,
+                     'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('create'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
     private function getEuropeVisaForm() {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
@@ -185,7 +247,9 @@ class ApplicationController extends BaseController {
         }
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
-        $visaapp = $visaapp->getById_first($app->id);
+        if ($app->id) {
+            $visaapp = $visaapp->getById_first($app->id);
+        }
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,

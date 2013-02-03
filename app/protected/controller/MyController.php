@@ -4,6 +4,8 @@ require_once 'BaseController.php';
 class MyController extends BaseController {
 
     protected $user;
+    protected $sortField;
+    protected $orderType;
 
 	public function home() {
         $this->renderAction('/my/index');
@@ -12,13 +14,13 @@ class MyController extends BaseController {
 	public function listApplications() {
         Doo::loadHelper('DooPager');
         Doo::loadModel('Application');
-        $u = $this->user;
         $app = new Application();
+        $options = $app->scopeSeenByUser($this->user);
         //if default, no sorting defined by user, show this as pager link
         if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $app->count($app->scopeSeenByUser($u)), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL.'my/applications/page', $app->count($options), 6, 10);
         }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $app->count($app->seenByUser($u)), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL."my/applications/sort/$this->sortField/$this->orderType/page", $app->count($options), 6, 10);
         }
 
         if(isset($this->params['pindex']))
@@ -28,20 +30,17 @@ class MyController extends BaseController {
 
         $this->data['pager'] = $pager->output;
 
-        $columns = 'id,type,start_date,status,assignee_id,user_id';
+        $options['limit'] = $pager->limit;
         //Order by ASC or DESC
         if($this->orderType=='desc'){
-            $this->data['applications'] = $app->limit($pager->limit, null, $this->sortField,
-                                        array_merge(array('select'=>$columns), $app->scopeSeenByMe($u))
-                                  );
+            $options['asc'] = $this->sortField;
             $this->data['order'] = 'asc';
         }else{
-            $this->data['applications'] = $app->limit($pager->limit, $this->sortField, null,
-                                        //we don't want to select the Content (waste of resources)
-                                        array_merge(array('select'=>$columns), $app->scopeSeenByUser($u))
-                                  );
+            $options['desc'] = $this->sortField;
             $this->data['order'] = 'desc';
         }
+        print_r($options);
+        $this->data['applications'] = $app->relateUser($options);
         $this->renderAction('/my/application/index');
 	}
 
