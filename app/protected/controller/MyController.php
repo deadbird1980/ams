@@ -39,7 +39,6 @@ class MyController extends BaseController {
             $options['desc'] = $this->sortField;
             $this->data['order'] = 'desc';
         }
-        print_r($options);
         $this->data['applications'] = $app->relateUser($options);
         $this->renderAction('/my/application/index');
 	}
