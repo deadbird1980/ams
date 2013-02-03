@@ -2090,7 +2090,9 @@
                                         ) ||
 
                                         // nothing is selected
-                                        element.get(0).selectedIndex == 0
+                                        element.get(0).selectedIndex == 0 ||
+                                        element.val() == '-' ||
+                                        element.val() == '--'
 
                                     // the rule doesn't validate
                                     ) control_is_valid = false;
