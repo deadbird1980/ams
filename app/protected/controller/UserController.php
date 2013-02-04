@@ -100,7 +100,7 @@ class UserController extends BaseController {
                 $u->type = $_POST['type'];
             }
             $u->status = $_POST['status'];
-            $u->update(array('where'=>"id={$u->id}",'field'=>'email,type,first_name,last_name,password,qq,confirm_code,phone,status'));
+            $u->update(array('where'=>"id={$u->id}"));
             $this->data['message'] = 'updated';
             $form = $this->getUserForm();
         }

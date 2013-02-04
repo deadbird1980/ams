@@ -45,10 +45,21 @@ class MyController extends BaseController {
 
     public function profile() {
 		$this->data['title'] = 'User';
-        Doo::loadModel('User');
-        $u = new User();
-        $this->data['user'] = $u->getById_first($this->session->user['id']);
         $form = $this->getProfileForm();
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $u = $this->user;
+            $u->first_name = $_POST['first_name'];
+            $u->last_name = $_POST['last_name'];
+            $u->first_name_alphabet = $_POST['first_name_alphabet'];
+            $u->last_name_alphabet = $_POST['last_name_alphabet'];
+            $u->email = $_POST['email'];
+            $u->password = $_POST['password'];
+            $u->phone = $_POST['phone'];
+            $u->qq = $_POST['qq'];
+            $u->update(array('where'=>"id={$u->id}"));
+            $this->data['message'] = 'updated';
+            $form = $this->getProfileForm();
+        }
         $this->data['form'] = $form->render();
 
 		$this->renderAction('/my/profile');
@@ -406,13 +417,9 @@ class MyController extends BaseController {
     }
 
     private function getProfileForm() {
+        $u = $this->user;
         Doo::loadHelper('DooForm');
-        $u = $this->data['user'];
-        if ($u->id) {
-            $action = Doo::conf()->APP_URL . 'index.php/admin/users/'.$u->id;
-        } else {
-            $action = Doo::conf()->APP_URL . 'index.php/admin/users/save';
-        }
+        $action = Doo::conf()->APP_URL . 'index.php/my/profile';
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
@@ -420,28 +427,28 @@ class MyController extends BaseController {
              'elements' => array(
                  'first_name' => array('text', array(
                      'required' => true,
-                     'label' => 'First Name:',
+                     'label' => $this->t('first_name'),
                      'value' => $u->first_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name' => array('text', array(
                      'required' => true,
-                     'label' => 'Last Name:',
+                     'label' => $this->t('last_name'),
                      'value' => $u->last_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'first_name_alphabet' => array('text', array(
                      'required' => true,
-                     'label' => 'First Name(Pinyin):',
+                     'label' => $this->t('first_name_pinyin'),
                      'value' => $u->first_name_alphabet,
                      'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name_alphabet' => array('text', array(
                      'required' => true,
-                     'label' => 'Last Name(Pinyin):',
+                     'label' => $this->t('last_name_pinyin'),
                      'value' => $u->last_name_alphabet,
                      'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
                  'element-wrapper' => 'div'
@@ -449,7 +456,7 @@ class MyController extends BaseController {
                  'password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
-                     'label' => 'Password:',
+                     'label' => $this->t('password'),
                      'value' => $u->password,
                  'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
                  'element-wrapper' => 'div'
@@ -457,21 +464,21 @@ class MyController extends BaseController {
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email')),
-                     'label' => 'Email:',
+                     'label' => $this->t('email'),
                      'value' => $u->email,
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
                  'phone' => array('text', array(
                      'required' => true,
-                     'label' => 'Phone:',
+                     'label' => $this->t('phone'),
                      'value' => $u->phone,
                      'attributes' => array('class' => 'control textbox validate[number()]'),
                  'element-wrapper' => 'div'
                  )),
                  'qq' => array('text', array(
                      'required' => true,
-                     'label' => 'QQ:',
+                     'label' => $this->t('qq'),
                      'value' => $u->qq,
                      'attributes' => array('class' => 'control textbox validate[number()]'),
                  'element-wrapper' => 'div'
