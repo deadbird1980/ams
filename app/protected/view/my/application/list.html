@@ -1,5 +1,5 @@
-        <div class="list">
         <!-- if {{isset(applications)}} && !{{empty(applications)}} -->
+        <div class="list">
         <table class="list">
             <tbody>
 
@@ -21,8 +21,10 @@
                 <!-- endloop -->
 
         </tbody></table>
-        <!-- endif -->
         </div>
 
         <hr class="divider"/>
         {{pager}}
+        <!-- else -->
+        {{t('no_records')}}
+        <!-- endif -->
