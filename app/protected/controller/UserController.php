@@ -86,14 +86,7 @@ class UserController extends BaseController {
 	public function edit() {
 		$this->data['title'] = 'User';
         $form = $this->getUserForm();
-        $this->data['form'] = $form->render();
-		$this->renderAction('/my/user/edit');
-	}
-
-	public function update() {
-		$this->data['title'] = 'User';
-        $form = $this->getUserForm();
-        if ($form->isValid($_POST)) {
+        if ($this->isPost() && $form->isValid($_POST)) {
             $u = $this->data['user'];
             $u->first_name = $_POST['first_name'];
             $u->last_name = $_POST['last_name'];
@@ -103,14 +96,16 @@ class UserController extends BaseController {
             $u->password = $_POST['password'];
             $u->qq = $_POST['qq'];
             $u->confirm_code = $_POST['confirm_code'];
-            $u->type = $_POST['type'];
+            if ($this->user->isAdmin() && isset($_POST['type'])) {
+                $u->type = $_POST['type'];
+            }
             $u->status = $_POST['status'];
             $u->update(array('where'=>"id={$u->id}",'field'=>'email,type,first_name,last_name,password,qq,confirm_code,phone,status'));
             $this->data['message'] = 'updated';
             $form = $this->getUserForm();
         }
         $this->data['form'] = $form->render();
-		$this->renderAction('/admin/user/edit');
+		$this->renderAction('/my/user/edit');
 	}
 
     public function activate() {
@@ -148,35 +143,35 @@ class UserController extends BaseController {
         Doo::loadHelper('DooForm');
         $u = $this->data['user'];
         if ($u->id) {
-            $action = Doo::conf()->APP_URL . 'index.php/admin/users/'.$u->id;
+            $action = Doo::conf()->APP_URL . 'index.php/my/users/'.$u->id;
         } else {
-            $action = Doo::conf()->APP_URL . 'index.php/admin/users/save';
+            $action = Doo::conf()->APP_URL . 'index.php/my/users/save';
         }
         $elements = array(
                  'first_name' => array('text', array(
                      'required' => true,
-                     'label' => 'First Name:',
+                     'label' => $this->t('first_name'),
                      'value' => $u->first_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name' => array('text', array(
                      'required' => true,
-                     'label' => 'Last Name:',
+                     'label' => $this->t('last_name'),
                      'value' => $u->last_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'first_name_alphabet' => array('text', array(
                      'required' => true,
-                     'label' => 'First Name(Pinyin):',
+                     'label' => $this->t('first_name_pinyin'),
                      'value' => $u->first_name_alphabet,
                      'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
                  'element-wrapper' => 'div'
                  )),
                  'last_name_alphabet' => array('text', array(
                      'required' => true,
-                     'label' => 'Last Name(Pinyin):',
+                     'label' => $this->t('last_name_pinyin'),
                      'value' => $u->last_name_alphabet,
                      'attributes' => array('class' => 'control textbox validate[required,alphabet()]'),
                  'element-wrapper' => 'div'
@@ -184,7 +179,7 @@ class UserController extends BaseController {
                  'password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
-                     'label' => 'Password:',
+                     'label' => $this->t('password'),
                      'value' => $u->password,
                  'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
                  'element-wrapper' => 'div'
@@ -192,28 +187,28 @@ class UserController extends BaseController {
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email')),
-                     'label' => 'Email:',
+                     'label' => $this->t('email'),
                      'value' => $u->email,
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
                  )),
                  'phone' => array('text', array(
                      'required' => true,
-                     'label' => 'Phone:',
+                     'label' => $this->t('phone'),
                      'value' => $u->phone,
                      'attributes' => array('class' => 'control textbox validate[number()]'),
                  'element-wrapper' => 'div'
                  )),
                  'qq' => array('text', array(
                      'required' => true,
-                     'label' => 'QQ:',
+                     'label' => $this->t('qq'),
                      'value' => $u->qq,
                      'attributes' => array('class' => 'control textbox validate[number()]'),
                  'element-wrapper' => 'div'
                  )),
                  'confirm_code' => array('text', array(
                      'required' => true,
-                     'label' => 'Confirm Code:',
+                     'label' => $this->t('confirm_code'),
                      'value' => $u->confirm_code,
                      'attributes' => array('class' => 'control textbox'),
                      'element-wrapper' => 'div'
@@ -221,7 +216,7 @@ class UserController extends BaseController {
                  'status' => array('select', array(
                      'required' => true,
                      'multioptions' => array('registered'=>'注册', 'active'=>'激活', 'obsolete'=>'过期'),
-                     'label' => 'Status:',
+                     'label' => $this->t('status'),
                      'value' => $u->status,
                      'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
