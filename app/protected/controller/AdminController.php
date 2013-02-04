@@ -8,23 +8,6 @@ class AdminController extends BaseController {
     public $orderType = 'desc';
     public static $tags;
 
-	public function beforeRun($resource, $action){
-        parent::beforeRun($resource, $action);
-
-		//if not login, group = anonymous
-		$role = (isset($this->session->user['type'])) ? $this->session->user['type'] : 'anonymous';
-
-		if($role!='anonymous'){
-				$role = 'admin';
-		}
-
-		//check against the ACL rules
-		if($rs = $this->acl()->process($role, $resource, $action )){
-            echo $role .' is not allowed for '. $resource . ' '. $action;
-			return $rs;
-		}
-	}
-
     /**
      * Display the list of paginated Posts (draft and published)
      */
@@ -292,11 +275,41 @@ class AdminController extends BaseController {
     }
     
     function listUser(){
+        Doo::loadHelper('DooPager');
         Doo::loadModel('User');
-        $c = new User;
-        $data['users'] = $c->find(array('desc'=>'createtime'));
-        $data['rootUrl'] = Doo::conf()->APP_URL;
-        $this->renderAction('admin_users', $data);
+
+        $u = new User();
+        //if default, no sorting defined by user, show this as pager link
+        if($this->sortField=='email' && $this->orderType=='desc'){
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
+        }else{
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
+        }
+
+        if(isset($this->params['pindex']))
+            $pager->paginate(intval($this->params['pindex']));
+        else
+            $pager->paginate(1);
+
+        $this->data['pager'] = $pager->output;
+
+        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
+        //Order by ASC or DESC
+        if($this->orderType=='desc'){
+            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
+                                        //we don't want to select the Content (waste of resources)
+                                        array('select'=>$columns)
+                                  );
+            $this->data['order'] = 'asc';
+        }else{
+            $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
+                                        //we don't want to select the Content (waste of resources)
+                                        array('select'=>$columns)
+                                  );
+            $this->data['order'] = 'desc';
+        }
+
+        $this->renderAction('/admin/user/index');
     }
 
     function approveComment(){
