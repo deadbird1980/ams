@@ -7,6 +7,7 @@ class BaseController extends DooController {
     protected $auth;
     protected $translator;
     protected $user;
+    protected $helper;
 
 	public function beforeRun($resource, $action){
 
@@ -32,7 +33,15 @@ class BaseController extends DooController {
             $u = new User();
             $this->user = $u->getById_first($this->session->user['id']);
         }
+        $this->setHelper();
 	}
+
+    protected function setHelper() {
+        if (isset($this->helper)) {
+            Doo::loadClass($this->helper);
+            $this->helper = new $this->helper($this);
+        }
+    }
 
     protected function renderAction($view, $layout = 'main') {
 
@@ -50,7 +59,7 @@ class BaseController extends DooController {
         return $_SERVER['REQUEST_METHOD'] == 'POST';
     }
 
-    protected function t($msg) {
+    public function t($msg) {
         return Doo::getTranslator()->translate($msg);
     }
 }
