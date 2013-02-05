@@ -8,7 +8,14 @@ class MyController extends BaseController {
     protected $orderType;
     protected $helper = 'ApplicationHelper';
 
+    private function setMessage() {
+        if ($this->user->hasApplicationsToFillIn()) {
+            $this->data['message'] = $this->t('applications_to_fill_in');
+        }
+    }
+
 	public function home() {
+        $this->setMessage();
         $this->renderAction('/my/index');
 	}
 

@@ -79,5 +79,19 @@ class User extends DooSmartModel{
         return false;
     }
 
+    public function shouldHaveCustomers() {
+        return $this->isCounselor() || $this->isExecutor();
+    }
+
+    public function hasCustomers() {
+        return $this->count(array('where' => "activated_by={$this->id}")) > 0;
+    }
+
+    public function hasApplicationsToFillIn() {
+        Doo::loadModel('Application');
+        $app = new Application();
+        return $app->count(array('where'=>"user_id={$this->id} and status='".Application::CREATED."'")) > 0;
+    }
+
 }
 ?>

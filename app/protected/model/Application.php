@@ -3,7 +3,7 @@ Doo::loadCore('db/DooSmartModel');
 Doo::loadClass('ApplicationType');
 Doo::loadModel('SchoolApplication');
 
-class Application extends DooSmartModel{
+class Application extends DooSmartModel {
 
     public $id;
     public $user_id;
@@ -47,6 +47,10 @@ class Application extends DooSmartModel{
         return $this->status == 'submitted';
     }
 
+    public function isCreated() {
+        return $this->status == Application::CREATED;
+    }
+
     public function createDetailApplication() {
         if (ApplicationType::isVisa($this->type)) {
             $a = new VisaApplication();
@@ -75,5 +79,6 @@ class Application extends DooSmartModel{
     public function isSchool() {
         return ApplicationType::isSchool($this->type);
     }
+
 }
 ?>
