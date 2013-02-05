@@ -67,5 +67,13 @@ class Application extends DooSmartModel{
         }
         return $a;
     }
+
+    public function isVisa() {
+        return ApplicationType::isVisa($this->type);
+    }
+
+    public function isSchool() {
+        return ApplicationType::isSchool($this->type);
+    }
 }
 ?>

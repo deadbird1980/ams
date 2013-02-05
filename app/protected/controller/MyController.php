@@ -87,7 +87,7 @@ class MyController extends BaseController {
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/confirm');
         } else {
-            $form = $this->helper->getEuropeVisaForm($app);
+            $form = $this->helper->getApplicationForm($app);
             if ($this->isPost() && $form->isValid($_POST)) {
                 $id = $this->params['id'];
                 $app = new Application();
@@ -110,7 +110,7 @@ class MyController extends BaseController {
         $app = new Application();
         $app->type = $this->params['type'];
         $this->data['application'] = $app;
-        $form = $this->getEuropeVisaForm();
+        $form = $this->getApplicationForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
             Doo::loadModel('Application');
             $a = new Application();
