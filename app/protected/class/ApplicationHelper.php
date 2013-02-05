@@ -11,6 +11,15 @@ class ApplicationHelper {
         return $this->controller->t($str);
     }
 
+    public function getApplicationForm($app) {
+        if ($app->isVisa()) {
+            $form = $this->getEuropeVisaForm($app);
+        } else {
+            $form = $this->getSchoolForm($app);
+        }
+        return $form;
+    }
+
     public function getConfirmApplicationForm() {
         $app = $this->data['application'];
         $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
@@ -242,8 +251,7 @@ class ApplicationHelper {
         return $form;
     }
 
-    public function getSchoolVisaForm() {
-        $app = $this->data['application'];
+    public function getSchoolForm($app) {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
         } else {

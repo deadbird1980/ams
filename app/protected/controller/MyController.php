@@ -92,11 +92,8 @@ class MyController extends BaseController {
                 $id = $this->params['id'];
                 $app = new Application();
                 $app = $app->getById_first($id);
-                $visaapp = new VisaApplication();
-                $visaapp = $visaapp->getById_first($id);
-                $app = new VisaApplication($_POST);
-                $app->id = $id;
-                $app->update_attributes($_POST, array('where'=>"id=${id}"));
+                $app_detail = $app->createDetailApplication();
+                $app_detail->update_attributes($_POST, array('where'=>"id=${id}"));
                 Doo::loadHelper('DooUrlBuilder');
                 return DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$id), true);
             }
