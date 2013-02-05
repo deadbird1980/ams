@@ -87,7 +87,7 @@ class MyController extends BaseController {
         Doo::loadModel('Application');
 
         $app = new Application();
-        $this->data['application'] = $app->getById_first($this->params['id']);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
 
         if ($this->data['application']->isSubmitted()) {
             $form = $this->getConfirmApplicationForm();
