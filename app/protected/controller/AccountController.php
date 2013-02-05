@@ -61,6 +61,15 @@ class AccountController extends BaseController{
             $user->confirm_code = md5($user->email . '@' . Doo::conf()->SITE_ID.'@' . time());
             $user->insert();
             $this->data['message'] = $this->t('registered'). $user->confirm_code;
+            // send mail to the register
+            Doo::loadHelper('DooMailer');
+            $mail = new DooMailer();
+            $mail->addTo($_POST['email']);
+            $mail->setSubject($this->t('forgotten_password'));
+            $mail->setBodyText($this->data['message']);
+            $mail->setFrom('noreply@ams.com', 'no reply');
+            if ($mail->send()) {
+            }
             $this->renderAction('registered');
         } else {
             $this->data['message'] = 'User with details below not found';
