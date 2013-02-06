@@ -20,8 +20,16 @@ class ApplicationHelper {
         return $form;
     }
 
-    public function getConfirmApplicationForm() {
-        $app = $this->data['application'];
+    public function getConfirmApplicationForm($app) {
+        if ($app->isVisa()) {
+            $form = $this->getConfirmVisaForm($app);
+        } else {
+            $form = $this->getConfirmSchoolForm($app);
+        }
+        return $form;
+    }
+
+    public function getConfirmVisaForm($app) {
         $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
@@ -107,6 +115,91 @@ class ApplicationHelper {
                  'field-wrapper' => 'div'
                  ));
         }
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
+        ));
+        return $form;
+    }
+
+    public function getConfirmSchoolForm($app) {
+        if ($app->beforeSubmitted()) {
+            $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
+        } else {
+            $action = DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$app->id), true);
+        }
+        Doo::loadModel('VisaApplication');
+        $visaapp = $app->createDetailApplication();
+        $elements =  array(
+                 'type' => array('hidden', array(
+                     'value' => $app->type,
+                 )),
+                 'start_date' => array('display', array(
+                     'label' => $this->t('start_date'),
+                     'content' => $visaapp->start_date,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport' => array('display', array(
+                     'content' => '护照信息:',
+                 )),
+                 'passport_no' => array('display', array(
+                     'label' => $this->t('passport_no'),
+                     'content' => $visaapp->passport_no,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport_name' => array('display', array(
+                     'label' => $this->t('passport_name'),
+                     'content' => $visaapp->passport_name,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'birthday' => array('display', array(
+                     'label' => $this->t('birthday'),
+                     'content' => $visaapp->birthday,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport_start_date' => array('display', array(
+                     'label' => $this->t('start_date'),
+                     'content' => $visaapp->passport_start_date,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'passport_end_date' => array('display', array(
+                     'label' => $this->t('end_date'),
+                     'content' => $visaapp->passport_end_date,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa' => array('display', array(
+                     'content' => '当前签证状态:',
+                 )),
+                 'address' => array('display', array(
+                     'label' => $this->t('cn_address'),
+                     'content' => $visaapp->address,
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
+                 )));
+        if ($app->beforeSubmitted()) {
+            $elements['submit'] = array('submit', array(
+                     'label' => $this->t('submit'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ));
+        } else {
+            $elements['submit'] = array('submit', array(
+                     'label' => $this->t('next'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ));
+        }
+
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,

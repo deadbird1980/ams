@@ -58,6 +58,10 @@ class Application extends DooSmartModel {
         return $this->status == 'submitted';
     }
 
+    public function beforeSubmitted() {
+        return $this->status == Application::IN_PROGRESS || $this->status == Application::CREATED;
+    }
+
     public function isCreated() {
         return $this->status == Application::CREATED;
     }

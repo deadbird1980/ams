@@ -88,9 +88,9 @@ class MyController extends BaseController {
             return array('no access', 404);
         }
         if ($this->data['application']->isSubmitted()) {
-            $form = $this->getConfirmApplicationForm();
+            $form = $this->helper->getConfirmApplicationForm($app);
             $this->data['form'] = $form->render();
-            $this->renderAction('/my/application/confirm');
+            $this->renderAction('/my/application/view');
         } else {
             $form = $this->helper->getApplicationForm($app);
             if ($this->isPost() && $form->isValid($_POST)) {
@@ -159,10 +159,10 @@ class MyController extends BaseController {
         $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
         $this->data['next_url'] = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$this->params['id']), true);
         $this->data['form'] = $form->render();
-        if ($this->data['application']->isSubmitted()) {
-            $this->renderAction('/my/application/file/view');
-        } else {
+        if ($this->data['application']->beforeSubmitted()) {
             $this->renderAction('/my/application/file/edit');
+        } else {
+            $this->renderAction('/my/application/file/view');
         }
     }
 
@@ -183,11 +183,9 @@ class MyController extends BaseController {
             return array('no access', 404);
         }
 
-        $form = $this->getConfirmApplicationForm();
+        $form = $this->helper->getConfirmApplicationForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
             $id = $this->params['id'];
-            $app = new Application();
-            $app = $app->getById_first($id);
             $visaapp = new VisaApplication();
             $visaapp = $visaapp->getById_first($id);
             $app = new VisaApplication($_POST);
