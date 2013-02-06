@@ -43,6 +43,17 @@ class Application extends DooSmartModel {
         return array();
     }
 
+    public function canBeSeen($user) {
+        if ($user->isAdmin()) {
+            return true;
+        } elseif ($user->isCounselor() || $user->isExecutor()) {
+            return $this->assignee_id == $user->id;
+        } elseif ($user->isCustomer()) {
+            return $this->user_id= $user->id;
+        }
+        return false;
+    }
+
     public function isSubmitted() {
         return $this->status == 'submitted';
     }

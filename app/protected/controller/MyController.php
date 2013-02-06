@@ -84,11 +84,9 @@ class MyController extends BaseController {
     }
 
     public function editApplication() {
-        Doo::loadModel('Application');
-
-        $app = new Application();
-        $app = $this->data['application'] = $app->getById_first($this->params['id']);
-
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
         if ($this->data['application']->isSubmitted()) {
             $form = $this->getConfirmApplicationForm();
             $this->data['form'] = $form->render();
@@ -146,11 +144,11 @@ class MyController extends BaseController {
     }
 
     public function uploadFiles() {
-        Doo::loadModel('Application');
-        $app = new Application();
-        $this->data['application'] = $app->getById_first($this->params['id']);
 
-        $form = $this->getFilesForm();
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
+        $form = $this->helper->getFilesForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User();
             $u->findByConfirm_code($_POST['confirm_code']);
@@ -168,11 +166,22 @@ class MyController extends BaseController {
         }
     }
 
-    public function confirmApplication() {
+    private function setApplication() {
         Doo::loadModel('Application');
 
         $app = new Application();
-        $this->data['application'] = $app->getById_first($this->params['id']);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        if ($app && !$app->canBeSeen($this->user)) {
+            $app = null;
+        }
+        return $app;
+    }
+
+    public function confirmApplication() {
+
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
 
         $form = $this->getConfirmApplicationForm();
         if ($this->isPost() && $form->isValid($_POST)) {
