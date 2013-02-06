@@ -137,12 +137,6 @@ class MyController extends BaseController {
         $this->renderAction('/my/application/edit');
     }
 
-    public function uploadFile() {
-        Doo::loadClass('UploadHandler');
-        $handler = new UploadHandler();
-        $handler->post(true);
-    }
-
     public function uploadFiles() {
 
         if (!($app = $this->setApplication())) {
