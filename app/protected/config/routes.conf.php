@@ -61,6 +61,10 @@ $route['*']['/my/users/:id'] = array('UserController', 'edit');
 $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
 $route['*']['/my/users/activate'] = array('UserController', 'activate');
+$route['*']['/admin/users/:user_id/applications'] = array('ApplicationController', 'index');
+$route['*']['/admin/users/:user_id/applications/create'] = array('ApplicationController', 'create');
+
+$route['*']['/admin/users/page/:pindex'] = array('AdminController', 'home');
 
 //files
 $route['get']['/files'] = array('FileController', 'view');

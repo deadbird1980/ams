@@ -17,10 +17,12 @@ class AdminController extends BaseController {
 
         $u = new User();
         //if default, no sorting defined by user, show this as pager link
+        $row_perpage = Doo::conf()->ROWS_PERPAGE;
+        $pages = Doo::conf()->PAGES;
         if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $row_perpage, $pages);
         }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $row_perpage, $pages);
         }
 
         if(isset($this->params['pindex']))
@@ -30,12 +32,9 @@ class AdminController extends BaseController {
 
         $this->data['pager'] = $pager->output;
 
-        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
-            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
-                                        array('select'=>$columns)
-                                  );
+            $this->data['users'] = $u->limit($pager->limit, null, $this->sortField);
             $this->data['order'] = 'asc';
         }else{
             $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
@@ -280,10 +279,13 @@ class AdminController extends BaseController {
 
         $u = new User();
         //if default, no sorting defined by user, show this as pager link
+        $row_perpage = Doo::conf()->ROWS_PERPAGE;
+        $pages = Doo::conf()->PAGES;
+
         if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $u->count(), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $row_perpage, $pages);
         }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $u->count(), 6, 10);
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $row_perpage, $pages);
         }
 
         if(isset($this->params['pindex']))
@@ -293,7 +295,7 @@ class AdminController extends BaseController {
 
         $this->data['pager'] = $pager->output;
 
-        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
+        $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,type,confirm_code,status';
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,

@@ -53,6 +53,8 @@ $config['TEMPLATE_COMPILE_ALWAYS'] = TRUE;
 //$config['ERROR_404_DOCUMENT'] = 'error.php';
 $config['ERROR_404_ROUTE'] = '/error';
 
+$config['ROWS_PERPAGE'] = 4;
+$config['PAGES'] = 10;
 $config['lang'] = 'zh';
 $config['default_lang'] = 'en';
 
