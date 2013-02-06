@@ -34,7 +34,7 @@ class Application extends DooSmartModel {
 
     public function scopeSeenByUser($user) {
         if ($user->isAdmin()) {
-            return array();
+            return array('where'=>'1=1');
         } elseif ($user->isCounselor() || $user->isExecutor()) {
             return array('where'=>'assignee_id='.$user->id);
         } elseif ($user->isCustomer()) {

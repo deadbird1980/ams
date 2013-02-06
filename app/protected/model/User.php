@@ -26,7 +26,7 @@ class User extends DooSmartModel{
 
     public function scopeSeenByMe() {
         if ($this->isAdmin()) {
-            return array();
+            return array('where'=>'1=1');
         } elseif ($this->isCounselor() || $this->isExecutor()) {
             return array('where'=>'activated_by='.$this->id);
         } elseif ($this->isCustomer()) {
