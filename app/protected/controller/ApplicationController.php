@@ -55,8 +55,12 @@ class ApplicationController extends BaseController {
             }
         }
 
-        $this->data['applications'] = $app->relateUser($options);
-        $this->renderAction('/my/application/index');
+        $this->data['applications'] = $app->relateMany(array('User','Assignee'),$options);
+        if ($this->user->isAdmin()) {
+            $this->renderAction('/admin/application/index');
+        } else {
+            $this->renderAction('/my/application/index');
+        }
 	}
 
     public function create() {
