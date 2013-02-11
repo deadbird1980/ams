@@ -80,6 +80,7 @@ class MyController extends BaseController {
 
         $app = new Application();
         $app->update_attributes(array("status"=>"submitted"), array('where'=>"id={$this->params['id']}"));
+        $this->data['message'] = $this->t('application_submitted');
         $this->renderAction('/my/application/submitted');
     }
 
