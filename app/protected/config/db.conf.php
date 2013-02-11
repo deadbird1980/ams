@@ -20,8 +20,6 @@ $dbmap['Attachment']['belongs_to']['Application'] = array('foreign_key'=>'id');
 $dbconfig['dev'] = array('localhost', 'ams_dev', 'root', '', 'mysql',true);
 if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     $url = parse_url($_ENV["CLEARDB_DATABASE_URL"]);
-    print_r($url);
     $dbconfig['dev'] = array($url['host'], trim($url['path'],'/'), $url['user'], $url['pass'], $url['scheme'], true);
-    print_r($dbconfig);exit;
 }
 ?>
