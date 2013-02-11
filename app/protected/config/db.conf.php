@@ -18,4 +18,8 @@ $dbmap['Assignee']['has_many']['Application'] = array('foreign_key'=>'assignee_i
 $dbmap['Attachment']['belongs_to']['Application'] = array('foreign_key'=>'id');
 
 $dbconfig['dev'] = array('localhost', 'ams_dev', 'root', '', 'mysql',true);
+if (isset($_ENV['SHARED_DATABASE_URL'])) {
+    $url = parse_url($_ENV["SHARED_DATABASE_URL"]);
+    $dbconfig['dev'] = array($url['host'], trim($url['path'],'/'), $url['user'], $url['pass'], $url['scheme'], true);
+}
 ?>
