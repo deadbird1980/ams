@@ -56,6 +56,7 @@ $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
 $route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
 $route['*']['/my/applications/:id/confirm'] = array('MyController', 'confirmApplication');
+$route['*']['/my/applications/:id/status'] = array('ApplicationController', 'status');
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 // admin/counselor/executor

@@ -107,6 +107,30 @@ class ApplicationController extends BaseController {
         $this->renderAction('/my/application/edit');
     }
 
+    public function status() {
+        Doo::loadModel('Application');
+
+        $app = new Application();
+        $this->data['application'] = $app;
+        if (isset($this->params['id'])) {
+            $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        } else {
+        }
+        $form = $this->helper->getApplicationStatusForm($app);
+
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $id = $this->params['id'];
+            $app = new Application();
+            $app = $app->getById_first($id);
+            $visaapp = $app->createDetailApplication();
+            $app->update_attributes($_POST, array('where'=>"id=${id}"));
+            Doo::loadHelper('DooUrlBuilder');
+            return DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$id), true);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/status');
+    }
+
     public function apply() {
         Doo::loadModel('Application');
         $app = new Application();

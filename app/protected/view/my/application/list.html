@@ -20,7 +20,11 @@
                 <td><a href='{{baseurl}}index.php/my/users/{{applications' value.@user_id}}'>{{applications' value.@User.@first_name}}</a></td>
                 <!-- endif -->
                 <td>{{applications' value.@start_date}}</td>
+                <!-- if ({{role}}!='customer') -->
+                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
+                <!-- else -->
                 <td>{{applications' value.@status}}</td>
+                <!-- endif -->
                 </tr>
                 <!-- endloop -->
 

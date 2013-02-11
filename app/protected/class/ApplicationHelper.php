@@ -459,5 +459,50 @@ class ApplicationHelper {
         ));
         return $form;
     }
+
+    public function getApplicationStatusForm($app) {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('ApplicationController', 'status', array('id'=>$app->id), true);
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'type' => array('hidden', array(
+                     'value' => $app->type,
+                 )),
+                 'status' => array('select', array(
+                     'required' => true,
+                     'multioptions' => array(Application::CREATED=>$this->t(Application::CREATED),
+                                             Application::IN_PROGRESS=>$this->t(Application::IN_PROGRESS),
+                                             Application::SUBMITTED=>$this->t(Application::SUBMITTED),
+                                             Application::CONFIRMED=>$this->t(Application::CONFIRMED),
+                                             Application::SENT=>$this->t(Application::SENT),
+                                             Application::REPLIED=>$this->t(Application::REPLIED),
+                                             Application::DONE=>$this->t(Application::DONE),),
+                     'label' => $this->t('status'),
+                     'value' => $app->status,
+                     'attributes' => array('class' => 'control type validate[required]'),
+                     'element-wrapper' => 'div'
+                 )),
+                 'paid' => array('select', array(
+                     'required' => true,
+                     'multioptions' => array('true'=>$this->t('yes'), '0'=>$this->t('no')),
+                     'label' => $this->t('paid'),
+                     'value' => $app->status,
+                     'attributes' => array('class' => 'control type validate[required]'),
+                     'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('submit'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
 }
 ?>
