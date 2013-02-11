@@ -143,7 +143,7 @@
 $(function () {
     //'use strict';
 
-    var files_url = "{{url2('FileController', 'view')}}";
+    var files_url = "{{url2('FileController', 'view', array(), true)}}";
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
