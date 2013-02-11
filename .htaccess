@@ -1,0 +1,14 @@
+RewriteEngine On
+
+RewriteRule ^\.htaccess$ - [F]
+
+RewriteCond %{REQUEST_URI} =""
+RewriteRule ^.*$ /app/index.php [NC,L]
+
+RewriteCond %{REQUEST_URI} !^/app/.*$
+RewriteRule ^(.*)$ /app/$1
+
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^.*$ - [NC,L]
+
+RewriteRule ^public/.*$ /app/index.php [NC,L]
