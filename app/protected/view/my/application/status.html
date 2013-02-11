@@ -1,0 +1,41 @@
+  <!-- block:content -->
+    <div class="left">
+
+        <h1><a href="{{baseurl}}my/applications/">{{t('application')}}</a></h1><br/>
+<div class="message">
+    {{message}}
+</div>
+<div class="content">
+    <div class="container">
+  <div id="leftSide">
+  <fieldset>
+      <legend>{{t('detail')}}</legend>
+    {{form}}
+        </fieldset>
+    </div>
+      <script type="text/javascript">
+          function init() {
+              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              var required_error = "This field must be filled in!";
+              var pinyin_error = "Pinyin must be filled in!";
+              $("#form").Zebra_Form({scroll_to_error:true,
+                      tips_position:'left',
+                      close_tips:true,
+                      validate_on_the_fly:false,
+                      validate_all:false,
+                      error_messages:{"confirm_code-element":{"required":required_error}
+                      }})}
+          init()
+      </script>
+</div>
+</div>
+    </div>
+    <div class="right">
+        <!-- include '/my/sidebar' -->
+    </div>
+
+    <div style="clear: both;"> </div>
+  <!-- endblock -->
