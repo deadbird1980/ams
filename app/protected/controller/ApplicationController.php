@@ -53,9 +53,13 @@ class ApplicationController extends BaseController {
                 $options['desc'] = $this->sortField;
                 $this->data['order'] = 'desc';
             }
+            if ($this->user->isAdmin()) {
+                $this->data['applications'] = $app->relateMany(array('User','Assignee'),array('Application'=>$options));
+            } else {
+                $this->data['applications'] = $app->relateUser($options);
+            }
         }
 
-        $this->data['applications'] = $app->relateMany(array('User','Assignee'),$options);
         if ($this->user->isAdmin()) {
             $this->renderAction('/admin/application/index');
         } else {
@@ -87,8 +91,8 @@ class ApplicationController extends BaseController {
         $this->data['application'] = $app;
         if (isset($this->params['id'])) {
             $this->data['application'] = $app->getById_first($this->params['id']);
-            $form = $this->getEuropeVisaForm($app);
         }
+        $form = $this->helper->getApplicationForm($app);
 
         if ($this->isPost() && $form->isValid($_POST)) {
             $id = $this->params['id'];
