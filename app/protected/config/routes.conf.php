@@ -16,7 +16,10 @@
  * $route['*']['/'] = array('HomeController', 'index', 'className'=>'HomeController');
  */
 
-$route['*']['/'] = array('AccountController', 'index');
+$route['*']['/'] = array('AccountController', 'index', 'authName'=>'Blog Admin', 'auth'=>array('test'=>'ams_test_1234'), 'authFailURL'=>'./error/loginFail');
+if (isset($_ENV['ACCESS_USER'])) {
+    $route['*']['/'] = array('AccountController', 'index', 'authName'=>'Blog Admin', 'auth'=>array($_ENV['ACCESS_USER']=>$_ENV['ACCESS_PASS']), 'authFailURL'=>'./error/loginFail');
+}
 $route['get']['/captcha/:file'] = array('AccountController', 'captcha');
 $route['*']['/registration'] = array('AccountController', 'registration');
 $route['*']['/forgotten_password'] = array('AccountController', 'forgottenPassword');
