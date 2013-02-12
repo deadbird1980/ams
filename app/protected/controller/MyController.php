@@ -25,11 +25,13 @@ class MyController extends BaseController {
         $app = new Application();
         $options = $app->scopeSeenByUser($this->user);
         if ($count = $app->count($options) > 0) {
+            $row_perpage = Doo::conf()->ROWS_PERPAGE;
+            $pages = Doo::conf()->PAGES;
             //if default, no sorting defined by user, show this as pager link
             if($this->sortField=='email' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.'my/applications/page', $app->count($options), 6, 10);
+                $pager = new DooPager(Doo::conf()->APP_URL.'my/applications/page', $app->count($options), $row_perpage, $pages);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL."my/applications/sort/$this->sortField/$this->orderType/page", $app->count($options), 6, 10);
+                $pager = new DooPager(Doo::conf()->APP_URL."my/applications/sort/$this->sortField/$this->orderType/page", $app->count($options), $row_perpage, $pages);
             }
 
             if(isset($this->params['pindex']))

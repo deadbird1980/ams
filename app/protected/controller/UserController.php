@@ -18,10 +18,12 @@ class UserController extends BaseController {
         $scope = $user->scopeSeenByMe();
         if ($user_count = $u->count($scope) > 0) {
         //if default, no sorting defined by user, show this as pager link
+            $row_perpage = Doo::conf()->ROWS_PERPAGE;
+            $pages = Doo::conf()->PAGES;
             if($this->sortField=='email' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.'admin/user/page', $user_count, 6, 10);
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange().'/user/page', $user_count, $row_perpage, $pages);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL."admin/user/sort/$this->sortField/$this->orderType/page", $user_count, 6, 10);
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange()."/user/sort/{$this->sortField}/{$this->orderType}/page", $user_count, $row_perpage, $pages);
             }
 
             if(isset($this->params['pindex']))
