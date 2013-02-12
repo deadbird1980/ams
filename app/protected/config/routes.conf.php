@@ -51,6 +51,7 @@ $route['post']['/admin/users/save'] = array('UserController', 'save');
 $route['*']['/my'] = array('MyController', 'home');
 $route['*']['/my/profile'] = array('MyController', 'profile');
 $route['*']['/my/applications'] = array('MyController', 'listApplications');
+$route['*']['/my/applications/page/:pindex'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
