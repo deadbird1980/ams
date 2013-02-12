@@ -32,6 +32,7 @@ class BaseController extends DooController {
             Doo::loadModel('User');
             $u = new User();
             $this->user = $u->getById_first($this->session->user['id']);
+            $this->data['range'] = $this->getRange();
         }
         $this->setHelper();
 	}
@@ -57,6 +58,14 @@ class BaseController extends DooController {
 
     protected function isPost() {
         return $_SERVER['REQUEST_METHOD'] == 'POST';
+    }
+
+    protected function getRange() {
+        if ($this->user && $this->user->isAdmin()) {
+            return 'admin';
+        } else {
+            return 'my';
+        }
     }
 
     public function t($msg) {
