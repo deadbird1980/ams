@@ -5,7 +5,7 @@ class ApplicationController extends BaseController {
 
     protected $user;
     protected $sortField = 'Application.id';
-    protected $orderType;
+    protected $orderType = 'desc';
     protected $helper = 'ApplicationHelper';
 
 	public function index() {
@@ -28,14 +28,20 @@ class ApplicationController extends BaseController {
         } else {
             $u = $this->user;
         }
-        if ($count = $app->count($options) > 0) {
+        if (($count = $app->count()) > 0) {
+            if (isset($this->params['sortField'])) {
+                $this->sortField = $this->params['sortField'];
+            }
+            if (isset($this->params['orderType'])) {
+                $this->orderType = $this->params['orderType'];
+            }
             $row_perpage = Doo::conf()->ROWS_PERPAGE;
             $pages = Doo::conf()->PAGES;
             //if default, no sorting defined by user, show this as pager link
-            if($this->sortField=='email' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.'my/user/page', $count, $row_perpage, $pages);
+            if($this->sortField=='Application.id' && $this->orderType=='desc'){
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range'].'/applications/page', $count, $row_perpage, $pages);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL."my/user/sort/$this->sortField/$this->orderType/page", $count, $row_perpage, $pages);
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range']."/applications/sort/{$this->sortField}/{$this->orderType}/page", $count, $row_perpage, $pages);
             }
 
             if(isset($this->params['pindex']))
@@ -48,18 +54,21 @@ class ApplicationController extends BaseController {
             $options['limit'] = $pager->limit;
 
             //Order by ASC or DESC
-            if($this->orderType=='desc'){
+            if($this->orderType=='asc'){
                 $options['asc'] = $this->sortField;
                 $this->data['order'] = 'asc';
+                $this->data['orderType'] = 'desc';
             }else{
                 $options['desc'] = $this->sortField;
                 $this->data['order'] = 'desc';
+                $this->data['orderType'] = 'asc';
             }
             if ($this->user->isAdmin()) {
-                $this->data['applications'] = $app->relateMany(array('User','Assignee'),array('Application'=>$options));
+                $this->data['applications'] = $app->relateMany(array('User','Assignee'),array('User'=>$options));
             } else {
                 $this->data['applications'] = $app->relateUser($options);
             }
+            $this->data['sortField'] = $this->sortField;
         }
 
         if ($this->user->isAdmin()) {

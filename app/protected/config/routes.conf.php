@@ -31,6 +31,8 @@ $route['*']['/logout'] = array('AccountController', 'logout');
 //Admin pages
 $route['*']['/admin'] = array('AdminController', 'home');
 $route['*']['/admin/applications'] = array('ApplicationController', 'index');
+$route['*']['/admin/applications/page/:pindex'] = array('ApplicationController', 'index');
+$route['*']['/admin/applications/sort/:sortField/:orderType/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/admin/applications/:id'] = array('AdminController', 'editApplication');
 $route['*']['/admin/applications/:id/files'] = array('AdminController', 'uploadFiles');
 $route['*']['/admin/files'] = array('FileController', 'index');

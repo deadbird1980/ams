@@ -4,13 +4,19 @@
             <tbody>
 
                 <tr>
+                <!-- if ({{role}}=='customer') -->
                 <th># </th>
-                <th>Type</th>
-                <!-- if ({{role}}!='customer') -->
-                <th>Customer</th>
+                <th>{{t('type')}}</th>
+                <th>{{t('customer')}}</th>
+                <th>{{t('start_date'}}</th>
+                <th>{{t('status')}}</th>
+                <!-- else -->
+                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">#</a> </th>
+                <th><a href="{{baseurl}}{{range}}/applications/sort/type/desc">{{t('type')}}</a> </th>
+                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('customer')}}</a> </th>
+                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('start_date')}}</a> </th>
+                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('status')}}</a> </th>
                 <!-- endif -->
-                <th>Start Date</th>
-                <th>Status</th>
                 </tr>
                 <!-- loop applications -->
                 <tr>
