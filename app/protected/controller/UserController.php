@@ -22,6 +22,21 @@ class UserController extends BaseController {
         $user = $this->user;
         $u = new User;
         $scope = $user->scopeSeenByMe();
+        // operations
+        if ($this->isPost() && isset($_POST['operation'])) {
+            if ($_POST['operation'] == 'delete') {
+                foreach($_POST['users'] as $id) {
+                    $u = $user->getById_first($id);
+                    $u->delete();
+                }
+                $this->data['message'] = $this->t('item_deleted');
+            } else if ($_POST['operation'] == 'export') {
+                foreach($_POST['users'] as $id) {
+                    $u = $user->getById_first($id);
+                    $u->export();
+                }
+            }
+        }
         if (($user_count = $u->count($scope)) > 0) {
         //if default, no sorting defined by user, show this as pager link
             $row_perpage = Doo::conf()->ROWS_PERPAGE;

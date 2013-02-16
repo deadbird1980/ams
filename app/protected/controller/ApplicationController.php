@@ -42,7 +42,7 @@ class ApplicationController extends BaseController {
                     $app2pay->paid();
                 }
                 $this->data['message'] = $this->t('item_deleted');
-            } else if ($_POST['operation'] == 'paid') {
+            } else if ($_POST['operation'] == 'export') {
                 foreach($_POST['applications'] as $app_id) {
                     $app2export = $app->getById_first($app_id);
                     $app2export->export();

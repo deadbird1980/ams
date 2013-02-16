@@ -93,5 +93,14 @@ class User extends DooSmartModel{
         return $app->count(array('where'=>"user_id={$this->id} and status='".Application::CREATED."'")) > 0;
     }
 
+    public function delete($opt=NULL){
+        if ($apps = $this->relateApplication()) {
+            foreach($apps as $app) {
+                $app->delete();
+            }
+        }
+        parent::delete($opt);
+    }
+
 }
 ?>
