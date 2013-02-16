@@ -121,5 +121,7 @@ class Application extends DooSmartModel {
         return true;
     }
 
+    public function export() {
+    }
 }
 ?>

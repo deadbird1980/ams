@@ -28,7 +28,7 @@ class ApplicationController extends BaseController {
         } else {
             $u = $this->user;
         }
-        // delete operation
+        // operations
         if ($this->isPost() && isset($_POST['operation'])) {
             if ($_POST['operation'] == 'delete') {
                 foreach($_POST['applications'] as $app_id) {
@@ -40,6 +40,12 @@ class ApplicationController extends BaseController {
                 foreach($_POST['applications'] as $app_id) {
                     $app2pay = $app->getById_first($app_id);
                     $app2pay->paid();
+                }
+                $this->data['message'] = $this->t('item_deleted');
+            } else if ($_POST['operation'] == 'paid') {
+                foreach($_POST['applications'] as $app_id) {
+                    $app2export = $app->getById_first($app_id);
+                    $app2export->export();
                 }
                 $this->data['message'] = $this->t('item_deleted');
             }
