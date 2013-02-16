@@ -35,13 +35,13 @@ class AdminController extends BaseController {
         //Order by ASC or DESC
         if($this->orderType=='desc'){
             $this->data['users'] = $u->limit($pager->limit, null, $this->sortField);
-            $this->data['order'] = 'asc';
+            $this->data['orderType'] = 'asc';
         }else{
             $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
                                         array('select'=>$columns)
                                   );
-            $this->data['order'] = 'desc';
+            $this->data['orderType'] = 'desc';
         }
 
         $this->renderAction('admin/index');
@@ -302,13 +302,13 @@ class AdminController extends BaseController {
                                         //we don't want to select the Content (waste of resources)
                                         array('select'=>$columns)
                                   );
-            $this->data['order'] = 'asc';
+            $this->data['orderType'] = 'asc';
         }else{
             $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                         //we don't want to select the Content (waste of resources)
                                         array('select'=>$columns)
                                   );
-            $this->data['order'] = 'desc';
+            $this->data['orderType'] = 'desc';
         }
 
         $this->renderAction('/admin/user/index');

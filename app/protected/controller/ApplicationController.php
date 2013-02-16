@@ -28,6 +28,16 @@ class ApplicationController extends BaseController {
         } else {
             $u = $this->user;
         }
+        // delete operation
+        if ($this->isPost() && isset($this->params['operation'])) {
+            if ($this->params['operation'] == 'delete') {
+                foreach($this->params['applications'] as $app_id) {
+                    $app = $app->getById_first($app_id);
+                    $app->delete();
+                }
+            }
+        }
+
         if (($count = $app->count()) > 0) {
             if (isset($this->params['sortField'])) {
                 $this->sortField = $this->params['sortField'];

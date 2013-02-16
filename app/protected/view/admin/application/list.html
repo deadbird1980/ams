@@ -1,13 +1,17 @@
         <!-- if {{isset(applications)}} && !{{empty(applications)}} -->
+        <form id="frm" name="frm" method="post">
         <div>
-            <select></select>
+            <select name="operation" id="operation" disabled>
+                <option value="-">---</option>
+                <option value="paid">{{t('paid')}}</option>
+                <option value="delete">{{t('delete')}}</option>
+            </select>
         </div>
-        <div class="list">
+        <div id="list" class="list">
         <table class="list">
             <tbody>
-
                 <tr>
-                    <th><input type=checkbox name='all'></input></th>
+                    <th><input type=checkbox id='all' name='all'></input></th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/Application.id/{{orderType}}/page/1">#</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/Application.type/{{orderType}}/page/1">{{t('type')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/user.first_name/{{orderType}}/page/1">{{t('customer')}}</a> </th>
@@ -19,7 +23,7 @@
                 </tr>
                 <!-- loop applications -->
                 <tr>
-                <td><input type=checkbox name="application[{{applications' value.@id}}]"></input></td>
+                <td><input type=checkbox name="applications[]" value="{{applications' value.@id}}"></input></td>
                 <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
                 <td>{{applications' value.@type}}</td>
                 <td><a href='{{baseurl}}index.php/my/users/{{applications' value.@user_id}}'>{{applications' value.@User.@first_name}}</a></td>
@@ -38,6 +42,37 @@
 
         </tbody></table>
         </div>
+        </form>
+      <script type="text/javascript">
+          function itemChecked() {
+            if ($("input[type='checkbox'][checked]", this.frm).not("#all").length>0) return true;
+            return false;
+          }
+          function operationCheck() {
+            $("#operation").attr('disabled', itemChecked());
+          }
+          function init() {
+              if(typeof jQuery=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              $("#all", this.frm).bind("click", function(e){
+                $("input[type='checkbox']", this.frm).not("#all").attr('checked', this.checked);
+                operationCheck();
+              });
+              $("input[type='checkbox']", this.frm).not("#all").bind("click", function(e){
+                operationCheck();
+              });
+
+              $("#operation", this.frm).bind("change", function(e){
+                var conf = confirm("{{t('confirm_yes_no')}}");
+                if(conf == true){
+                  $('#frm').submit();
+                }
+              });
+          }
+          init()
+      </script>
 
         <hr class="divider"/>
         {{pager}}

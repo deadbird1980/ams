@@ -66,6 +66,23 @@ class Application extends DooSmartModel {
         return $this->status == Application::CREATED;
     }
 
+    public function getDetail() {
+        if (ApplicationType::isVisa($this->type)) {
+            $a = new VisaApplication();
+        } else {
+            $a = new SchoolApplication();
+        }
+        $a = $a->getByid_first($this->id);
+        return $a;
+    }
+
+    public function delete($opt=NULL){
+        if ($detail = $this->getDetail()) {
+            $detail->delete();
+        }
+        parent::delete($opt);
+    }
+
     public function createDetailApplication() {
         if (ApplicationType::isVisa($this->type)) {
             $a = new VisaApplication();
