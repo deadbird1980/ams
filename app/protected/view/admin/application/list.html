@@ -45,11 +45,11 @@
         </form>
       <script type="text/javascript">
           function itemChecked() {
-            if ($("input[type='checkbox'][checked]", this.frm).not("#all").length>0) return true;
+            if ($(":checkbox:checked").length>0) return true;
             return false;
           }
           function operationCheck() {
-            $("#operation").attr('disabled', itemChecked());
+            $("#operation").attr('disabled', !itemChecked());
           }
           function init() {
               if(typeof jQuery=="undefined") {
