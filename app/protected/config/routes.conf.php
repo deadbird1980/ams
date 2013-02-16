@@ -40,6 +40,8 @@ $route['*']['/admin/emails'] = array('EmailController', 'index');
 
 //User pages
 $route['*']['/admin/users'] = array('UserController', 'index');
+$route['*']['/admin/users/page/:pindex'] = array('UserController', 'index');
+$route['*']['/admin/users/sort/:sortField/:orderType/page/:pindex'] = array('UserController', 'index');
 $route['*']['/admin/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:code/active'] = array('UserController', 'active');

@@ -7,8 +7,14 @@ class UserController extends BaseController {
             return $rtn;
         }
         $this->setUser();
-        $this->sortField = '';
-        $this->orderType = '';
+        $this->sortField = 'id';
+        $this->orderType = 'desc';
+        if (isset($this->params['sortField'])) {
+          $this->data['sortField'] = $this->sortField = $this->params['sortField'];
+        }
+        if (isset($this->params['orderType'])) {
+          $this->orderType = $this->params['orderType'];
+        }
     }
 
 	public function index() {
@@ -16,14 +22,14 @@ class UserController extends BaseController {
         $user = $this->user;
         $u = new User;
         $scope = $user->scopeSeenByMe();
-        if ($user_count = $u->count($scope) > 0) {
+        if (($user_count = $u->count($scope)) > 0) {
         //if default, no sorting defined by user, show this as pager link
             $row_perpage = Doo::conf()->ROWS_PERPAGE;
             $pages = Doo::conf()->PAGES;
             if($this->sortField=='email' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange().'/user/page', $user_count, $row_perpage, $pages);
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange().'/users/page', $user_count, $row_perpage, $pages);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange()."/user/sort/{$this->sortField}/{$this->orderType}/page", $user_count, $row_perpage, $pages);
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange()."/users/sort/{$this->sortField}/{$this->orderType}/page", $user_count, $row_perpage, $pages);
             }
 
             if(isset($this->params['pindex']))
@@ -39,18 +45,22 @@ class UserController extends BaseController {
                 $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
                                             array_merge(array('select'=>$columns), $scope)
                                       );
-                $this->data['order'] = 'asc';
+                $this->data['orderType'] = 'asc';
             }else{
                 $this->data['users'] = $u->limit($pager->limit, $this->sortField, null,
                                             //we don't want to select the Content (waste of resources)
                                             array_merge(array('select'=>$columns), $scope)
                                       );
-                $this->data['order'] = 'desc';
+                $this->data['orderType'] = 'desc';
             }
         }
         $form = $this->getActivateUserForm();
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/user/index');
+        if ($this->user->isAdmin()) {
+            $this->renderAction('/admin/user/index');
+        } else {
+            $this->renderAction('/my/user/index');
+        }
 	}
 
 	public function save() {
