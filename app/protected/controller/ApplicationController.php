@@ -29,11 +29,12 @@ class ApplicationController extends BaseController {
             $u = $this->user;
         }
         // delete operation
-        if ($this->isPost() && isset($this->params['operation'])) {
-            if ($this->params['operation'] == 'delete') {
-                foreach($this->params['applications'] as $app_id) {
-                    $app = $app->getById_first($app_id);
-                    $app->delete();
+        if ($this->isPost() && isset($_POST['operation'])) {
+            if ($_POST['operation'] == 'delete') {
+                foreach($_POST['applications'] as $app_id) {
+                    $app2delete = $app->getById_first($app_id);
+                    $app2delete->delete();
+                    $this->data['message'] = $this->t('item_deleted');
                 }
             }
         }

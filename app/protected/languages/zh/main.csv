@@ -89,3 +89,4 @@ no|"否"
 
 delete|"删除"
 confirm_yes_no|"确定要进行此操作？"
+item_deleted|"记录已经被删除。"

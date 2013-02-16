@@ -2,6 +2,7 @@
 Doo::loadCore('db/DooSmartModel');
 Doo::loadClass('ApplicationType');
 Doo::loadModel('SchoolApplication');
+Doo::loadModel('VisaApplication');
 
 class Application extends DooSmartModel {
 
