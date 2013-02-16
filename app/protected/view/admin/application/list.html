@@ -1,0 +1,46 @@
+        <!-- if {{isset(applications)}} && !{{empty(applications)}} -->
+        <div>
+            <select></select>
+        </div>
+        <div class="list">
+        <table class="list">
+            <tbody>
+
+                <tr>
+                    <th><input type=checkbox name='all'></input></th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/Application.id/{{orderType}}/page/1">#</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/Application.type/{{orderType}}/page/1">{{t('type')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/user.first_name/{{orderType}}/page/1">{{t('customer')}}</a> </th>
+                    <th>{{t('assignee')}}</th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/Application.start_date/{{orderType}}/page/1">{{t('start_date')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/Application.end_date/{{orderType}}/page/1">{{t('end_date')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/Application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/paid/{{orderType}}/page/1">{{t('paid')}}</a> </th>
+                </tr>
+                <!-- loop applications -->
+                <tr>
+                <td><input type=checkbox name="application[{{applications' value.@id}}]"></input></td>
+                <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
+                <td>{{applications' value.@type}}</td>
+                <td><a href='{{baseurl}}index.php/my/users/{{applications' value.@user_id}}'>{{applications' value.@User.@first_name}}</a></td>
+                <!-- if {{isset(applications' value.@Assignee)}} -->
+
+                <td>{{applications' value.@Assignee.@first_name}}</td>
+                <!-- else -->
+                <td>-</td>
+                <!-- endif -->
+                <td>{{applications' value.@start_date}}</td>
+                <td>{{applications' value.@end_date}}</td>
+                <td>{{applications' value.@status}}</td>
+                <td>{{applications' value.@paid}}</td>
+                </tr>
+                <!-- endloop -->
+
+        </tbody></table>
+        </div>
+
+        <hr class="divider"/>
+        {{pager}}
+        <!-- else -->
+        {{t('no_records')}}
+        <!-- endif -->
