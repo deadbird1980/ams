@@ -34,8 +34,14 @@ class ApplicationController extends BaseController {
                 foreach($_POST['applications'] as $app_id) {
                     $app2delete = $app->getById_first($app_id);
                     $app2delete->delete();
-                    $this->data['message'] = $this->t('item_deleted');
                 }
+                $this->data['message'] = $this->t('item_deleted');
+            } else if ($_POST['operation'] == 'paid') {
+                foreach($_POST['applications'] as $app_id) {
+                    $app2pay = $app->getById_first($app_id);
+                    $app2pay->paid();
+                }
+                $this->data['message'] = $this->t('item_deleted');
             }
         }
 

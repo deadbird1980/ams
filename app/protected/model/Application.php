@@ -113,5 +113,13 @@ class Application extends DooSmartModel {
         return ApplicationType::isSchool($this->type);
     }
 
+    public function paid() {
+        if (!$this->paid) {
+            $this->paid = 1;
+            $this->update();
+        }
+        return true;
+    }
+
 }
 ?>
