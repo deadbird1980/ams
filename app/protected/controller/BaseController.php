@@ -87,6 +87,13 @@ class BaseController extends DooController {
         }
     }
 
+    public function isAdmin() {
+        if ($this->user && $this->user->isAdmin()) {
+            return true;
+        }
+        return false;
+    }
+
     public function t($msg) {
         return Doo::getTranslator()->translate($msg);
     }
