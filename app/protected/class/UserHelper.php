@@ -19,6 +19,11 @@ class UserHelper {
             $action = Doo::conf()->APP_URL . 'index.php/my/users/save';
         }
         $elements = array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'first_name' => array('text', array(
                      'required' => true,
                      'label' => $this->t('first_name'),
@@ -127,6 +132,11 @@ class UserHelper {
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'confirm_code' => array('text', array(
                      'validators' => array(array('dbExist', 'User', 'confirm_code', 'The confirm code does not exist!')),
                      'label' => 'Confirm Code:',

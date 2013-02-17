@@ -35,6 +35,11 @@ class ApplicationHelper {
         $visaapp = new VisaApplication();
         $visaapp = $visaapp->getById_first($app->id);
         $elements =  array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
@@ -133,6 +138,11 @@ class ApplicationHelper {
         Doo::loadModel('VisaApplication');
         $visaapp = $app->createDetailApplication();
         $elements =  array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
@@ -251,6 +261,11 @@ class ApplicationHelper {
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
@@ -356,6 +371,11 @@ class ApplicationHelper {
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
@@ -469,6 +489,11 @@ class ApplicationHelper {
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
