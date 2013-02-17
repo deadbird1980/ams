@@ -18,7 +18,7 @@
 
 $route['*']['/'] = array('AccountController', 'index');
 if (isset($_ENV['ACCESS_USER'])) {
-    $route['*']['/'] = array('AccountController', 'index', 'authName'=>'Blog Admin', 'auth'=>array($_ENV['ACCESS_USER']=>$_ENV['ACCESS_PASS']), 'authFailURL'=>'./error/loginFail');
+    $route['*']['/'] = array('AccountController', 'index', 'authName'=>'AMS Admin', 'auth'=>array($_ENV['ACCESS_USER']=>$_ENV['ACCESS_PASS']), 'authFailURL'=>'./error/loginFail');
 }
 $route['get']['/captcha/:file'] = array('AccountController', 'captcha');
 $route['*']['/registration'] = array('AccountController', 'registration');

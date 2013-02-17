@@ -82,6 +82,9 @@ class AccountController extends BaseController{
     public function login(){
         $form = $this->getLoginForm();
         $this->data['message'] = $this->t('wrong_email_password');
+        if (!($this->isPost() && $this->isValidToken())) {
+            return Doo::conf()->APP_URL . 'index.php';
+        }
         if ($form->isValid($_POST)) {
             if(isset($_POST['email']) && isset($_POST['password']) ){
 
@@ -142,6 +145,9 @@ class AccountController extends BaseController{
         Doo::loadHelper('DooUrlBuilder');
         $action = DooUrlBuilder::url2('AccountController', 'login', null, true);
         $elements = array(
+                 'token' => array('hidden', array(
+                     'value' => $this->getAuthenticityToken(),
+                 )),
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email'), array('dbExist', 'User', 'email', 'User/Password Wrong!')),

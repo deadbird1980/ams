@@ -60,6 +60,25 @@ class BaseController extends DooController {
         return $_SERVER['REQUEST_METHOD'] == 'POST';
     }
 
+    protected function getAuthenticityToken() {
+        if (!isset($this->session->token)) {
+            $token = md5(time() . rand(1,100) . Doo::conf()->SITE_ID);
+            $this->session->token = $token;
+        }
+        return $this->session->token;
+    }
+
+    protected function isValidToken() {
+        if (!isset($_POST['token'])) {
+            return false;
+        }
+        if ($this->session->token == $_POST['token']) {
+            unset($this->session->token);
+            return true;
+        }
+        return false;
+    }
+
     protected function getRange() {
         if ($this->user && $this->user->isAdmin()) {
             return 'admin';
