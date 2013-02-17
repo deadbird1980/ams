@@ -3,6 +3,8 @@ require_once 'BaseController.php';
 
 class AccountController extends BaseController{
 
+    protected $helper = 'AccountHelper';
+
     public function index(){
 		if(isset($this->session->user)){
 			$this->data['user'] = $this->session->user;
@@ -13,7 +15,7 @@ class AccountController extends BaseController{
 
         $this->data['message'] = '';
         Doo::loadHelper('DooForm');
-        $this->data['form'] = $this->getLoginForm()->render();
+        $this->data['form'] = $this->helper->getLoginForm()->render();
 
         $this->renderAction('login', 'main');
     }
@@ -25,12 +27,12 @@ class AccountController extends BaseController{
     }
 
     public function registration(){
-        $this->data['form'] = $this->getRegisterForm()->render();
+        $this->data['form'] = $this->helper->getRegisterForm()->render();
         $this->renderAction('registration');
     }
 
     public function forgottenPassword(){
-        $form = $this->getForgottenPasswordForm();
+        $form = $this->helper->getForgottenPasswordForm();
         if ($this->isPost()) {
             if ($form->isValid($_POST)) {
                 Doo::loadHelper('DooMailer');
@@ -51,7 +53,7 @@ class AccountController extends BaseController{
     }
 
     public function register(){
-        $form = $this->getRegisterForm();
+        $form = $this->helper->getRegisterForm();
         if ($form->isValid($_POST)) {
             Doo::loadModel('User');
             $user = new User($_POST);
@@ -80,11 +82,8 @@ class AccountController extends BaseController{
 
 
     public function login(){
-        $form = $this->getLoginForm();
+        $form = $this->helper->getLoginForm();
         $this->data['message'] = $this->t('wrong_email_password');
-        if (!($this->isPost() && $this->isValidToken())) {
-            return Doo::conf()->APP_URL . 'index.php';
-        }
         if ($form->isValid($_POST)) {
             if(isset($_POST['email']) && isset($_POST['password']) ){
 
@@ -139,162 +138,5 @@ class AccountController extends BaseController{
             return Doo::conf()->APP_URL . 'index.php/my/';
         }
     }
-
-    private function getLoginForm() {
-        Doo::loadHelper('DooForm');
-        Doo::loadHelper('DooUrlBuilder');
-        $action = DooUrlBuilder::url2('AccountController', 'login', null, true);
-        $elements = array(
-                 'token' => array('hidden', array(
-                     'value' => $this->getAuthenticityToken(),
-                 )),
-                 'email' => array('text', array(
-                     'required' => true,
-                     'validators' => array(array('email'), array('dbExist', 'User', 'email', 'User/Password Wrong!')),
-                     'label' => $this->t('email'),
-                     'attributes' => array('class' => 'control email validate[required,email]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'password' => array('password', array(
-                     'required' => true,
-                     'validators' => array('password'),
-                     'label' => $this->t('password'),
-                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
-                     'label' => $this->t('login'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 )),
-
-                 'register' => array('display', array(
-                     'content' => "<a href=".DooUrlBuilder::url2('AccountController', 'registration', null, true).">{$this->t('register')}</a>&nbsp;&nbsp;&nbsp;<a href=".DooUrlBuilder::url2('AccountController', 'forgottenPassword', null, true).">{$this->t('forgotten_password')}</a>",
-                     'attributes' => array('class'=>'link'),
-                 'field-wrapper' => 'div'
-                 ))
-             );
-        if (Doo::conf()->APP_MODE == 'dev') {
-            $elements['email'][0] = 'select';
-            Doo::loadModel('User');
-            $user = new User();
-            $options = array(''=>'');
-            $users = $user->find();
-            foreach($users as $u) {
-                $options[$u->email] = $u->email;
-            }
-            $elements['email'][1]['multioptions'] = $options;
-            $elements['password'] = array('hidden', array(
-                                 'value'=>'password'
-                                 ));
-        }
-
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => $elements
-        ));
-        return $form;
-    }
-
-    private function getRegisterForm() {
-        Doo::loadHelper('DooForm');
-        $action = Doo::conf()->APP_URL . 'index.php/register';
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
-                 'first_name' => array('text', array(
-                     'required' => true,
-                     'label' => $this->t('first_name'),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'last_name' => array('text', array(
-                     'required' => true,
-                     'label' => $this->t('last_name'),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'first_name_alphabet' => array('text', array(
-                     'required' => true,
-                     'label' => $this->t('first_name_pinyin'),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'last_name_alphabet' => array('text', array(
-                     'required' => true,
-                     'label' => $this->t('last_name_pinyin'),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'password' => array('password', array(
-                     'required' => true,
-                     'validators' => array('password'),
-                     'label' => $this->t('password'),
-                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'email' => array('text', array(
-                     'required' => true,
-                     'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
-                     'label' => $this->t('email'),
-                     'attributes' => array('class' => 'control email validate[required,email]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'phone' => array('text', array(
-                     'required' => true,
-                     'label' => $this->t('phone'),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'qq' => array('text', array(
-                     'required' => true,
-                     'label' => $this->t('qq'),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
-                     'label' => $this->t('register'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 )),
-
-             )
-        ));
-        return $form;
-    }
-
-    private function getForgottenPasswordForm() {
-        Doo::loadHelper('DooForm');
-        $action = Doo::conf()->APP_URL . 'index.php/forgotten_password';
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
-                 'email' => array('text', array(
-                     'required' => true,
-                     'validators' => array(array('email'), array('dbExist', 'User','email','Email not exists, please choose another one!')),
-                     'label' => $this->t('email'),
-                     'attributes' => array('class' => 'control email validate[required,email]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
-                     'label' => $this->t('submit'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 )),
-
-             )
-        ));
-        return $form;
-    }
-
 }
 ?>

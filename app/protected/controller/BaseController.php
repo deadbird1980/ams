@@ -60,7 +60,7 @@ class BaseController extends DooController {
         return $_SERVER['REQUEST_METHOD'] == 'POST';
     }
 
-    protected function getAuthenticityToken() {
+    public function getAuthenticityToken() {
         if (!isset($this->session->token)) {
             $token = md5(time() . rand(1,100) . Doo::conf()->SITE_ID);
             $this->session->token = $token;
@@ -68,7 +68,7 @@ class BaseController extends DooController {
         return $this->session->token;
     }
 
-    protected function isValidToken() {
+    public function isValidToken() {
         if (!isset($_POST['token'])) {
             return false;
         }
