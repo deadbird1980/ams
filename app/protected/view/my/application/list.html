@@ -7,14 +7,15 @@
                 <!-- if ({{role}}=='customer') -->
                 <th># </th>
                 <th>{{t('type')}}</th>
-                <th>{{t('customer')}}</th>
-                <th>{{t('start_date'}}</th>
+                <th>{{t('start_date')}}</th>
+                <th>{{t('end_date')}}</th>
                 <th>{{t('status')}}</th>
                 <!-- else -->
                 <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">#</a> </th>
                 <th><a href="{{baseurl}}{{range}}/applications/sort/type/desc">{{t('type')}}</a> </th>
                 <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('customer')}}</a> </th>
                 <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('start_date')}}</a> </th>
+                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('end_date')}}</a> </th>
                 <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('status')}}</a> </th>
                 <!-- endif -->
                 </tr>
@@ -26,6 +27,7 @@
                 <td><a href='{{baseurl}}index.php/my/users/{{applications' value.@user_id}}'>{{applications' value.@User.@first_name}}</a></td>
                 <!-- endif -->
                 <td>{{applications' value.@start_date}}</td>
+                <td>{{applications' value.@end_date}}</td>
                 <!-- if ({{role}}!='customer') -->
                 <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
                 <!-- else -->
