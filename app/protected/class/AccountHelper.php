@@ -1,15 +1,5 @@
 <?php
-class AccountHelper {
-    private $controller;
-    public function __construct($controller) {
-        Doo::loadHelper('DooForm');
-        Doo::loadHelper('DooUrlBuilder');
-        $this->controller = $controller;
-    }
-
-    private function t($str) {
-        return $this->controller->t($str);
-    }
+class AccountHelper extends Helper {
 
     public function getLoginForm() {
         Doo::loadHelper('DooForm');

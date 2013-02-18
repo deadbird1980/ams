@@ -38,6 +38,7 @@ class BaseController extends DooController {
 	}
 
     protected function setHelper() {
+        Doo::loadClass('Helper');
         if (isset($this->helper)) {
             Doo::loadClass($this->helper);
             $this->helper = new $this->helper($this);

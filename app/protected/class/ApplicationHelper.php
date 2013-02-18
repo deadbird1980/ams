@@ -1,15 +1,5 @@
 <?php
-class ApplicationHelper {
-    private $controller;
-    public function __construct($controller) {
-        Doo::loadHelper('DooForm');
-        Doo::loadHelper('DooUrlBuilder');
-        $this->controller = $controller;
-    }
-
-    private function t($str) {
-        return $this->controller->t($str);
-    }
+class ApplicationHelper extends Helper {
 
     public function getApplicationForm($app) {
         if ($app->isVisa()) {
