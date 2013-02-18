@@ -49,6 +49,12 @@ $route['post']['/admin/users/:id'] = array('UserController', 'update');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
 $route['post']['/admin/users/save'] = array('UserController', 'save');
 
+// Emails
+$route['*']['/admin/emails'] = array('EmailController', 'index');
+$route['*']['/admin/emails/page/:pindex'] = array('EmailController', 'index');
+$route['*']['/admin/emails/sort/:sortField/:orderType/page/:pindex'] = array('EmailController', 'index');
+$route['*']['/admin/emails/:id'] = array('EmailController', 'edit');
+
 //-------------
 //-- my page
 //-------------
