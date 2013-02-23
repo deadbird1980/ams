@@ -25,7 +25,11 @@ $config['APP_MODE'] = 'dev';
 //----------------- optional, if not defined, default settings are optimized for production mode ----------------
 //if your root directory is /var/www/ and you place this in a subfolder eg. 'app', define SUBFOLDER = '/app/'
 
-$config['SUBFOLDER'] = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\','/',$config['SITE_PATH']));
+if (strpos(str_replace('\\','/',$config['SITE_PATH']), $_SERVER['DOCUMENT_ROOT']) !== false) {
+    $config['SUBFOLDER'] = str_replace($_SERVER['DOCUMENT_ROOT'], '', str_replace('\\','/',$config['SITE_PATH']));
+} else {
+    $config['SUBFOLDER'] = str_replace('index.php', '', $_SERVER['REQUEST_URI']);
+}
 if(strpos($config['SUBFOLDER'], '/')!==0){
 	$config['SUBFOLDER'] = '/'.$config['SUBFOLDER'];
 }
