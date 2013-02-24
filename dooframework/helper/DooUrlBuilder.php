@@ -68,8 +68,12 @@ class DooUrlBuilder {
                 }
             }
         }
+        $entry_index = '';
+        if (Doo::conf()->ENTRY_INDEX && strlen(Doo::conf()->ENTRY_INDEX)>0) {
+            $entry_index = Doo::conf()->ENTRY_INDEX.'/';
+        }
         if($addAppUrl)
-            $routename = Doo::conf()->APP_URL . substr($routename,1);
+            $routename = Doo::conf()->APP_URL .$entry_index. substr($routename,1);
 
         if($param!=null){
             foreach($param as $k=>$v){

@@ -36,6 +36,7 @@ if(strpos($config['SUBFOLDER'], '/')!==0){
 
 $config['APP_URL'] = 'http://'.$_SERVER['HTTP_HOST'].$config['SUBFOLDER'];
 $config['AUTOROUTE'] = TRUE;
+$config['ENTRY_INDEX'] = 'index.php';
 $config['DEBUG_ENABLED'] = TRUE;
 
 $config['TEMPLATE_COMPILE_ALWAYS'] = TRUE;
