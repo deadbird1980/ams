@@ -1,11 +1,11 @@
   <!-- block:content -->
     <div class="container">
 <div id="top">
-    <h1>Please complete the form below</h1>
+    <h1>{{t('complete_form')}}</h1>
   </div>
   <div id="leftSide">
   <fieldset>
-<legend>Registration details</legend>
+      <legend>{{t('registration_detail')}}</legend>
     {{form}}
         </fieldset>
     </div>
@@ -20,7 +20,11 @@
                       close_tips:true,
                       validate_on_the_fly:false,
                       validate_all:false,
-                      error_messages:{"email-element":{"required":"Email is required!","email":"Email address seems to be invalid!"},"first_name-element":{"required":"First name is required!"},"last_name-element":{"required":"Last name is required!"},
+                      error_messages:{"email-element":{"required":"{{t('input_email')}}","email":"{{t('email_invalid')}}"},"first_name-element":{"required":"{{t('input_first_name')}}"},"last_name-element":{"required":"{{t('input_last_name')}}"},
+                      "first_name_alphabet-element":{"required":"{{t('input_first_name')}}"},
+                      "last_name_alphabet-element":{"required":"{{t('input_last_name')}}"},
+                      "password-element":{"required":"{{t('input_password')}}","length":"{{t('password_length')}}"},
+                      "phone-element":{"required":"{{t('input_phone')}}"},
                       "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}
           init()
       </script>
