@@ -2,13 +2,13 @@
         <h2>{{t('my')}}</h2>
         <ul>
             <li>
-                <a href="{{rootUrl}}index.php/my/profile">{{t('profile')}}</a>
+                <a href="{{indexUrl}}/my/profile">{{t('profile')}}</a>
             <!-- if {{role}}!='customer' -->
-                <a href="{{rootUrl}}index.php/my/users">{{t('user')}}</a>
+                <a href="{{indexUrl}}/my/users">{{t('user')}}</a>
             <!-- endif -->
-                <a href="{{rootUrl}}index.php/my/applications/">{{t('application')}}</a>
-                <a href="{{rootUrl}}my/emails/">{{t('email')}}</a>
-                <a href="{{rootUrl}}logout/">{{t('logout')}}</a>
+                <a href="{{indexUrl}}/my/applications/">{{t('application')}}</a>
+                <a href="{{indexUrl}}/my/emails/">{{t('email')}}</a>
+                <a href="{{indexUrl}}logout/">{{t('logout')}}</a>
             </li>
         </ul>
     </div>
