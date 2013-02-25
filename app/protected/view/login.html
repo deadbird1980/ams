@@ -20,7 +20,7 @@
                       close_tips:true,
                       validate_on_the_fly:false,
                       validate_all:false,
-                      error_messages:{"email-element":{"required":"Email is required!","email":"Email address seems to be invalid!"},"password-element":{"required":"Password is required!","length":"The password must have between 6 and 10 characters"},
+                      error_messages:{"email-element":{"required":"{{t('input_email')}}","email":"{{t('email_invalid')}}"},"password-element":{"required":"Password is required!","length":"{{t('password_length')}}"},
                       "captcha_code":{"captcha":"Characters from image entered incorrectly!"}}})}
           init()
       </script>

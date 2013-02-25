@@ -93,3 +93,6 @@ delete|"删除"
 confirm_yes_no|"确定要进行此操作？"
 item_deleted|"记录已经被删除。"
 new|"新建"
+
+email_invalid|"电子邮件格式不正确！"
+password_length|"密码长度必须介于6和12个字符之间"

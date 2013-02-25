@@ -19,3 +19,6 @@ phone|"Phone"
 email|"Email"
 qq|"QQ"
 register|"Register"
+
+email_invalid|"Email seems to be invalid!"
+password_length|"The password must have between 6 and 12 characters!"
