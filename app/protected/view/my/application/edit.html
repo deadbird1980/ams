@@ -42,7 +42,8 @@
               $('#start_date-element').datepicker(dp_options);
               $('#passport_start_date-element').datepicker(dp_options);
               $('#passport_end_date-element').datepicker(dp_options);
-              $('#birthday-element').datepicker(dp_options);
+              $('#birthday-element').datepicker({ dateFormat: "yy-mm-dd", defaultDate: '1990-01-01'});
+
               $('#visa_start_date-element').datepicker(dp_options);
               $('#visa_end_date-element').datepicker(dp_options);
           }
