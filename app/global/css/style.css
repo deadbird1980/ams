@@ -80,6 +80,11 @@ a.logo {
 .header { background: #FFF; padding: 10px 5px; font-weight: bold }
 .header a { color: #FFF; text-decoration: none }
 .header span { font-weight: normal }
+.main {
+	margin: 0 auto;
+ width:830px;
+ align : center
+}
 .content {
  align : center
 }
