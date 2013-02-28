@@ -74,6 +74,7 @@ $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 $route['get']['/my/users'] = array('UserController', 'index');
 $route['*']['/my/users/:id'] = array('UserController', 'edit');
 $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
+$route['*']['/my/users/:user_id/applications/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
 $route['*']['/my/users/activate'] = array('UserController', 'activate');
 $route['*']['/admin/users/:user_id/applications'] = array('ApplicationController', 'index');

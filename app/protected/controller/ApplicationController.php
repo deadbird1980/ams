@@ -51,18 +51,24 @@ class ApplicationController extends BaseController {
             }
         }
 
-        if (($count = $app->count()) > 0) {
+        if (($count = $app->count($options)) > 0) {
             if (isset($this->params['sortField'])) {
                 $this->sortField = $this->params['sortField'];
             }
             if (isset($this->params['orderType'])) {
                 $this->orderType = $this->params['orderType'];
             }
-            $row_perpage = Doo::conf()->ROWS_PERPAGE;
-            $pages = Doo::conf()->PAGES;
-            //if default, no sorting defined by user, show this as pager link
+            $row_perpage = $this->getRowPerPage();
+            $pages = $this->getPages();
+
+            if (isset($this->params['user_id'])) {
+                $url = Doo::conf()->APP_URL.$this->data['range'].'/users/'.$this->params['user_id'].'/applications/page';
+            } else {
+                $url = Doo::conf()->APP_URL.$this->data['range'].'/applications/page';
+            }
+
             if($this->sortField=='Application.id' && $this->orderType=='desc'){
-                $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range'].'/applications/page', $count, $row_perpage, $pages);
+                $pager = new DooPager($url, $count, $row_perpage, $pages);
             }else{
                 $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range']."/applications/sort/{$this->sortField}/{$this->orderType}/page", $count, $row_perpage, $pages);
             }
