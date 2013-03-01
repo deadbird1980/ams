@@ -40,7 +40,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'passport' => array('display', array(
-                     'content' => '护照信息:',
+                     'content' => $this->t('passport_information'),
                  )),
                  'passport_no' => array('display', array(
                      'label' => $this->t('passport_no'),
@@ -73,7 +73,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'visa' => array('display', array(
-                     'content' => '当前签证状态:',
+                     'content' => $this->t('visa_status'),
                  )),
                  'address' => array('display', array(
                      'label' => $this->t('uk_address'),
@@ -94,7 +94,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'work' => array('display', array(
-                     'content' => '目前工作学习状况:',
+                     'content' => $this->t('work_study_information'),
                  )),
                  'organization' => array('display', array(
                      'label' => $this->t('organization'),
@@ -108,6 +108,13 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
+                 ));
+        } else {
+            $elements['submit'] = array('display', array(
+                     'label' => '',
+                     'content' => "<a href={$app->id}/files>File...</a>",
+                     'attributes' => array('class' => 'control'),
+                 'element-wrapper' => 'div'
                  ));
         }
         $form = new DooForm(array(
