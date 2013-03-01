@@ -12,7 +12,7 @@ class AccountHelper extends Helper {
                  )),
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array(array('email'), array('dbExist', 'User', 'email', 'User/Password Wrong!')),
+                     'validators' => array(array('email'), array('dbExist', 'user', 'email', 'User/Password Wrong!')),
                      'label' => $this->t('email'),
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
@@ -106,7 +106,7 @@ class AccountHelper extends Helper {
                  )),
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array(array('email'), array('dbNotExist', 'User','email','Email exists, please choose another one!')),
+                     'validators' => array(array('email'), array('dbNotExist', 'user','email','Email exists, please choose another one!')),
                      'label' => $this->t('email'),
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
@@ -149,7 +149,7 @@ class AccountHelper extends Helper {
                  )),
                  'email' => array('text', array(
                      'required' => true,
-                     'validators' => array(array('email'), array('dbExist', 'User','email','Email not exists, please choose another one!')),
+                     'validators' => array(array('email'), array('dbExist', 'user','email','Email not exists, please choose another one!')),
                      'label' => $this->t('email'),
                      'attributes' => array('class' => 'control email validate[required,email]'),
                  'element-wrapper' => 'div'
