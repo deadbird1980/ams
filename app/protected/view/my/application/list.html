@@ -11,12 +11,12 @@
                 <th>{{t('end_date')}}</th>
                 <th>{{t('status')}}</th>
                 <!-- else -->
-                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">#</a> </th>
-                <th><a href="{{baseurl}}{{range}}/applications/sort/type/desc">{{t('type')}}</a> </th>
-                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('customer')}}</a> </th>
-                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('start_date')}}</a> </th>
-                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('end_date')}}</a> </th>
-                <th><a href="{{baseurl}}{{range}}/applications/sort/id/desc">{{t('status')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/application.id/{{orderType}}/page/1">#</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/application.type/{{orderType}}/page/1">{{t('type')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/user.first_name/{{orderType}}/page/1">{{t('customer')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/start_date/{{orderType}}/page/1">{{t('start_date')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/end_date/{{orderType}}/page/1">{{t('end_date')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
                 <!-- endif -->
                 </tr>
                 <!-- loop applications -->

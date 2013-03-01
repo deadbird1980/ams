@@ -24,10 +24,15 @@ class MyController extends BaseController {
         Doo::loadModel('Application');
         $app = new Application();
         $options = $app->scopeSeenByUser($this->user);
-        if ($count = $app->count($options) > 0) {
-            $row_perpage = Doo::conf()->ROWS_PERPAGE;
-            $pages = Doo::conf()->PAGES;
+        if (($count = $app->count($options)) > 0) {
+            $row_perpage = $this->getRowPerPage();
+            $pages = $this->getPages();
             //if default, no sorting defined by user, show this as pager link
+            if(isset($this->params['orderType']))
+                $this->orderType = $this->params['orderType'];
+            if(isset($this->params['sortField']))
+                $this->sortField = $this->params['sortField'];
+
             if($this->sortField=='email' && $this->orderType=='desc'){
                 $pager = new DooPager(Doo::conf()->APP_URL.'my/applications/page', $app->count($options), $row_perpage, $pages);
             }else{
@@ -43,12 +48,12 @@ class MyController extends BaseController {
 
             $options['limit'] = $pager->limit;
             //Order by ASC or DESC
-            if($this->orderType=='desc'){
+            if($this->orderType=='asc'){
                 $options['asc'] = $this->sortField;
-                $this->data['order'] = 'asc';
+                $this->data['orderType'] = 'desc';
             }else{
                 $options['desc'] = $this->sortField;
-                $this->data['order'] = 'desc';
+                $this->data['orderType'] = 'asc';
             }
             $this->data['applications'] = $app->relateUser($options);
         }

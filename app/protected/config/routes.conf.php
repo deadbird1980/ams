@@ -62,6 +62,7 @@ $route['*']['/my'] = array('MyController', 'home');
 $route['*']['/my/profile'] = array('MyController', 'profile');
 $route['*']['/my/applications'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/page/:pindex'] = array('MyController', 'listApplications');
+$route['*']['/my/applications/sort/:sortField/:orderType/page/:pindex'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
@@ -89,9 +90,6 @@ $route['post']['/files'] = array('FileController', 'upload');
 //Error
 $route['*']['/error/user'] = array('ErrorController', 'userDefaultError');
 $route['*']['/error/user/admin/:error'] = array('ErrorController', 'userAdminDeny');
-
-$route['*']['/error/admin/sns/:error'] = array('ErrorController', 'adminSnsDeny');
-
 
 $route['*']['/error/loginfirst'] = array('ErrorController', 'loginRequire');
 $route['*']['/error'] = array('ErrorController', 'error404');
