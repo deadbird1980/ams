@@ -22,21 +22,25 @@ class BaseController extends DooController {
 
         if($rs = $this->acl()->process($role, $resource, $action )){
             //echo $role .' is not allowed for '. $resource . ' '. $action;
-            //print_r($rs);
+            print_r($rs);
             return $rs;
         }
         $this->data['role'] = $role;
-        // “apc”, “php”, “xcache” and “eaccelerator”.
-        // Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('cache' => 'php', 'delimiter' => '|'));
-        Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('delimiter' => '|'));
         if ($this->session->user['id']) {
             Doo::loadModel('User');
             $u = new User();
             $this->user = $u->getById_first($this->session->user['id']);
             $this->data['range'] = $this->getRange();
         }
+        $this->setTranslator();
         $this->setHelper();
 	}
+
+    protected function setTranslator() {
+        // “apc”, “php”, “xcache” and “eaccelerator”.
+        // Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('cache' => 'php', 'delimiter' => '|'));
+        Doo::translator('Csv', Doo::getAppPath() . 'languages/'.Doo::conf()->lang.'/main.csv', array('delimiter' => '|'));
+    }
 
     protected function setHelper() {
         Doo::loadClass('Helper');

@@ -5,7 +5,9 @@ class ErrorController extends BaseController {
 	public function beforeRun($resource, $action){
 
         $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
+        $this->data['indexUrl'] = Doo::conf()->APP_URL . 'index.php';
         $this->data['message'] = '';
+        $this->setTranslator();
     }
 
 	function userDefaultError() {
