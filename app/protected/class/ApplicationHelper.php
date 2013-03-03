@@ -115,8 +115,8 @@ class ApplicationHelper extends Helper {
                  ));
         } else {
             $elements['files'] = array('display', array(
-                     'label' => $this->t('file'),
-                     'content' => "<a id='file-link' href='#'>{$this->t('file')}</a>&nbsp;&nbsp;<a target='_blank' href='{$app->id}/files'>{$this->t('detail')}</a>",
+                 'label' => "<a target='_blank' href='{$app->id}/files'>{$this->t('file')}</a>",
+                 'content' => '',
                  'element-wrapper' => 'div'
                  ));
             $elements['submit'] = array('submit', array(
