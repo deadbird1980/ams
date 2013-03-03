@@ -13,7 +13,6 @@
     {{form}}
         </fieldset>
     </div>
-    <div id="file-list" style="display:none">
 <!-- include '/my/application/file/nav' -->
     </div>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
@@ -23,8 +22,6 @@
                   setTimeout("init()",100);
                   return
               }
-              var required_error = "This field must be filled in!";
-              var pinyin_error = "Pinyin must be filled in!";
               $('#file-link').click(function(){
                   $('#file-list table tr a').filter(':first').trigger('click');
               });

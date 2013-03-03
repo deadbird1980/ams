@@ -1,91 +1,39 @@
+      <link rel="stylesheet" href="{{baseurl}}global/css/jquery-ui.css" id="theme">
+      <link rel="stylesheet" href="{{baseurl}}global/css/jquery.image-gallery.min.css">
       <link rel="stylesheet" type="text/css" href="{{baseurl}}global/css/jquery.fileupload-ui.css" media="screen" />
       <link rel="stylesheet" type="text/css" href="{{baseurl}}global/css/fileupload-style.css" media="screen" />
 <div class="content">
-    <!-- The file upload form used as target for the file upload widget -->
-<form id="fileupload" action="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}" method="POST" enctype="multipart/form-data">
-        <!-- Redirect browsers with JavaScript disabled to the origin page -->
-<noscript><input type="hidden" name="redirect" value="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}"></noscript>
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
-    </form>
-<!-- The template to display files available for upload -->
-<script id="template-upload" type="text/x-tmpl">
-</script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
-        {% if (file.error) { %}
-            <td></td>
-            <td class="name"><span>{%=file.name%}</span></td>
-            <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-        {% } else { %}
-            <td class="name">
-                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
-            </td>
-            <td colspan="2"></td>
-        {% } %}
-    </tr>
+    <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a><br>
 {% } %}
 </script>
 <script src="{{baseurl}}global/js/jquery-ui.min.js"></script>
 <script src="{{baseurl}}global/js/tmpl.min.js"></script>
-<script src="{{baseurl}}global/js/canvas-to-blob.min.js"></script>
 <script src="{{baseurl}}global/js/load-image.min.js"></script>
 <script src="{{baseurl}}global/js/jquery.image-gallery.min.js"></script>
-<script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload.js"></script>
-<script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-fp.js"></script>
-<script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-ui.js"></script>
-<script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-jui.js"></script>
 <script type="text/javascript">
 $(function () {
     //'use strict';
-
-    var files_url = "{{url2('FileController', 'view')}}";
-    // Initialize the jQuery File Upload widget:
-    $('#fileupload').fileupload({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
-        url: files_url + '?application_id={{application.@id}}'
+    var files_url = "{{url2('FileController', 'view')}}" + '?application_id={{application.@id}}';
+    // Load existing files:
+    $.ajax({
+        url: files_url,
+        dataType: 'json',
+    }).done(function (result) {
+        $('#files-element').css({overflow:'hidden', height:'100%'});
+        if (result.files.length > 0) {
+            $('#files-element').append(tmpl("template-download", result));
+        } else {
+            $('#files-element').html("{{t('no_file')}}");
+        }
     });
 
-        // Demo settings:
-        $('#fileupload').fileupload('option', {
-            maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            process: [
-                {
-                    action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: 500000 // 500KB
-                },
-                {
-                    action: 'resize',
-                    maxWidth: 1440,
-                    maxHeight: 900
-                },
-                {
-                    action: 'save'
-                }
-            ]
-        });
-        // Load existing files:
-        $.ajax({
-            // Uncomment the following to send cross-domain cookies:
-            //xhrFields: {withCredentials: true},
-            url: $('#fileupload').fileupload('option', 'url'),
-            dataType: 'json',
-            context: $('#fileupload')[0]
-        }).done(function (result) {
-            $(this).fileupload('option', 'done')
-                .call(this, null, {result: result});
-            if (result.files.length == 0) {
-                $('#files-element').html('{{t('no_file')}}');
-            }
-        });
-
     // Initialize the Image Gallery widget:
-    $('#fileupload .files').imagegallery();
+    $('#files-element').imagegallery();
 });
 </script>
     </div>
