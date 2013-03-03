@@ -13,6 +13,9 @@
     {{form}}
         </fieldset>
     </div>
+    <div id="file-list" style="display:none">
+<!-- include '/my/application/file/nav' -->
+    </div>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
       <script type="text/javascript">
           function init() {
@@ -22,30 +25,12 @@
               }
               var required_error = "This field must be filled in!";
               var pinyin_error = "Pinyin must be filled in!";
-              $("#form").Zebra_Form({scroll_to_error:true,
-                      tips_position:'left',
-                      close_tips:true,
-                      validate_on_the_fly:false,
-                      validate_all:false,
-                      error_messages:{"start_date-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "passport_end_date-element":{"required":required_error},
-                      "visa_start_date-element":{"required":required_error},
-                      "visa_end_date-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "attachment-element":{"required":required_error},
-                      }})
-              $('#start_date-element').datepicker();
-              $('#passport_start_date-element').datepicker();
-              $('#passport_end_date-element').datepicker();
-              $('#birthday-element').datepicker();
-              $('#visa_start_date-element').datepicker();
-              $('#visa_end_date-element').datepicker();
+              $('#file-link').click(function(){
+                  $('#file-list table tr a').filter(':first').trigger('click');
+              });
           }
           init()
       </script>
-</div>
 </div>
     </div>
     <div class="right">

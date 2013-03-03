@@ -20,9 +20,6 @@
             <td class="name"><span>{%=file.name%}</span></td>
             <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else { %}
-            <td class="preview">{% if (file.thumbnail_url) { %}
-                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
-            {% } %}</td>
             <td class="name">
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
             </td>
@@ -82,6 +79,9 @@ $(function () {
         }).done(function (result) {
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
+            if (result.files.length == 0) {
+                $('#files-element').html('{{t('no_file')}}');
+            }
         });
 
     // Initialize the Image Gallery widget:

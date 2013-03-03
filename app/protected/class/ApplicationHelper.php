@@ -20,7 +20,11 @@ class ApplicationHelper extends Helper {
     }
 
     public function getConfirmVisaForm($app) {
-        $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
+        if (!$app->isSubmitted()) {
+            $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
+        } else {
+            $action = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$app->id), true);
+        }
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
         $visaapp = $visaapp->getById_first($app->id);
@@ -110,11 +114,16 @@ class ApplicationHelper extends Helper {
                  'field-wrapper' => 'div'
                  ));
         } else {
-            $elements['submit'] = array('display', array(
-                     'label' => '',
-                     'content' => "<a href={$app->id}/files>File...</a>",
-                     'attributes' => array('class' => 'control'),
+            $elements['files'] = array('display', array(
+                     'label' => $this->t('file'),
+                     'content' => "<a id='file-link' href='#'>{$this->t('file')}</a>&nbsp;&nbsp;<a target='_blank' href='{$app->id}/files'>{$this->t('detail')}</a>",
                  'element-wrapper' => 'div'
+                 ));
+            $elements['submit'] = array('submit', array(
+                     'label' => $this->t('submit'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
                  ));
         }
         $form = new DooForm(array(
