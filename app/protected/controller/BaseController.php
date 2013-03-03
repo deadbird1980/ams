@@ -22,7 +22,6 @@ class BaseController extends DooController {
 
         if($rs = $this->acl()->process($role, $resource, $action )){
             //echo $role .' is not allowed for '. $resource . ' '. $action;
-            print_r($rs);
             return $rs;
         }
         $this->data['role'] = $role;
