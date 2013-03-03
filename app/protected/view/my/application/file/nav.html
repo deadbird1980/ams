@@ -1,21 +1,12 @@
-  <!-- block:content -->
       <link rel="stylesheet" type="text/css" href="{{baseurl}}global/css/jquery.fileupload-ui.css" media="screen" />
       <link rel="stylesheet" type="text/css" href="{{baseurl}}global/css/fileupload-style.css" media="screen" />
-    <div class="left">
-        <h1>{{t('file')}}</h1>
-<div class="message">
-    {{message}}
-</div>
 <div class="content">
-    <div class="container">
-  <div id="leftSide">
     <!-- The file upload form used as target for the file upload widget -->
 <form id="fileupload" action="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
 <noscript><input type="hidden" name="redirect" value="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}"></noscript>
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
-        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
     </form>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
@@ -27,7 +18,6 @@
         {% if (file.error) { %}
             <td></td>
             <td class="name"><span>{%=file.name%}</span></td>
-            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
             <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else { %}
             <td class="preview">{% if (file.thumbnail_url) { %}
@@ -36,7 +26,6 @@
             <td class="name">
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
             </td>
-            <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
             <td colspan="2"></td>
         {% } %}
     </tr>
@@ -63,29 +52,40 @@ $(function () {
         url: files_url + '?application_id={{application.@id}}'
     });
 
-    // Load existing files:
-    $.ajax({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
-        url: $('#fileupload').fileupload('option', 'url'),
-        dataType: 'json',
-        context: $('#fileupload')[0]
-    }).done(function (result) {
-        $(this).fileupload('option', 'done')
-            .call(this, null, {result: result});
-    });
+        // Demo settings:
+        $('#fileupload').fileupload('option', {
+            maxFileSize: 5000000,
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            process: [
+                {
+                    action: 'load',
+                    fileTypes: /^image\/(gif|jpeg|png)$/,
+                    maxFileSize: 500000 // 500KB
+                },
+                {
+                    action: 'resize',
+                    maxWidth: 1440,
+                    maxHeight: 900
+                },
+                {
+                    action: 'save'
+                }
+            ]
+        });
+        // Load existing files:
+        $.ajax({
+            // Uncomment the following to send cross-domain cookies:
+            //xhrFields: {withCredentials: true},
+            url: $('#fileupload').fileupload('option', 'url'),
+            dataType: 'json',
+            context: $('#fileupload')[0]
+        }).done(function (result) {
+            $(this).fileupload('option', 'done')
+                .call(this, null, {result: result});
+        });
 
     // Initialize the Image Gallery widget:
     $('#fileupload .files').imagegallery();
 });
 </script>
-</div>
-</div>
-</div>
     </div>
-    <div class="right">
-        <!-- include '/my/sidebar' -->
-    </div>
-
-    <div style="clear: both;"> </div>
-  <!-- endblock -->
