@@ -44,6 +44,7 @@ status|"状态"
 qq|"QQ号码"
 register|"注册"
 save|"保存"
+confirm|"确认"
 
 login|"登录"
 my_users|"我的客户"

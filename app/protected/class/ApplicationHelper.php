@@ -120,7 +120,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  ));
             $elements['submit'] = array('submit', array(
-                     'label' => $this->t('submit'),
+                     'label' => $this->t('confirm'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
