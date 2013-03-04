@@ -11,6 +11,7 @@ class BaseController extends DooController {
 
 	public function beforeRun($resource, $action){
 
+        $this->data['year'] = date('Y');
         $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
         $this->data['indexUrl'] = Doo::conf()->APP_URL . 'index.php';
         $this->data['message'] = '';
