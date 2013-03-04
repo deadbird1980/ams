@@ -131,7 +131,7 @@ class UserController extends BaseController {
             $u->status = $_POST['status'];
             $u->update(array('where'=>"id={$u->id}"));
             $this->data['message'] = 'updated';
-            $form = $this->getUserForm($u);
+            $form = $this->helper->getUserForm($u);
         }
         $this->data['form'] = $form->render();
 		$this->renderAction('/my/user/edit');
