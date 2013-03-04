@@ -95,7 +95,7 @@ class MyController extends BaseController {
         if (!($app = $this->setApplication())) {
             return array('no access', 404);
         }
-        if ($this->data['application']->isSubmitted()) {
+        if ($this->data['application']->afterSubmitted()) {
             $form = $this->helper->getConfirmApplicationForm($app);
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/view');
@@ -188,10 +188,10 @@ class MyController extends BaseController {
         $form = $this->helper->getConfirmApplicationForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
             $id = $this->params['id'];
-            $visaapp = new VisaApplication();
-            $visaapp = $visaapp->getById_first($id);
-            $app = new VisaApplication($_POST);
             $app->id = $id;
+            if ($app->isSubmitted()) {
+                $_POST['status'] = 'confirmed';
+            }
             $app->update_attributes($_POST, array('where'=>"id=${id}"));
             return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
         }

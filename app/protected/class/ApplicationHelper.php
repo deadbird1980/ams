@@ -106,7 +106,7 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )));
-        if (!$app->isSubmitted()) {
+        if (!$app->AfterSubmitted()) {
             $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
@@ -119,12 +119,14 @@ class ApplicationHelper extends Helper {
                  'content' => '',
                  'element-wrapper' => 'div'
                  ));
-            $elements['submit'] = array('submit', array(
-                     'label' => $this->t('confirm'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ));
+            if ($app->isSubmitted()) {
+                $elements['submit'] = array('submit', array(
+                         'label' => $this->t('confirm'),
+                         'attributes' => array('class' => 'buttons'),
+                         'order' => 100,
+                     'field-wrapper' => 'div'
+                     ));
+            }
         }
         $form = new DooForm(array(
              'method' => 'post',

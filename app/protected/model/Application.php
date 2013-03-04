@@ -56,7 +56,11 @@ class Application extends DooSmartModel {
     }
 
     public function isSubmitted() {
-        return $this->status == 'submitted';
+        return $this->status == Application::SUBMITTED;
+    }
+
+    public function afterSubmitted() {
+        return $this->status == Application::SUBMITTED || $this->status == Application::CONFIRMED;
     }
 
     public function beforeSubmitted() {
