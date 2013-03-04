@@ -82,7 +82,6 @@ a.logo {
 .header span { font-weight: normal }
 .main {
 	margin: 0 auto;
- width:830px;
  align : center
 }
 .content {
@@ -184,7 +183,7 @@ color:#fff;}
 .left           { float: left }
 .none           { display: none }
 .nowrap         { white-space: nowrap }
-.right          { float: right }
+.right          { float: right; clear:right;}
 .stretch        { width: 100% }
 .top            { margin-top: 0; padding-top: 0 }
 .visible        { visibility: visible }
