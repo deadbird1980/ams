@@ -38,11 +38,11 @@
                       "passport_start_date-element":{"required":required_error},
                       "address-element":{"required":required_error},
                       }})
-              var dp_options = { dateFormat: "yy-mm-dd" };
+              var dp_options = { dateFormat: "dd-mm-yy" };
               $('#start_date-element').datepicker(dp_options);
               $('#passport_start_date-element').datepicker(dp_options);
               $('#passport_end_date-element').datepicker(dp_options);
-              $('#birthday-element').datepicker({ dateFormat: "yy-mm-dd", defaultDate: '1990-01-01'});
+              $('#birthday-element').datepicker({ dateFormat: "dd-mm-yy", defaultDate: '01-01-1990'});
 
               $('#visa_start_date-element').datepicker(dp_options);
               $('#visa_end_date-element').datepicker(dp_options);
