@@ -4,7 +4,7 @@ require_once 'BaseController.php';
 class ApplicationController extends BaseController {
 
     protected $user;
-    protected $sortField = 'Application.id';
+    protected $sortField = 'application.id';
     protected $orderType = 'desc';
     protected $helper = 'ApplicationHelper';
 
