@@ -38,7 +38,7 @@ class ApplicationHelper extends Helper {
                      'value' => $app->type,
                  )),
                  'start_date' => array('display', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('plan_start_date'),
                      'content' => $visaapp->start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -65,13 +65,13 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('display', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('passport_start_date'),
                      'content' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('display', array(
-                     'label' => $this->t('end_date'),
+                     'label' => $this->t('passport_end_date'),
                      'content' => $visaapp->passport_end_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -86,7 +86,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'visa_start_date' => array('display', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('visa_start_date'),
                      'content' => $visaapp->visa_start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -155,7 +155,7 @@ class ApplicationHelper extends Helper {
                      'value' => $app->type,
                  )),
                  'start_date' => array('display', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('plan_start_date'),
                      'content' => $visaapp->start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -182,13 +182,13 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('display', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('passport_start_date'),
                      'content' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('display', array(
-                     'label' => $this->t('end_date'),
+                     'label' => $this->t('passport_end_date'),
                      'content' => $visaapp->passport_end_date,
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
@@ -278,7 +278,7 @@ class ApplicationHelper extends Helper {
                      'value' => $app->type,
                  )),
                  'start_date' => array('text', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('plan_start_date'),
                      'required' => true,
                      'value' => $visaapp->start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
@@ -309,7 +309,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('passport_start_date'),
                      'required' => true,
                      'value' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
@@ -333,14 +333,14 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'visa_start_date' => array('text', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('visa_start_date'),
                      'required' => true,
                      'value' => $visaapp->visa_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'visa_end_date' => array('text', array(
-                     'label' => $this->t('end_date'),
+                     'label' => $this->t('visa_end_date'),
                      'required' => true,
                      'value' => $visaapp->visa_end_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
@@ -412,14 +412,14 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
-                     'label' => $this->t('start_date'),
+                     'label' => $this->t('passport_start_date'),
                      'required' => true,
                      'value' => $visaapp->passport_start_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('text', array(
-                     'label' => $this->t('end_date'),
+                     'label' => $this->t('passport_end_date'),
                      'required' => true,
                      'value' => $visaapp->passport_end_date,
                      'attributes' => array('class' => 'control textbox validate[required]'),
