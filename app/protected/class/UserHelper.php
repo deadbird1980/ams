@@ -128,7 +128,7 @@ class UserHelper extends Helper {
                      'validators' => array(array('custom', array($this->controller,'isValidToken'))),
                  )),
                  'confirm_code' => array('text', array(
-                     'validators' => array(array('dbExist', 'User', 'confirm_code', 'The confirm code does not exist!')),
+                     'validators' => array(array('dbExist', 'user', 'confirm_code', 'The confirm code does not exist!')),
                      'label' => 'Confirm Code:',
                      'required' => true,
                      'attributes' => array('class' => 'control textbox validate[required]'),
