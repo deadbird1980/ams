@@ -85,6 +85,7 @@ assignee|"对应人"
 application_submitted|"申请已经提交！"
 
 created|"创建"
+updated|"已更新"
 in_progress|"提交中"
 submitted|"提交"
 confirmed|"确认"
@@ -112,3 +113,4 @@ input_password|"请填写密码！"
 
 no_file|"无文件"
 admin|"管理员"
+manage_users|"管理用户"

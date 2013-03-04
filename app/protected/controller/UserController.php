@@ -130,7 +130,7 @@ class UserController extends BaseController {
             }
             $u->status = $_POST['status'];
             $u->update(array('where'=>"id={$u->id}"));
-            $this->data['message'] = 'updated';
+            $this->data['message'] = $this->t('updated');
             $form = $this->helper->getUserForm($u);
         }
         $this->data['form'] = $form->render();
