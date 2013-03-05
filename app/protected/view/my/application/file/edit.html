@@ -135,6 +135,7 @@
 <script src="{{baseurl}}global/js/canvas-to-blob.min.js"></script>
 <script src="{{baseurl}}global/js/load-image.min.js"></script>
 <script src="{{baseurl}}global/js/jquery.image-gallery.min.js"></script>
+<script src="{{baseurl}}global/js/jquery.iframe-transport.js"></script>
 <script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload.js"></script>
 <script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-fp.js"></script>
 <script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-ui.js"></script>
@@ -155,6 +156,7 @@ $(function () {
         $('#fileupload').fileupload('option', {
             maxFileSize: 5000000,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png|docx?|pdf|xls)$/i,
+            async: true,
             process: [
                 {
                     action: 'load',
