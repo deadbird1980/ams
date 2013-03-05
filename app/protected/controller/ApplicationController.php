@@ -58,7 +58,7 @@ class ApplicationController extends BaseController {
             if (isset($this->params['orderType'])) {
                 $this->orderType = $this->params['orderType'];
             }
-            $row_perpage = $this->getRowPerPage();
+            $page_size = $this->getPageSize();
             $pages = $this->getPages();
 
             if (isset($this->params['user_id'])) {
@@ -68,9 +68,9 @@ class ApplicationController extends BaseController {
             }
 
             if($this->sortField=='Application.id' && $this->orderType=='desc'){
-                $pager = new DooPager($url, $count, $row_perpage, $pages);
+                $pager = new DooPager($url, $count, $page_size, $pages);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range']."/applications/sort/{$this->sortField}/{$this->orderType}/page", $count, $row_perpage, $pages);
+                $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range']."/applications/sort/{$this->sortField}/{$this->orderType}/page", $count, $page_size, $pages);
             }
 
             if(isset($this->params['pindex']))

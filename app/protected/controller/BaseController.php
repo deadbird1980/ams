@@ -104,16 +104,16 @@ class BaseController extends DooController {
         return Doo::getTranslator()->translate($msg);
     }
 
-    public function getRowPerPage() {
-        if (isset(Doo::conf()->ROWS_PERPAGE)) {
-            return Doo::conf()->ROWS_PERPAGE;
+    public function getPageSize() {
+        if (isset(Doo::conf()->pagesize)) {
+            return Doo::conf()->pagesize;
         }
         return 50;
     }
 
     public function getPages() {
-        if (isset(Doo::conf()->PAGES)) {
-            return Doo::conf()->PAGES;
+        if (isset(Doo::conf()->pages)) {
+            return Doo::conf()->pages;
         }
         return 10;
     }

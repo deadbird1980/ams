@@ -20,6 +20,8 @@ $config['BASE_PATH'] = realpath('..').'/dooframework/';
 $config['TMP_PATH'] = realpath('..').'/tmp/';
 $config['UPLOAD_PATH'] = realpath('..').'/app/uploads/';
 
+$config['SURPPORT_EMAIL'] = 'support@mmxcode.com';
+
 //for production mode use 'prod'
 $config['APP_MODE'] = 'dev';
 //----------------- optional, if not defined, default settings are optimized for production mode ----------------
@@ -58,8 +60,6 @@ $config['TEMPLATE_COMPILE_ALWAYS'] = TRUE;
 //$config['ERROR_404_DOCUMENT'] = 'error.php';
 $config['ERROR_404_ROUTE'] = '/error';
 
-$config['ROWS_PERPAGE'] = 4;
-$config['PAGES'] = 10;
 $config['lang'] = 'zh';
 $config['default_lang'] = 'en';
 
@@ -77,6 +77,7 @@ $config['default_lang'] = 'en';
  * you can include self defined config, retrieved via Doo::conf()->variable
  * Use lower case for you own settings for future Compability with DooPHP
  */
-//$config['pagesize'] = 10;
+$config['pagesize'] = 10;
+$config['pages'] = 10;
 
 ?>

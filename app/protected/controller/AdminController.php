@@ -17,12 +17,12 @@ class AdminController extends BaseController {
 
         $u = new User();
         //if default, no sorting defined by user, show this as pager link
-        $row_perpage = Doo::conf()->ROWS_PERPAGE;
-        $pages = Doo::conf()->PAGES;
+        $page_size = $this->getPageSize();
+        $pages = $this->getPages();
         if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $row_perpage, $pages);
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $page_size, $pages);
         }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $row_perpage, $pages);
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $page_size, $pages);
         }
 
         if(isset($this->params['pindex']))
@@ -279,13 +279,13 @@ class AdminController extends BaseController {
 
         $u = new User();
         //if default, no sorting defined by user, show this as pager link
-        $row_perpage = Doo::conf()->ROWS_PERPAGE;
+        $page_size = $this->getPageSize();
         $pages = Doo::conf()->PAGES;
 
         if($this->sortField=='email' && $this->orderType=='desc'){
-            $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $row_perpage, $pages);
+            $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $page_size, $pages);
         }else{
-            $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $row_perpage, $pages);
+            $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $page_size, $pages);
         }
 
         if(isset($this->params['pindex']))
