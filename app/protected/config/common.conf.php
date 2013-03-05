@@ -20,7 +20,6 @@ $config['BASE_PATH'] = realpath('..').'/dooframework/';
 $config['TMP_PATH'] = realpath('..').'/tmp/';
 $config['UPLOAD_PATH'] = realpath('..').'/app/uploads/';
 
-$config['SURPPORT_EMAIL'] = 'support@mmxcode.com';
 
 //for production mode use 'prod'
 $config['APP_MODE'] = 'dev';
@@ -39,7 +38,7 @@ if(strpos($config['SUBFOLDER'], '/')!==0){
 $config['APP_URL'] = 'http://'.$_SERVER['HTTP_HOST'].$config['SUBFOLDER'];
 $config['AUTOROUTE'] = TRUE;
 $config['ENTRY_INDEX'] = 'index.php';
-$config['DEBUG_ENABLED'] = TRUE;
+$config['DEBUG_ENABLED'] = FALSE;
 
 $config['TEMPLATE_COMPILE_ALWAYS'] = TRUE;
 
@@ -71,13 +70,14 @@ $config['default_lang'] = 'en';
  *                       array('192.168.1.23', '11211', true, 80)
  *                     );
  */
- 
- 
+
 /**
  * you can include self defined config, retrieved via Doo::conf()->variable
  * Use lower case for you own settings for future Compability with DooPHP
  */
 $config['pagesize'] = 10;
 $config['pages'] = 10;
+$config['support_email'] = 'support@mmxcode.com';
+$config['error_email'] = 'error@mmxcode.com';
 
 ?>

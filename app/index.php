@@ -10,7 +10,12 @@ include $config['BASE_PATH'].'Doo.php';
 include $config['BASE_PATH'].'app/DooConfig.php';
 
 Doo::conf()->set($config);
-include $config['BASE_PATH'].'diagnostic/debug.php';
+if (isset($config['DEBUG_ENABLED']) && $config['DEBUG_ENABLED']) {
+    include $config['BASE_PATH'].'diagnostic/debug.php';
+} else {
+    // Our custom error handler  
+    Doo::loadClass('ErrorHandler');
+}
 
 Doo::acl()->rules = $acl;
 Doo::acl()->defaultFailedRoute = '/error';
