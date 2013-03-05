@@ -38,7 +38,14 @@ class AccountController extends BaseController{
             $form = $this->helper->getResetPasswordForm();
             if ($form->isValid($_POST)) {
                 Doo::loadModel('User');
-                $user = new User($_POST);
+                $u = new User();
+                $u->confirm_code = $_POST['confirm_code'];
+                $u = $this->db()->find($u, array('limit'=>1));
+                $u->password = $_POST['password'];
+                $u->status = $_POST['status'];
+                $u->update(array('where'=>"id={$u->id}"));
+                $this->data['message'] = $this->t('updated');
+                $this->renderAction('registered');
             }
         } else if (isset($_GET['confirm_code'])) {
             $this->params['confirm_code'] = $_GET['confirm_code'];
