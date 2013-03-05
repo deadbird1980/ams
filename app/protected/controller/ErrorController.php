@@ -7,6 +7,7 @@ class ErrorController extends BaseController {
         $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
         $this->data['indexUrl'] = Doo::conf()->APP_URL . 'index.php';
         $this->data['message'] = '';
+        $this->data['year'] = date('Y');
         $this->setTranslator();
     }
 
