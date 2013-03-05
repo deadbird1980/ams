@@ -53,11 +53,16 @@ class AccountController extends BaseController{
         $form = $this->helper->getForgottenPasswordForm();
         if ($this->isPost()) {
             if ($form->isValid($_POST)) {
+                Doo::loadModel('User');
+                $user = new User();
+                $user = $user->getByEmail_first($_POST['email']);
                 Doo::loadHelper('DooMailer');
+                $url = Doo::conf()->APP_URL.'reset_password?confirm_code='.$user->confirm_code;
                 $mail = new DooMailer();
                 $mail->addTo($_POST['email']);
                 $mail->setSubject($this->t('forgotten_password'));
-                $mail->setBodyText("This is plain text body");
+                $mail->setBodyText("请点击<a href=$url>这里</a>重置密码！");
+                $mail->setBodyHtml("请点击<a href=$url>这里</a>重置密码！");
                 $mail->setFrom('noreply@ams.com', 'no reply');
                 if ($mail->send()) {
                     $this->data['message'] = $this->t('forgotten_password_email_sent');
@@ -84,9 +89,10 @@ class AccountController extends BaseController{
             // send mail to the register
             Doo::loadHelper('DooMailer');
             $mail = new DooMailer();
-            $mail->addTo($_POST['email']);
-            $mail->setSubject($this->t('forgotten_password'));
+            $mail->addTo($_POST['email'], $user->first_name);
+            $mail->setSubject($this->t('registered'));
             $mail->setBodyText($this->data['message']);
+            $mail->setBodyHtml($this->data['message']);
             $mail->setFrom('noreply@ams.com', 'no reply');
             if ($mail->send()) {
             }
