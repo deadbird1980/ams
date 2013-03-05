@@ -165,5 +165,48 @@ class AccountHelper extends Helper {
         ));
         return $form;
     }
+
+    public function getResetPasswordForm() {
+        $action = Doo::conf()->APP_URL . 'index.php/reset_password';
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'confirm_code' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->params['confirm_code'],
+                     'validators' => array(array('confirm_code'), array('dbExist', 'user', 'confirm_code', $this->t('confirm_code error'))),
+                 )),
+                 'password' => array('password', array(
+                     'required' => true,
+                     'validators' => array('password'),
+                     'label' => $this->t('password'),
+                     'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                     'element-wrapper' => 'div'
+                 )),
+                 'confirm_password' => array('password', array(
+                     'required' => true,
+                     'validators' => array('password'),
+                     'label' => $this->t('confirm_password'),
+                     'attributes' => array('class' => 'control password validate[required,length(6,10),compare(password-element)]'),
+                     'element-wrapper' => 'div'
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('submit'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 )),
+
+             )
+        ));
+        return $form;
+    }
 }
 ?>

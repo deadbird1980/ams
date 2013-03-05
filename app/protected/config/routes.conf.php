@@ -23,6 +23,7 @@ if (isset($_ENV['ACCESS_USER'])) {
 $route['get']['/captcha/:file'] = array('AccountController', 'captcha');
 $route['*']['/registration'] = array('AccountController', 'registration');
 $route['*']['/forgotten_password'] = array('AccountController', 'forgottenPassword');
+$route['*']['/reset_password'] = array('AccountController', 'resetPassword');
 $route['post']['/register'] = array('AccountController', 'register');
 
 $route['post']['/login'] = array('AccountController', 'login');
