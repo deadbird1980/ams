@@ -117,5 +117,37 @@ class BaseController extends DooController {
         }
         return 10;
     }
+
+    public function notifyAdmin($subject, $body) {
+        Doo::loadModel('User');
+        $u = new User();
+        $admins = $u->getByType('admin');
+        Doo::loadHelper('DooMailer');
+        foreach($admins as $admin) {
+            $mail = new DooMailer();
+            $mail->addTo($admin->email, $admin->first_name);
+            $mail->setSubject($subject);
+            $mail->setBodyText($body);
+            $mail->setBodyHtml($body);
+            $mail->setFrom(Doo::conf()->support_email, 'no reply');
+            if ($mail->send()) {
+
+            }
+        }
+        return true;
+    }
+
+    public function notifyUser($user, $subject, $body) {
+        Doo::loadHelper('DooMailer');
+        $mail = new DooMailer();
+        $mail->addTo($user->email, $user->first_name);
+        $mail->setSubject($subject);
+        $mail->setBodyText($body);
+        $mail->setBodyHtml($body);
+        $mail->setFrom(Doo::conf()->support_email, 'no reply');
+        if ($mail->send()) {
+        }
+        return true;
+    }
 }
 ?>
