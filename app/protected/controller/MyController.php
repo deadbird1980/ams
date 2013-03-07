@@ -87,6 +87,7 @@ class MyController extends BaseController {
 
         $app = new Application();
         $app->update_attributes(array("status"=>"submitted"), array('where'=>"id={$this->params['id']}"));
+        $this->notifyAdmin('Application submitted', "Appliction {$this->params['id']} is submitted");
         $this->data['message'] = $this->t('application_submitted');
         $this->renderAction('/my/application/submitted');
     }
@@ -192,6 +193,7 @@ class MyController extends BaseController {
             if ($app->isSubmitted()) {
                 $_POST['status'] = 'confirmed';
             }
+            $this->notifyAdmin("Applicatioin {$id} is confirmed","Applicatioin {$id} is confirmed");
             $app->update_attributes($_POST, array('where'=>"id=${id}"));
             return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
         }
