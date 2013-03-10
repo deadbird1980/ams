@@ -127,5 +127,13 @@ class Application extends DooSmartModel {
 
     public function export() {
     }
+
+    public function files() {
+        Doo::loadModel('ApplicationFile');
+        $appFile = new ApplicationFile();
+        $options = array('where'=>"application_type='{$this->type}'");
+        $rtn = $appFile->find($options);
+        return $rtn;
+    }
 }
 ?>

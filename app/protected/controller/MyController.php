@@ -162,6 +162,10 @@ class MyController extends BaseController {
         $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
         $this->data['next_url'] = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$this->params['id']), true);
         $this->data['form'] = $form->render();
+        // application file
+        Doo::loadClass('FileHelper');
+        $h = new FileHelper($this);
+        $this->data['application_file'] = $h->getFilesForApplication($app);
         if ($this->data['application']->beforeSubmitted()) {
             $this->renderAction('/my/application/file/edit');
         } else {
