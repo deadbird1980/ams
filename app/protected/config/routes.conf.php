@@ -39,6 +39,11 @@ $route['*']['/admin/applications/:id/files'] = array('AdminController', 'uploadF
 $route['*']['/admin/files'] = array('FileController', 'index');
 $route['*']['/admin/emails'] = array('EmailController', 'index');
 
+$route['*']['/admin/application_files'] = array('ApplicationFileController', 'index');
+$route['*']['/admin/application_files/save'] = array('ApplicationFileController', 'edit');
+$route['*']['/admin/application_files/create'] = array('ApplicationFileController', 'edit');
+$route['*']['/admin/application_files/:id'] = array('ApplicationFileController', 'edit');
+
 //User pages
 $route['*']['/admin/users'] = array('UserController', 'index');
 $route['*']['/admin/users/page/:pindex'] = array('UserController', 'index');
