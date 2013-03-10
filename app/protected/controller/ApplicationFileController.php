@@ -55,12 +55,11 @@ class ApplicationFileController extends BaseController {
                 $options['asc'] = $this->sortField;
                 $this->data['order'] = 'asc';
                 $this->data['orderType'] = 'desc';
+                $this->data['applicationFiles'] = $appFile->limit($pager->limit, $this->sortField, null);
             }else{
                 $options['desc'] = $this->sortField;
                 $this->data['order'] = 'desc';
                 $this->data['orderType'] = 'asc';
-            }
-            if ($this->user->isAdmin()) {
                 $this->data['applicationFiles'] = $appFile->limit($pager->limit, null, $this->sortField);
             }
             $this->data['sortField'] = $this->sortField;

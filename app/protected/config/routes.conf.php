@@ -40,6 +40,7 @@ $route['*']['/admin/files'] = array('FileController', 'index');
 $route['*']['/admin/emails'] = array('EmailController', 'index');
 
 $route['*']['/admin/application_files'] = array('ApplicationFileController', 'index');
+$route['*']['/admin/application_files/sort/:sortField/:orderType/page/:pindex'] = array('ApplicationFileController', 'index');
 $route['*']['/admin/application_files/save'] = array('ApplicationFileController', 'edit');
 $route['*']['/admin/application_files/create'] = array('ApplicationFileController', 'edit');
 $route['*']['/admin/application_files/:id'] = array('ApplicationFileController', 'edit');
