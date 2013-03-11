@@ -119,6 +119,7 @@
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
             </td>
             <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td class="type"><span>{%=file.application_file%}</span></td>
             <td colspan="2"></td>
         {% } %}
         <td class="delete">

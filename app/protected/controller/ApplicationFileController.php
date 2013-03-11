@@ -68,23 +68,6 @@ class ApplicationFileController extends BaseController {
         $this->renderAction('/admin/application_file/index');
 	}
 
-    public function create() {
-        if ($this->isPost()) {
-            Doo::loadModel('ApplicationFile');
-            $app = new Application($_POST);
-            $app->user_id = $this->params['user_id'];
-            $app->assignee_id = $this->user->id;
-            $app->status = Application::CREATED;
-            if ($app->insert()) {
-                $this->data['message'] = $this->t('created');
-            }
-            $this->renderAction('/my/application/created');
-        } else {
-            $form = $this->helper->getTypeForm();
-            $this->data['form'] = $form->render();
-            $this->renderAction('/my/application/type');
-        }
-    }
     public function edit() {
         Doo::loadModel('ApplicationFile');
 

@@ -1,5 +1,6 @@
 <?php
 Doo::loadCore('db/DooSmartModel');
+Doo::loadModel('ApplicationFile');
 
 class Attachment extends DooSmartModel{
 
@@ -14,7 +15,7 @@ class Attachment extends DooSmartModel{
     public $_primarykey = 'id';
     public $_fields = array('id','application_id','application_file_id','file_name','file_size','file_type','title');
 
-    function __construct(){
+    public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()
     }
 
@@ -23,6 +24,9 @@ class Attachment extends DooSmartModel{
         $this->file_size = $file->size;
         $this->file_type = $file->type;
         $this->application_file_id = $file->application_file;
+        // replace id with name for display
+        $af = new ApplicationFile();
+        $file->application_file = $af->getById_first($this->application_file_id)->name;
         return $this->insert();
     }
 
