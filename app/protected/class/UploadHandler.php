@@ -39,6 +39,7 @@ class UploadHandler
             'script_url' => $this->get_full_url().'/',
             'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/uploads/',
             'upload_model' => false,
+            'additional_elements' => array(),
             'upload_url' => $this->get_full_url().'/files/',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
@@ -586,6 +587,10 @@ class UploadHandler
             }
             $file->size = $file_size;
             $this->set_file_delete_properties($file);
+        }
+        // filln additional form data
+        foreach($this->options['additional_elements'] as $element) {
+            $file->$element = $_POST[$element][$index];
         }
         return $file;
     }

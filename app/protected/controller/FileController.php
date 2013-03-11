@@ -3,7 +3,8 @@ require_once 'BaseController.php';
 
 class FileController extends BaseController {
 
-    protected $user;
+    protected $helper = 'FileHelper';
+
 	public function beforeRun($resource, $action){
         parent::beforeRun($resource, $action);
 
@@ -73,6 +74,7 @@ class FileController extends BaseController {
             $attachment->application_id = $_GET['application_id'];
             $options['upload_model'] = $attachment;
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
+            $options['additional_elements'] = array('application_file');
         }
         Doo::loadClass('UploadHandler');
         $this->handler = new UploadHandler($options, false);
