@@ -671,7 +671,10 @@ class DooSmartModel{
             }
 
             // underscore _ as AND in SQL
-            if(strpos($field, '_')!==false){
+            // use __ for getByUser_id__location_id
+            if(strpos($field, '__')!==false){
+                $field = explode('__', $field);
+            } else if(strpos($field, '_')!==false){
                 $field = explode('_', $field);
             }
 
