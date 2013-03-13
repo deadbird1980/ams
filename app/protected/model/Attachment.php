@@ -24,6 +24,10 @@ class Attachment extends DooSmartModel{
         $this->file_size = $file->size;
         $this->file_type = $file->type;
         $this->application_file_id = $file->application_file;
+        $fnd = $this->getByApplication_id__application_file_id_first($this->application_id, $this->application_file_id);
+        if ($fnd) {
+            return false;
+        }
         // replace id with name for display
         $af = new ApplicationFile();
         $file->application_file = $af->getById_first($this->application_file_id)->name;

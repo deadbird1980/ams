@@ -548,6 +548,17 @@ class UploadHandler
         $file->name = $this->get_file_name($name, $type, $index, $content_range);
         $file->size = $this->fix_integer_overflow(intval($size));
         $file->type = $type;
+        // filln additional form data
+        foreach($this->options['additional_elements'] as $element) {
+            $file->$element = $_POST[$element][$index];
+        }
+        if ($this->options['upload_model']) {
+            if (!$this->options['upload_model']->importFile($file)) {
+                $file->error = 'File already exists!';
+            }
+            return $file;
+        }
+
         if ($this->validate($uploaded_file, $file, $error, $index)) {
             $this->handle_form_data($file, $index);
             $upload_dir = $this->get_upload_path();
@@ -600,10 +611,6 @@ class UploadHandler
             }
             $file->size = $file_size;
             $this->set_file_delete_properties($file);
-        }
-        // filln additional form data
-        foreach($this->options['additional_elements'] as $element) {
-            $file->$element = $_POST[$element][$index];
         }
         return $file;
     }
@@ -792,13 +799,6 @@ class UploadHandler
                 null,
                 $content_range
             );
-        }
-
-        if ($this->options['upload_model']) {
-            foreach($files as $file) {
-                $id = $this->options['upload_model']->importFile($file);
-                $file->delete_url = '';
-            }
         }
 
         return $this->generate_response(
