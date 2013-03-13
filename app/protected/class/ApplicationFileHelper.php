@@ -5,7 +5,7 @@ class ApplicationFileHelper extends Helper {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
         if ($appFile->id) {
-          $action = Doo::conf()->APP_URL . "index.php/admin/application_files/{$appFile->id}/edit";
+          $action = Doo::conf()->APP_URL . "index.php/admin/application_files/{$appFile->id}";
         } else {
           $action = Doo::conf()->APP_URL . "index.php/admin/application_files/save";
         }
@@ -53,7 +53,7 @@ class ApplicationFileHelper extends Helper {
                  )),
                  'mandatory' => array('select', array(
                      'required' => true,
-                     'multioptions' => array('true'=>$this->t('yes'), '0'=>$this->t('no')),
+                     'multioptions' => array('1'=>$this->t('yes'), '0'=>$this->t('no')),
                      'label' => $this->t('mandatory'),
                      'value' => $appFile->mandatory,
                      'attributes' => array('class' => 'control type validate[required]'),

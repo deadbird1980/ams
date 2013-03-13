@@ -74,7 +74,7 @@ class ApplicationFileController extends BaseController {
         $appFile = new ApplicationFile();
         $this->data['applicationFile'] = $appFile;
         if (isset($this->params['id'])) {
-            $this->data['application'] = $appFile->getById_first($this->params['id']);
+            $appFile = $this->data['application'] = $appFile->getById_first($this->params['id']);
         }
         $form = $this->helper->getApplicationFileForm($appFile);
 
@@ -86,7 +86,7 @@ class ApplicationFileController extends BaseController {
             } else {
               $id = $appFile->insert();
             }
-            return Doo::conf()->APP_URL . "index.php/admin/application_files/{$id}/edit";
+            return Doo::conf()->APP_URL . "index.php/admin/application_files/{$id}";
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/admin/application_file/edit');
