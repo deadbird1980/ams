@@ -194,6 +194,13 @@ $(function () {
         if (inputs.filter('[required][value=""]').first().focus().length) {
             return false;
         }
+        // duplicated selection
+        var f = inputs.filter('[required]').first().children("option").filter(":selected").text();
+        if ($('td.type span:contains("'+f+'")', this).length > 0) {
+            alert("{{t('duplicated_application_file')}}");
+            return false;
+        }
+
         data.formData = inputs.serializeArray();
     });
 });
