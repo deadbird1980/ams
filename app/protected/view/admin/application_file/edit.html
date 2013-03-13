@@ -1,0 +1,57 @@
+  <!-- block:content -->
+      <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" id="theme">
+    <div class="left">
+        <h1>{{t('application_file')}}</h1>
+<div class="message">
+    {{message}}
+</div>
+<div class="content">
+    <div class="container">
+  <div id="leftSide">
+  <fieldset>
+      <legend>{{t('application_file')}}</legend>
+    {{form}}
+        </fieldset>
+    </div>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+      <script type="text/javascript">
+          function init() {
+              if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              var required_error = "{{t('required_error')}}";
+              var pinyin_error = "{{t('pinyin_error')}}";
+              $("#form").Zebra_Form({scroll_to_error:true,
+                      tips_position:'left',
+                      close_tips:true,
+                      validate_on_the_fly:false,
+                      validate_all:false,
+                      error_messages:{"start_date-element":{"required":required_error},
+                      "passport_start_date-element":{"required":required_error},
+                      "passport_end_date-element":{"required":required_error},
+                      "visa_start_date-element":{"required":required_error},
+                      "visa_end_date-element":{"required":required_error},
+                      "passport_start_date-element":{"required":required_error},
+                      "passport_start_date-element":{"required":required_error},
+                      "attachment-element":{"required":required_error},
+                      }})
+              var dp_options = { dateFormat: "yy-mm-dd" };
+              $('#start_date-element').datepicker(dp_options);
+              $('#passport_start_date-element').datepicker(dp_options);
+              $('#passport_end_date-element').datepicker(dp_options);
+              $('#birthday-element').datepicker(dp_options);
+              $('#visa_start_date-element').datepicker(dp_options);
+              $('#visa_end_date-element').datepicker(dp_options);
+          }
+          init()
+      </script>
+</div>
+</div>
+    </div>
+    <div class="right">
+        <!-- include '/my/sidebar' -->
+    </div>
+
+    <div style="clear: both;"> </div>
+  <!-- endblock -->

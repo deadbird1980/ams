@@ -1,0 +1,66 @@
+        <!-- if {{isset(applicationFiles)}} && !{{empty(applicationFiles)}} -->
+        <form id="frm" name="frm" method="post">
+        <div>
+            <select name="operation" id="operation" disabled>
+                <option value="-">---</option>
+                <option value="delete">{{t('delete')}}</option>
+                <option value="export">{{t('export')}}</option>
+            </select>
+        </div>
+        <div id="list" class="list">
+        <table class="list">
+            <tbody>
+                <tr>
+                    <th><input type=checkbox id='all' name='all'></input></th>
+                    <th><a href="{{baseurl}}admin/application_files/sort/id/{{orderType}}/page/1">#</a> </th>
+                    <th><a href="{{baseurl}}admin/application_files/sort/application_type/{{orderType}}/page/1">{{t('application_type')}}</a> </th>
+                    <th><a href="{{baseurl}}admin/application_files/sort/name/{{orderType}}/page/1">{{t('name')}}</a> </th>
+                </tr>
+                <!-- loop applicationFiles -->
+                <tr>
+                <td><input type=checkbox name="applicationFiles[]" value="{{applicationFiles' value.@id}}"></input></td>
+                <td><a href='{{baseurl}}index.php/my/applicationFiles/{{applicationFiles' value.@id}}'>{{applicationFiles' value.@id}}</a></td>
+                <td>{{applicationFiles' value.@application_type}}</td>
+                <td>{{applicationFiles' value.@name}}</td>
+                </tr>
+                <!-- endloop -->
+
+        </tbody></table>
+        </div>
+        </form>
+      <script type="text/javascript">
+          function itemChecked() {
+            if ($(":checkbox:checked").length>0) return true;
+            return false;
+          }
+          function operationCheck() {
+            $("#operation").attr('disabled', !itemChecked());
+          }
+          function init() {
+              if(typeof jQuery=="undefined") {
+                  setTimeout("init()",100);
+                  return
+              }
+              $("#all", this.frm).bind("click", function(e){
+                $("input[type='checkbox']", this.frm).not("#all").attr('checked', this.checked);
+                operationCheck();
+              });
+              $("input[type='checkbox']", this.frm).not("#all").bind("click", function(e){
+                operationCheck();
+              });
+
+              $("#operation", this.frm).bind("change", function(e){
+                var conf = confirm("{{t('confirm_yes_no')}}");
+                if(conf == true){
+                  $('#frm').submit();
+                }
+              });
+          }
+          init()
+      </script>
+
+        <hr class="divider"/>
+        {{pager}}
+        <!-- else -->
+        {{t('no_records')}}
+        <!-- endif -->
