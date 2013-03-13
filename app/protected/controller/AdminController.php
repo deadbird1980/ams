@@ -7,6 +7,7 @@ class AdminController extends BaseController {
     public $sortField = 'email';
     public $orderType = 'desc';
     public static $tags;
+    protected $helper = 'ApplicationHelper';
 
     /**
      * Display the list of paginated Posts (draft and published)
@@ -47,6 +48,40 @@ class AdminController extends BaseController {
         $this->renderAction('admin/index');
 	}
 
+    private function setApplication() {
+        Doo::loadModel('Application');
+
+        $app = new Application();
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        if ($app && !$app->canBeSeen($this->user)) {
+            $app = null;
+        }
+        return $app;
+    }
+
+    public function editApplication() {
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
+        if ($this->data['application']->afterSubmitted()) {
+            $form = $this->helper->getConfirmApplicationForm($app);
+            $this->data['form'] = $form->render();
+            $this->renderAction('/admin/application/view');
+        } else {
+            $form = $this->helper->getApplicationForm($app);
+            if ($this->isPost() && $form->isValid($_POST)) {
+                $id = $this->params['id'];
+                $app = new Application();
+                $app = $app->getById_first($id);
+                $app_detail = $app->createDetailApplication();
+                $app_detail->update_attributes($_POST, array('where'=>"id=${id}"));
+                Doo::loadHelper('DooUrlBuilder');
+                return DooUrlBuilder::url2('AdminController', 'uploadFiles', array('id'=>$id), true);
+            }
+            $this->data['form'] = $form->render();
+            $this->renderAction('/admin/application/edit');
+        }
+    }
     /**
      * Show single blog post for editing
      */
@@ -78,201 +113,6 @@ class AdminController extends BaseController {
         $this->renderAction('admin_edit_post');
 	}
 
-    /**
-     * This shows the same content as home(), but with pagination
-     * Show error if Page index is invalid (negative)
-     */
-	function page() {
-        if(isset($this->params['pindex']) && $this->params['pindex']>0)
-    		$this->home();
-        else
-            return 404;
-	}
-
-    /**
-     * Sort by field names DESC or ASC, with paginations
-     */
-    function sortBy(){
-        //if field name not in Post model fields, show error
-        if(!in_array($this->params['sortField'], Doo::loadModel('Post', true)->_fields))
-            return 404;
-
-        if($this->params['orderType']!='asc' && $this->params['orderType']!='desc')
-            return 404;
-
-        $this->orderType = $this->params['orderType'];
-        $this->sortField = $this->params['sortField'];
-        $this->home();
-    }
-
-    /**
-     * Validate if post exists
-     */
-    static function checkPostExist($id){
-        Doo::loadModel('Post');
-        $p = new Post;
-        $p->id = $id;
-
-        //if Post id doesn't exist, return an error
-        if($p->find(array('limit'=>1, 'select'=>'id'))==Null)
-            return 'Post ID not found in database';
-    }
-
-    /**
-     * Validate if tags is less than or equal to 10 tags based on the String seperated by commas.
-     * Tags cannot be empty 'mytag, tag2,,tag4,  , tag5' (error)
-     */
-    static function checkTags($tagStr){
-        //tags can be empty(no tags)
-        $tagStr = trim($tagStr);
-        if(empty($tagStr)){
-           return;
-        }
-
-        $tags = explode(',', $tagStr);
-
-        foreach($tags as $k=>$v){
-            $tags[$k] = strip_tags(trim($v));
-            if(empty($tags[$k])){
-                return 'Invalid tags!';
-            }
-        }
-
-        if(sizeof($tags)>10)
-            return 'You can only have max 10 tags!';
-
-        self::$tags = $tags;
-    }
-
-    /**
-     * Save changes made in Post editing
-     */
-    function savePostChanges(){               
-        Doo::loadHelper('DooValidator');
-
-        $_POST['content'] = trim($_POST['content']);
-
-        //get defined rules and add show some error messages
-        $validator = new DooValidator;
-        $validator->checkMode = DooValidator::CHECK_SKIP;
-
-        if($error = $validator->validate($_POST, 'post_edit.rules')){
-            $data['rootUrl'] = Doo::conf()->APP_URL;
-            $data['title'] =  'Error Occured!';
-            $data['content'] =  '<p style="color:#ff0000;">'.$error.'</p>';
-            $data['content'] .=  '<p>Go <a href="javascript:history.back();">back</a> to edit.</p>';
-            $this->renderAction('admin_msg', $data);
-        }
-        else{
-            Doo::loadModel('Post');
-            Doo::loadModel('Tag');
-
-            $p = new Post($_POST);
-
-            //delete the previous linked tags first
-            Doo::loadModel('PostTag');
-            $pt = new PostTag;
-            $pt->post_id = $p->id;
-            $pt->delete();
-
-            //update the post along with the tags
-            if(self::$tags!=Null){
-                $tags = array();
-                foreach(self::$tags as $t){
-                    $tg = new Tag;
-                    $tg->name = $t;
-                    $tags[] = $tg;
-                }
-                $p->relatedUpdate($tags);
-            }
-            //if no tags, just update the post
-            else{
-                $p->update();
-            }
-            
-            //clear the sidebar cache
-            Doo::cache('front')->flushAllParts();
-            
-            $this->data['rootUrl'] = Doo::conf()->APP_URL;
-            $this->data['title'] =  'Post Updated!';
-            $this->data['content'] =  '<p>Your changes is saved successfully.</p>';
-            $this->data['content'] .=  '<p>Click  <a href="'.$this->data['rootUrl'].'article/'.$p->id.'">here</a> to view the post.</p>';
-            $this->renderAction('admin_msg');
-        }
-    }
-
-    function saveNewPost(){
-        Doo::loadHelper('DooValidator');
-
-        $_POST['content'] = trim($_POST['content']);
-
-        //get defined rules and add show some error messages
-        $validator = new DooValidator;
-        $validator->checkMode = DooValidator::CHECK_SKIP;
-
-        if($error = $validator->validate($_POST, 'post_create.rules')){
-            $data['rootUrl'] = Doo::conf()->APP_URL;
-            $data['title'] =  'Error Occured!';
-            $data['content'] =  '<p style="color:#ff0000;">'.$error.'</p>';
-            $data['content'] .=  '<p>Go <a href="javascript:history.back();">back</a> to edit.</p>';
-            $this->renderAction('admin_msg', $data);
-        }
-        else{
-            Doo::loadModel('Post');
-            Doo::loadModel('Tag');
-            Doo::autoload('DooDbExpression');
-            $p = new Post($_POST);
-            $p->createtime = new DooDbExpression('NOW()');
-
-            //insert the post along with the tags
-            if(self::$tags!=Null){
-                $tags = array();
-                foreach(self::$tags as $t){
-                    $tg = new Tag;
-                    $tg->name = $t;
-                    $tags[] = $tg;
-                }
-                $id = $p->relatedInsert($tags);
-            }
-            //if no tags, just insert the post
-            else{
-                $id = $p->insert();
-            }
-
-            //clear the sidebar cache
-            Doo::cache('front')->flushAllParts();
-
-            $data['rootUrl'] = Doo::conf()->APP_URL;
-            $data['title'] =  'Post Created!';
-            $data['content'] =  '<p>Your post is created successfully!</p>';
-            if($p->status==1)
-                $data['content'] .=  '<p>Click  <a href="'.$data['rootUrl'].'article/'.$id.'">here</a> to view the published post.</p>';
-            $this->renderAction('admin_msg', $data);
-        }
-    }
-
-
-    /**
-     * Delete post
-     */
-    function deletePost(){
-        $pid = intval($this->params['pid']);
-        if($pid>0){
-            Doo::loadModel('Post');
-            $p = new Post;
-            $p->id = $pid;
-            $p->delete();
-
-            //clear the sidebar cache
-            Doo::cache('front')->flushAllParts();
-
-            $data['rootUrl'] = Doo::conf()->APP_URL;
-            $data['title'] =  'Post Deleted!';
-            $data['content'] =  "<p>Post with ID $pid is deleted successfully!</p>";
-            $this->renderAction('admin_msg', $data);
-        }
-    }
-    
     function listUser(){
         Doo::loadHelper('DooPager');
         Doo::loadModel('User');
@@ -314,52 +154,6 @@ class AdminController extends BaseController {
         $this->renderAction('/admin/user/index');
     }
 
-    function approveComment(){
-        Doo::loadModel('Comment');
-        $c = new Comment;
-        $c->id = intval($this->params['cid']);
-        $comment = $c->find(array('limit'=>1, 'select'=>'id, post_id'));
-
-        //if not exists, show error
-        if($comment==Null){
-            return 404;
-        }
-
-        //change status to Approved
-        $comment->status = 1;
-        $comment->update(array('field'=>'status'));
-
-        Doo::loadModel('Post');
-        Doo::autoload('DooDbExpression');
-
-        //Update totalcomment field in Post
-        $p = new Post;
-        $p->id = $comment->post_id;
-        $p->totalcomment = new DooDbExpression('totalcomment+1');
-        $p->update(array('field'=>'totalcomment'));
-
-        $data['rootUrl'] = Doo::conf()->APP_URL;
-        $data['title'] =  'Comment Approved!';
-        $data['content'] =  "<p>Comment is approved successfully!</p>";
-        $data['content'] .=  "<p>View the comment <a href=\"{$data['rootUrl']}article/$p->id#comment$comment->id\">here</a></p>";
-        $this->renderAction('admin_msg', $data);
-    }
-
-    /**
-     * Reject (delete) unapproved comment
-     */
-    function rejectComment(){
-        Doo::loadModel('Comment');
-        $c = new Comment;
-        $c->id = intval($this->params['cid']);
-        $c->status = 0;
-        $c->delete(array('limit'=>1));
-
-        $data['rootUrl'] = Doo::conf()->APP_URL;
-        $data['title'] =  'Comment Rejected!';
-        $data['content'] =  "<p>Comment is rejected &amp; deleted successfully!</p>";
-        $thisrenderAction('admin_msg', $data);
-    }
 
 }
 ?>

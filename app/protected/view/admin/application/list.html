@@ -26,7 +26,7 @@
                 <tr>
                 <td><input type=checkbox name="applications[]" value="{{applications' value.@id}}"></input></td>
                 <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
-                <td>{{applications' value.@type}}</td>
+                <td>{{t(applications' value.@type)}}</td>
                 <td><a href='{{baseurl}}index.php/my/users/{{applications' value.@user_id}}'>{{applications' value.@User.@first_name}}</a></td>
                 <!-- if {{isset(applications' value.@Assignee)}} -->
 
