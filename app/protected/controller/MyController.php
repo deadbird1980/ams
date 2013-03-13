@@ -25,7 +25,7 @@ class MyController extends BaseController {
         $app = new Application();
         $options = $app->scopeSeenByUser($this->user);
         if (($count = $app->count($options)) > 0) {
-            $row_perpage = $this->getRowPerPage();
+            $row_perpage = $this->getPageSize();
             $pages = $this->getPages();
             //if default, no sorting defined by user, show this as pager link
             if(isset($this->params['orderType']))
