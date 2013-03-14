@@ -36,6 +36,7 @@ $route['*']['/admin/applications/page/:pindex'] = array('ApplicationController',
 $route['*']['/admin/applications/sort/:sortField/:orderType/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/admin/applications/:id'] = array('AdminController', 'editApplication');
 $route['*']['/admin/applications/:id/files'] = array('AdminController', 'uploadFiles');
+$route['*']['/admin/applications/:id/confirm'] = array('AdminController', 'confirmApplication');
 $route['*']['/admin/files'] = array('FileController', 'index');
 $route['*']['/admin/emails'] = array('EmailController', 'index');
 

@@ -154,6 +154,53 @@ class AdminController extends BaseController {
         $this->renderAction('/admin/user/index');
     }
 
+    public function uploadFiles() {
+
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
+        $form = $this->helper->getFilesForm($app);
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $u = new User();
+            $u->findByConfirm_code($_POST['confirm_code']);
+            $u->activate($this->user);
+            $this->data['message'] = "User activated!";
+        }
+        Doo::loadHelper('DooUrlBuilder');
+        $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
+        $this->data['next_url'] = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$this->params['id']), true);
+        $this->data['form'] = $form->render();
+        // application file
+        Doo::loadClass('FileHelper');
+        $h = new FileHelper($this);
+        $this->data['application_file'] = $h->getFilesForApplication($app);
+        if ($this->data['application']->beforeSubmitted()) {
+            $this->renderAction('/admin/application/file/edit');
+        } else {
+            $this->renderAction('/admin/application/file/view');
+        }
+    }
+
+    public function confirmApplication() {
+
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
+
+        $form = $this->helper->getConfirmApplicationForm($app);
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $id = $this->params['id'];
+            $app->id = $id;
+            if ($app->isSubmitted()) {
+                $_POST['status'] = 'confirmed';
+            }
+            $this->notifyAdmin("Applicatioin {$id} is confirmed","Applicatioin {$id} is confirmed");
+            $app->update_attributes($_POST, array('where'=>"id=${id}"));
+            return Doo::conf()->APP_URL . "index.php/admin/applications/{$id}/files";
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/admin/application/edit');
+    }
 
 }
 ?>
