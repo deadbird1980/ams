@@ -40,6 +40,7 @@ class BaseController extends DooController {
     protected function pickMessage() {
         if (isset($this->session->message)) {
             $this->data['message'] = $this->session->message;
+            unset($this->session->message);
         }
     }
 
