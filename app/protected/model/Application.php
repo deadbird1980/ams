@@ -128,12 +128,24 @@ class Application extends DooSmartModel {
     public function export() {
     }
 
-    public function files() {
+    public function filesEssential() {
         Doo::loadModel('ApplicationFile');
         $appFile = new ApplicationFile();
         $options = array('where'=>"application_type='{$this->type}'");
         $rtn = $appFile->find($options);
         return $rtn;
+    }
+
+    public function files() {
+        Doo::loadModel('Attachment');
+        $a = new Attachment();
+        $options = array('where'=>"application_id='{$this->id}'");
+        $a = $a->find($options);
+        return $a;
+    }
+
+    public function isFilesReady() {
+        return count($this->files()) == count($this->filesEssential());
     }
 }
 ?>

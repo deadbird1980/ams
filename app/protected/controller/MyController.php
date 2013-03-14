@@ -86,10 +86,17 @@ class MyController extends BaseController {
         Doo::loadModel('Application');
 
         $app = new Application();
-        $app->update_attributes(array("status"=>"submitted"), array('where'=>"id={$this->params['id']}"));
-        $this->notifyAdmin('Application submitted', "Appliction {$this->params['id']} is submitted");
-        $this->data['message'] = $this->t('application_submitted');
-        $this->renderAction('/my/application/submitted');
+        // confirm all the files uploaded
+        $app = $app->getById_first($this->params['id']);
+        if ($app->isFilesReady()) {
+            $app->update_attributes(array("status"=>"submitted"), array('where'=>"id={$this->params['id']}"));
+            $this->notifyAdmin('Application submitted', "Application {$this->params['id']} is submitted");
+            $this->data['message'] = $this->t('application_submitted');
+            $this->renderAction('/my/application/submitted');
+        } else {
+            $this->leaveMessage($this->t('error_application_missing_files'));
+            return Doo::conf()->APP_URL . "index.php/my/applications/{$app->id}/confirm";
+        }
     }
 
     public function editApplication() {

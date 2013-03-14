@@ -34,7 +34,18 @@ class BaseController extends DooController {
         }
         $this->setTranslator();
         $this->setHelper();
+        $this->pickMessage();
 	}
+
+    protected function pickMessage() {
+        if (isset($this->session->message)) {
+            $this->data['message'] = $this->session->message;
+        }
+    }
+
+    protected function leaveMessage($msg) {
+        $this->session->message = $msg;
+    }
 
     protected function setTranslator() {
         // “apc”, “php”, “xcache” and “eaccelerator”.

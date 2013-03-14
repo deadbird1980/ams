@@ -129,3 +129,6 @@ duplicated_application_file|"重复的申请文件"
 mandatory|"必需"
 application_type|"申请类型"
 name|"名称"
+
+
+error_application_missing_files|"所需文件尚缺，请返回重新上载！"
