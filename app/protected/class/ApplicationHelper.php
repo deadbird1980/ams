@@ -106,6 +106,11 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )));
+        $elements['files'] = array('display', array(
+             'label' => "<a target='_blank' href='{$app->id}/files'>{$this->t('file')}</a>",
+             'content' => '',
+             'element-wrapper' => 'div'
+             ));
         if (!$app->AfterSubmitted()) {
             $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
@@ -114,11 +119,6 @@ class ApplicationHelper extends Helper {
                  'field-wrapper' => 'div'
                  ));
         } else {
-            $elements['files'] = array('display', array(
-                 'label' => "<a target='_blank' href='{$app->id}/files'>{$this->t('file')}</a>",
-                 'content' => '',
-                 'element-wrapper' => 'div'
-                 ));
             if ($app->isSubmitted()) {
                 $elements['submit'] = array('submit', array(
                          'label' => $this->t('confirm'),
@@ -202,6 +202,11 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )));
+        $elements['files'] = array('display', array(
+             'label' => "<a target='_blank' href='{$app->id}/files'>{$this->t('file')}</a>",
+             'content' => '',
+             'element-wrapper' => 'div'
+             ));
         if ($app->beforeSubmitted()) {
             $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
