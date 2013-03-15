@@ -16,9 +16,12 @@ class SchoolApplication extends DooSmartModel{
     public $visa_start_date;
     public $visa_end_date;
     public $address;
+    public $school;
+    public $subject;
+    public $course;
     public $_table = 'school_application';
     public $_primarykey = 'id';
-    public $_fields = array('id','application_id','country','start_date','passport_no','passport_name','birthday','organization','passport_start_date','passport_end_date','visa_start_date','visa_end_date','address');
+    public $_fields = array('id','application_id','country','start_date','passport_no','passport_name','birthday','organization','passport_start_date','passport_end_date','visa_start_date','visa_end_date','address','school','subject','course');
     public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()
         parent::__construct($properties);

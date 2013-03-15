@@ -437,6 +437,27 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
+                 'school' => array('text', array(
+                     'label' => $this->t('school'),
+                     'required' => true,
+                     'value' => $visaapp->address,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'subject' => array('text', array(
+                     'label' => $this->t('subject'),
+                     'required' => true,
+                     'value' => $visaapp->address,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'course' => array('text', array(
+                     'label' => $this->t('course'),
+                     'required' => true,
+                     'value' => $visaapp->address,
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
                  'submit' => array('submit', array(
                      'label' => $this->t('next'),
                      'attributes' => array('class' => 'buttons'),
