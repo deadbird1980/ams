@@ -81,7 +81,7 @@
         <td class="preview"><span class="fade"></span></td>
         <td class="name"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-        <td class="application_file">{{application_file}}</td>
+        <td class="delete">{{application_file}}</td>
         {% if (file.error) { %}
             <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
@@ -123,7 +123,7 @@
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
             </td>
             <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-            <td class="type"><span>{%=file.application_file%}</span></td>
+            <td class="delete"><span>{%=file.application_file%}</span></td>
             <td colspan="2"></td>
         {% } %}
         <td class="delete">
