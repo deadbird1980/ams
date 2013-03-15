@@ -557,6 +557,7 @@ class UploadHandler
                 $file->error = 'File already exists!';
                 return $file;
             }
+            $file->application_id = $this->options['upload_model']->application_id;
         }
 
         if ($this->validate($uploaded_file, $file, $error, $index)) {
@@ -610,10 +611,10 @@ class UploadHandler
                 $file->error = 'abort';
             }
             $file->size = $file_size;
-            $this->set_file_delete_properties($file);
             if ($this->options['upload_model']) {
                 $this->options['upload_model']->importFile($file);
             }
+            $this->set_file_delete_properties($file);
         }
         return $file;
     }
