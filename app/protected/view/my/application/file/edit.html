@@ -11,12 +11,16 @@
 <div class="content">
     <div class="container">
   <div id="leftSide">
+    <div class="message">
+        {{instruction}}
+    </div>
     <!-- The file upload form used as target for the file upload widget -->
 <form id="fileupload" action="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" id="files_required" name="files_required" value="{{files_required}}">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
 <noscript><input type="hidden" name="redirect" value="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row fileupload-buttonbar">
+        <div id="uploadbars" class="row fileupload-buttonbar">
             <div class="span7">
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
@@ -143,6 +147,11 @@
 <script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-ui.js"></script>
 <script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-jui.js"></script>
 <script type="text/javascript">
+
+function allFilesUploaded() {
+    return $('#fileupload td.type').length >= $('#fileupload #files_required').val();
+}
+
 $(function () {
     //'use strict';
 
@@ -185,6 +194,13 @@ $(function () {
         }).done(function (result) {
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
+            if (allFilesUploaded()) {
+                $('#fileupload span.next').show();
+                $('#fileupload #uploadbars').hide();
+
+            } else {
+                $('#fileupload span.next').hide();
+            }
         });
 
     // Initialize the Image Gallery widget:
@@ -200,8 +216,21 @@ $(function () {
             alert("{{t('duplicated_application_file')}}");
             return false;
         }
-
         data.formData = inputs.serializeArray();
+    });
+
+    $('#fileupload').bind('fileuploaddone', function (e, data) {
+        if ($('td.type', this).length + 1 >= $('#files_required', this).val()) {
+            $('span.next', this).show();
+            $('#fileupload #uploadbars').hide();
+        }
+    });
+
+    $('#fileupload').bind('fileuploaddestroy', function (e, data) {
+        if ($('td.type', this).length - 1 < $('#files_required', this).val()) {
+            $('span.next', this).hide();
+            $('#fileupload #uploadbars').show();
+        }
     });
 });
 </script>

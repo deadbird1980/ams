@@ -10,5 +10,14 @@ class FileHelper extends Helper {
         $html .= "</select>";
         return $html;
     }
+
+    public function getFilesRequired($app) {
+        $files = $app->filesEssential();
+        $names = array();
+        foreach($files as $file) {
+            $names[] = "{$file->name}";
+        }
+        return array('count'=>count($files), 'text'=>join($names, ','));
+    }
 }
 ?>

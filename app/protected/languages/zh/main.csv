@@ -130,5 +130,7 @@ mandatory|"必需"
 application_type|"申请类型"
 name|"名称"
 
+files_required|"必须提交的文件如下: "
+
 
 error_application_missing_files|"所需文件尚缺，请返回重新上载！"

@@ -553,10 +553,10 @@ class UploadHandler
             $file->$element = $_POST[$element][$index];
         }
         if ($this->options['upload_model']) {
-            if (!$this->options['upload_model']->importFile($file)) {
+            if ($this->options['upload_model']->fileExist($file)) {
                 $file->error = 'File already exists!';
+                return $file;
             }
-            return $file;
         }
 
         if ($this->validate($uploaded_file, $file, $error, $index)) {
@@ -611,6 +611,9 @@ class UploadHandler
             }
             $file->size = $file_size;
             $this->set_file_delete_properties($file);
+            if ($this->options['upload_model']) {
+                $this->options['upload_model']->importFile($file);
+            }
         }
         return $file;
     }

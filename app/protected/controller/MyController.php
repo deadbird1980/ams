@@ -173,6 +173,9 @@ class MyController extends BaseController {
         Doo::loadClass('FileHelper');
         $h = new FileHelper($this);
         $this->data['application_file'] = $h->getFilesForApplication($app);
+        $files = $h->getFilesRequired($app);
+        $this->data['instruction'] = $this->t('files_required') . $files['text'];
+        $this->data['files_required'] = $files['count'];
         if ($this->data['application']->beforeSubmitted()) {
             $this->renderAction('/my/application/file/edit');
         } else {
