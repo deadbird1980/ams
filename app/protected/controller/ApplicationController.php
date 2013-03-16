@@ -112,13 +112,15 @@ class ApplicationController extends BaseController {
             Doo::loadModel('Application');
             $app = new Application($_POST);
             $app->user_id = $this->params['user_id'];
+            $app->type = $_POST['type'];
             $app->assignee_id = $this->user->id;
             $app->status = Application::CREATED;
-            if ($app->insert()) {
+            if ($id = $app->insert()) {
+                $app->id = $id;
+                if ($app->isSchool()) {
+                    $app_detail = $app->createDetailApplication($_POST);
+                }
                 $this->data['message'] = $this->t('created');
-            }
-            if ($app->isSchool()) {
-                $app_detail = $app->createDetailApplication($_POST);
             }
             $this->renderAction('/my/application/created');
         } else {

@@ -16,10 +16,16 @@ class Helper {
     }
 
     public function convertDateFromDB($date) {
+        if (strlen($date) == 0 || $date == '0000-00-00') {
+            return "";
+        }
         return date("d/m/Y", strtotime($date));
     }
 
     public function convertDateToDB($date) {
+        if (strlen($date) == 0) {
+            return "";
+        }
         return date("Y-m-d", strtotime($date));
     }
 

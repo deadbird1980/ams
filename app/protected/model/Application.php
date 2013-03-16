@@ -88,19 +88,19 @@ class Application extends DooSmartModel {
         parent::delete($opt);
     }
 
-    public function createDetailApplication() {
+    public function createDetailApplication($data=null) {
         if (ApplicationType::isVisa($this->type)) {
             $a = new VisaApplication();
             if (!($a = $a->getByid_first($this->id))) {
-                $a = new VisaApplication();
+                $a = new VisaApplication($data);
                 $a->id = $this->id;
                 $a->application_id = $this->id;
                 $a->insert();
             }
         } else {
             $a = new SchoolApplication();
-            if (!($a = $a->getByid_first($this->id))) {
-                $a = new SchoolApplication();
+            if (!$this->id || !($a = $a->getByid_first($this->id))) {
+                $a = new SchoolApplication($data);
                 $a->id = $this->id;
                 $a->application_id = $this->id;
                 $a->insert();

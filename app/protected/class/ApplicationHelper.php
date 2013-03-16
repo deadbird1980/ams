@@ -387,11 +387,7 @@ class ApplicationHelper extends Helper {
             $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
         }
         $visaapp = $app->createDetailApplication();
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
+        $elements = array(
                  'token' => array('hidden', array(
                      'required' => true,
                      'value' => $this->controller->getAuthenticityToken(),
@@ -421,21 +417,21 @@ class ApplicationHelper extends Helper {
                      'label' => $this->t('birthday'),
                      'required' => true,
                      'value' => $this->convertDateFromDB($visaapp->birthday),
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
                      'label' => $this->t('passport_start_date'),
                      'required' => true,
-                     'value' => $visaapp->passport_start_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->passport_start_date),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('text', array(
                      'label' => $this->t('passport_end_date'),
                      'required' => true,
-                     'value' => $visaapp->passport_end_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->passport_end_date),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'address' => array('text', array(
@@ -444,35 +440,58 @@ class ApplicationHelper extends Helper {
                      'value' => $visaapp->address,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
-                 )),
-                 'school' => array('text', array(
-                     'label' => $this->t('school'),
-                     'required' => true,
-                     'value' => $visaapp->address,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'subject' => array('text', array(
-                     'label' => $this->t('subject'),
-                     'required' => true,
-                     'value' => $visaapp->address,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'course' => array('text', array(
-                     'label' => $this->t('course'),
-                     'required' => true,
-                     'value' => $visaapp->address,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
-                 'element-wrapper' => 'div'
-                 )),
-                 'submit' => array('submit', array(
+                 ))
+             );
+        if ($this->controller->isAdmin()) {
+            $elements['school'] = array('text', array(
+                         'label' => $this->t('school'),
+                         'required' => true,
+                         'value' => $visaapp->school,
+                         'attributes' => array('class' => 'control textbox validate[required]'),
+                     'element-wrapper' => 'div'
+                     ));
+            $elements['subject'] = array('text', array(
+                         'label' => $this->t('subject'),
+                         'required' => true,
+                         'value' => $visaapp->subject,
+                         'attributes' => array('class' => 'control textbox validate[required]'),
+                     'element-wrapper' => 'div'
+                 ));
+            $elements['course'] = array('text', array(
+                         'label' => $this->t('course'),
+                         'required' => true,
+                         'value' => $visaapp->course,
+                         'attributes' => array('class' => 'control textbox validate[required]'),
+                     'element-wrapper' => 'div'
+                     ));
+        } else {
+            $elements['school'] = array('display', array(
+                         'label' => $this->t('school'),
+                         'content' => $visaapp->school,
+                     'element-wrapper' => 'div'
+                     ));
+            $elements['subject'] = array('display', array(
+                         'label' => $this->t('subject'),
+                         'content' => $visaapp->subject,
+                     'element-wrapper' => 'div'
+                 ));
+            $elements['course'] = array('display', array(
+                         'label' => $this->t('course'),
+                         'content' => $visaapp->course,
+                     'element-wrapper' => 'div'
+                     ));
+        }
+        $elements['submit'] = array('submit', array(
                      'label' => $this->t('next'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
-                 ))
-             )
+                 ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements'=>$elements
         ));
         return $form;
     }
