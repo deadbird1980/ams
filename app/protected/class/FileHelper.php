@@ -5,19 +5,24 @@ class FileHelper extends Helper {
         $files = $app->filesEssential();
         $html = "<select name='application_file[]' required>";
         foreach($files as $file) {
-            $html .= "<option value={$file->id}>{$file->name}</option>";
+            $required = $file->mandatory ? '*' : '';
+            $html .= "<option value={$file->id}>$required{$file->name}</option>";
         }
         $html .= "</select>";
         return $html;
     }
 
-    public function getFilesRequired($app) {
+    public function getFileNames($app) {
         $files = $app->filesEssential();
-        $names = array();
+        $required = array();
         foreach($files as $file) {
-            $names[] = "{$file->name}";
+            if ($file->mandatory) {
+                $required[] = "{$file->name}(*)";
+            } else {
+                $required[] = "{$file->name}";
+            }
         }
-        return array('count'=>count($files), 'text'=>join($names, ','));
+        return $required;
     }
 }
 ?>

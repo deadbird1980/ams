@@ -16,7 +16,6 @@
     </div>
     <!-- The file upload form used as target for the file upload widget -->
 <form id="fileupload" action="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}" method="POST" enctype="multipart/form-data">
-    <input type="hidden" id="files_required" name="files_required" value="{{files_required}}">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
 <noscript><input type="hidden" name="redirect" value="{{rootUrl}}index.php/files/upload?application_id={{application.@id}}"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -123,7 +122,7 @@
                 <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
             </td>
             <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
-            <td class="delete"><span>{%=file.application_file%}</span></td>
+            <td class="delete"><span>{%=file.application_file%}</span><input type="hidden" name="files[]" value="{%=file.application_file_id%}" {% if (file.mandatory==1) { %}required{% }%}></td>
             <td colspan="2"></td>
         {% } %}
         <td class="delete">
@@ -148,8 +147,17 @@
 <script type="text/javascript" src="{{baseurl}}global/js/jquery.fileupload-jui.js"></script>
 <script type="text/javascript">
 
+var files = {{files}};
+var files_required = jQuery.map(files, function(n, i){ if (n.mandatory==1) {return n.id;} });
+var files_required_uploaded = 0;
+var files_uploaded = 0;
+
 function allFilesUploaded() {
-    return $('#fileupload td.type').length >= $('#fileupload #files_required').val();
+    return files_uploaded >= files.length;
+}
+
+function requiredFilesUploaded() {
+    return files_required_uploaded >= files_required.length;
 }
 
 $(function () {
@@ -194,10 +202,19 @@ $(function () {
         }).done(function (result) {
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
-            if (allFilesUploaded()) {
+            files_uploaded = result.files.length;
+            var cnt = 0;
+            for (var i in result.files) {
+                if (result.files[i].mandatory == '1') {
+                    cnt++;
+                }
+            }
+            files_required_uploaded = cnt;
+            if (files_uploaded >= files.length) {
                 $('#fileupload span.next').show();
                 $('#fileupload #uploadbars').hide();
-
+            } else if (files_required_uploaded >= files_required.length) {
+                $('#fileupload span.next').show();
             } else {
                 $('#fileupload span.next').hide();
             }
@@ -220,16 +237,28 @@ $(function () {
     });
 
     $('#fileupload').bind('fileuploaddone', function (e, data) {
-        if ($('td.type', this).length + 1 >= $('#files_required', this).val()) {
-            $('span.next', this).show();
+        var inputs = data.context.find(':input');
+        var f = inputs.filter('[required]').first().children("option").filter(":selected").val();
+        files_uploaded++;
+        if (files_uploaded >= files.length) {
             $('#fileupload #uploadbars').hide();
+            $('span.next', this).show();
+        } else if (jQuery.inArray(f+'', files_required) != -1) {
+            files_required_uploaded++;
+            if (files_required_uploaded >= files_required.length) {
+                $('span.next', this).show();
+            }
         }
     });
 
     $('#fileupload').bind('fileuploaddestroy', function (e, data) {
-        if ($('td.type', this).length - 1 < $('#files_required', this).val()) {
+        var inputs = data.context.find(':input');
+        var f = inputs.filter('[required]').first().val();
+        $('#fileupload #uploadbars').show();
+        files_uploaded--;
+        if (jQuery.inArray(f+'', files_required) != -1) {
+            files_required_uploaded--;
             $('span.next', this).hide();
-            $('#fileupload #uploadbars').show();
         }
     });
 });

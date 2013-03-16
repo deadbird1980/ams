@@ -266,7 +266,10 @@ class UploadHandler
                 $attachment->file_name = $file_name;
                 foreach($this->options['additional_elements'] as $element) {
                     if ($element == 'application_file') {
-                        $file->$element = $attachment->relateApplicationFile_first($attachment)->ApplicationFile->name;
+                        $at = $attachment->relateApplicationFile_first($attachment)->ApplicationFile;
+                        $file->$element = $at->name;
+                        $file->application_file_id = $at->id;
+                        $file->mandatory = $at->mandatory;
                     } else {
                         $file->$element = $attachment->$element;
                     }
@@ -284,6 +287,7 @@ class UploadHandler
         if (!is_dir($upload_dir)) {
             return array();
         }
+        $files = array();
         if ($att = $this->options['upload_model']) {
             $atts = $att->sameApplication();
             foreach($atts as $att) {

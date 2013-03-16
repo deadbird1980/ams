@@ -37,7 +37,10 @@ class Attachment extends DooSmartModel{
         $this->application_file_id = $file->application_file;
         // replace id with name for display
         $af = new ApplicationFile();
-        $file->application_file = $af->getById_first($this->application_file_id)->name;
+        $af = $af->getById_first($this->application_file_id);
+        $file->application_file = $af->name;
+        $file->mandatory = $af->mandatory;
+        $file->application_file_id = $this->application_file_id;
         $file->id = $this->insert();
         return $file;
     }

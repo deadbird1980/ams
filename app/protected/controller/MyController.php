@@ -173,9 +173,9 @@ class MyController extends BaseController {
         Doo::loadClass('FileHelper');
         $h = new FileHelper($this);
         $this->data['application_file'] = $h->getFilesForApplication($app);
-        $files = $h->getFilesRequired($app);
-        $this->data['instruction'] = $this->t('files_required') . $files['text'];
-        $this->data['files_required'] = $files['count'];
+        $files = $h->getFileNames($app);
+        $this->data['instruction'] = $this->t('files_required') . join($files, ',');
+        $this->data['files'] = json_encode($app->filesEssential());
         if ($this->data['application']->beforeSubmitted()) {
             $this->renderAction('/my/application/file/edit');
         } else {
