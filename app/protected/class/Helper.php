@@ -1,6 +1,9 @@
 <?php
 class Helper {
     protected $controller;
+    protected $dateFormat = 'dd/mm/yyyy';
+    protected $dateElements = array();
+    protected $dateClass = 'control textbox validate[required,regexp("/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/")]';
 
     public function __construct($controller) {
         Doo::loadHelper('DooForm');
@@ -10,6 +13,23 @@ class Helper {
 
     protected function t($str) {
         return $this->controller->t($str);
+    }
+
+    public function convertDateFromDB($date) {
+        return date("d/m/Y", strtotime($date));
+    }
+
+    public function convertDateToDB($date) {
+        return date("Y-m-d", strtotime($date));
+    }
+
+    public function formatDate($arr) {
+        foreach($this->dateElements as $elm) {
+            if (isset($arr[$elm])) {
+                $arr[$elm] = $this->convertDateToDB($arr[$elm]);
+            }
+        }
+        return $arr;
     }
 }
 ?>

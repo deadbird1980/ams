@@ -1,6 +1,8 @@
 <?php
 class ApplicationHelper extends Helper {
 
+    protected $dateElements = array('birthday', 'start_date', 'passport_start_date', 'passport_end_date', 'visa_start_date', 'visa_end_date');
+
     public function getApplicationForm($app) {
         if ($app->isVisa()) {
             $form = $this->getEuropeVisaForm($app);
@@ -285,8 +287,9 @@ class ApplicationHelper extends Helper {
                  'start_date' => array('text', array(
                      'label' => $this->t('plan_start_date'),
                      'required' => true,
-                     'value' => $visaapp->start_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->start_date),
+                     'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport' => array('display', array(
@@ -309,22 +312,25 @@ class ApplicationHelper extends Helper {
                  'birthday' => array('text', array(
                      'label' => $this->t('birthday'),
                      'required' => true,
-                     'value' => $visaapp->birthday,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->birthday),
+                     'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
                      'label' => $this->t('passport_start_date'),
                      'required' => true,
-                     'value' => $visaapp->passport_start_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->passport_start_date),
+                     'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('text', array(
                      'label' => $this->t('end_date'),
                      'required' => true,
-                     'value' => $visaapp->passport_end_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->passport_end_date),
+                     'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'visa' => array('display', array(
@@ -340,15 +346,17 @@ class ApplicationHelper extends Helper {
                  'visa_start_date' => array('text', array(
                      'label' => $this->t('visa_start_date'),
                      'required' => true,
-                     'value' => $visaapp->visa_start_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->visa_start_date),
+                     'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'visa_end_date' => array('text', array(
                      'label' => $this->t('visa_end_date'),
                      'required' => true,
-                     'value' => $visaapp->visa_end_date,
-                     'attributes' => array('class' => 'control textbox validate[required]'),
+                     'value' => $this->convertDateFromDB($visaapp->visa_end_date),
+                     'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'work' => array('display', array(
@@ -412,7 +420,7 @@ class ApplicationHelper extends Helper {
                  'birthday' => array('text', array(
                      'label' => $this->t('birthday'),
                      'required' => true,
-                     'value' => $visaapp->birthday,
+                     'value' => $this->convertDateFromDB($visaapp->birthday),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),

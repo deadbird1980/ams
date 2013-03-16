@@ -22,27 +22,28 @@
               }
               var required_error = "{{t('required_error')}}";
               var pinyin_error = "{{t('pinyin_error')}}";
+              var date_error = "{{t('date_error')}}";
               $("#form").Zebra_Form({scroll_to_error:true,
                       tips_position:'left',
                       close_tips:true,
                       validate_on_the_fly:false,
                       validate_all:false,
-                      error_messages:{"start_date-element":{"required":required_error},
+                      error_messages:{"start_date-element":{"required":required_error,"regexp":date_error},
                       "passport_no-element":{"required":required_error},
                       "passport_name-element":{"required":required_error},
-                      "birthday-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "passport_end_date-element":{"required":required_error},
-                      "visa_start_date-element":{"required":required_error},
-                      "visa_end_date-element":{"required":required_error},
+                      "birthday-element":{"required":required_error, "regexp":date_error},
+                      "passport_start_date-element":{"required":required_error, "regexp":date_error},
+                      "passport_end_date-element":{"required":required_error, "regexp":date_error},
+                      "visa_start_date-element":{"required":required_error, "regexp":date_error},
+                      "visa_end_date-element":{"required":required_error, "regexp":date_error},
                       "passport_start_date-element":{"required":required_error},
                       "address-element":{"required":required_error},
                       }})
-              var dp_options = { dateFormat: "dd-mm-yy" };
+              var dp_options = { dateFormat: "dd/mm/yy" };
               $('#start_date-element').datepicker(dp_options);
               $('#passport_start_date-element').datepicker(dp_options);
               $('#passport_end_date-element').datepicker(dp_options);
-              $('#birthday-element').datepicker({ dateFormat: "dd-mm-yy", defaultDate: '01-01-1990'});
+              $('#birthday-element').datepicker({ dateFormat: "dd/mm/yy", defaultDate: '01/01/1990'});
 
               $('#visa_start_date-element').datepicker(dp_options);
               $('#visa_end_date-element').datepicker(dp_options);

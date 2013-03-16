@@ -110,6 +110,7 @@ class MyController extends BaseController {
         } else {
             $form = $this->helper->getApplicationForm($app);
             if ($this->isPost() && $form->isValid($_POST)) {
+                $_POST = $this->helper->formatDate($_POST);
                 $id = $this->params['id'];
                 $app = new Application();
                 $app = $app->getById_first($id);

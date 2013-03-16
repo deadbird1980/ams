@@ -38,6 +38,7 @@ file|"文件"
 
 required_error|"请填写本项目!"
 pinyin_error|"请填写拼音!"
+date_error|"日期格式错误!"
 
 first_name|"名"
 last_name|"姓"
