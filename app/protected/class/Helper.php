@@ -3,7 +3,7 @@ class Helper {
     protected $controller;
     protected $dateFormat = 'dd/mm/yyyy';
     protected $dateElements = array();
-    protected $dateClass = 'control textbox validate[required,regexp("/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/")]';
+    protected $dateClass = 'control textbox validate[required,regexp(^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$)]';
 
     public function __construct($controller) {
         Doo::loadHelper('DooForm');
