@@ -109,7 +109,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )));
         $elements['files'] = array('display', array(
-             'label' => "<a target='_blank' href='{$app->id}/files'>{$this->t('file')}</a>",
+             'label' => "<a target='_blank' href='files'>{$this->t('file')}</a>",
              'content' => '',
              'element-wrapper' => 'div'
              ));
@@ -205,7 +205,7 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )));
         $elements['files'] = array('display', array(
-             'label' => "<a target='_blank' href='{$app->id}/files'>{$this->t('file')}</a>",
+             'label' => "<a target='_blank' href='files'>{$this->t('file')}</a>",
              'content' => '',
              'element-wrapper' => 'div'
              ));

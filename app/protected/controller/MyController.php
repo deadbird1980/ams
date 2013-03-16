@@ -213,7 +213,7 @@ class MyController extends BaseController {
             return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
         }
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/edit');
+        $this->renderAction('/my/application/confirm');
     }
 
     private function getProfileForm() {
