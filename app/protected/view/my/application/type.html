@@ -15,6 +15,22 @@
     </div>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
       <script type="text/javascript">
+          function checkApplicationType() {
+              var elements = ['school', 'subject', 'course'];
+              var type = $("#type-element").val();
+              if (type=='' || type.indexOf('visa_') >= 0) {
+                  for(var i=0; i<elements.length; i++) {
+                      $("label[for='"+elements[i]+"-element']").hide();
+                      $("#"+elements[i]+"-element-wrapper").hide();
+                  }
+              } else {
+                  for(var i=0; i<elements.length; i++) {
+                      $("label[for='"+elements[i]+"-element']").show();
+                      $("#"+elements[i]+"-element-wrapper").show();
+                  }
+              }
+          }
+
           function init() {
               if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
                   setTimeout("init()",100);
@@ -27,8 +43,11 @@
                       validate_on_the_fly:false,
                       validate_all:false,
                       error_messages:{"type-element":{"required":required_error},
-                      }})
-              var dp_options = { dateFormat: "yy-mm-dd" };
+              }});
+              $("#type-element").bind('change', function() {
+                  checkApplicationType();
+              });
+              checkApplicationType();
           }
           init()
       </script>

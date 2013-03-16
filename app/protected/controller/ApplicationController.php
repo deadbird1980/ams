@@ -117,6 +117,9 @@ class ApplicationController extends BaseController {
             if ($app->insert()) {
                 $this->data['message'] = $this->t('created');
             }
+            if ($app->isSchool()) {
+                $app_detail = $app->createDetailApplication($_POST);
+            }
             $this->renderAction('/my/application/created');
         } else {
             $form = $this->helper->getTypeForm();

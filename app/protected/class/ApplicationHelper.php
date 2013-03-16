@@ -503,6 +503,27 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
                  'element-wrapper' => 'div'
                  )),
+                 'school' => array('text', array(
+                     'label' => $this->t('school'),
+                     'required' => false,
+                     'value' => '',
+                     'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'subject' => array('text', array(
+                     'label' => $this->t('subject'),
+                     'required' => false,
+                     'value' => '',
+                     'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'course' => array('text', array(
+                     'label' => $this->t('course'),
+                     'required' => false,
+                     'value' => '',
+                     'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div',
+                 )),
                  'submit' => array('submit', array(
                      'label' => $this->t('create'),
                      'attributes' => array('class' => 'buttons'),
