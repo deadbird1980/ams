@@ -4,8 +4,8 @@ require_once 'BaseController.php';
 class MyController extends BaseController {
 
     protected $user;
-    protected $sortField;
-    protected $orderType;
+    protected $sortField = 'application.id';
+    protected $orderType = 'desc';
     protected $helper = 'ApplicationHelper';
 
     private function setMessage() {
@@ -33,7 +33,7 @@ class MyController extends BaseController {
             if(isset($this->params['sortField']))
                 $this->sortField = $this->params['sortField'];
 
-            if($this->sortField=='email' && $this->orderType=='desc'){
+            if($this->sortField=='application.id' && $this->orderType=='desc'){
                 $pager = new DooPager(Doo::conf()->APP_URL.'my/applications/page', $app->count($options), $row_perpage, $pages);
             }else{
                 $pager = new DooPager(Doo::conf()->APP_URL."my/applications/sort/$this->sortField/$this->orderType/page", $app->count($options), $row_perpage, $pages);
