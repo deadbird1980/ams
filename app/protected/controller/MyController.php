@@ -10,7 +10,7 @@ class MyController extends BaseController {
 
     private function setMessage() {
         if ($this->user->hasApplicationsToFillIn()) {
-            $this->data['message'] = $this->t('applications_to_fill_in');
+            $this->data['message'] = $this->t('applications_to_fill_in', array('url'=>'applications'));
         }
     }
 

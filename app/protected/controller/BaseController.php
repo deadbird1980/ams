@@ -112,8 +112,14 @@ class BaseController extends DooController {
         return false;
     }
 
-    public function t($msg) {
-        return Doo::getTranslator()->translate($msg);
+    public function t($msg, $vars=null) {
+        $str = Doo::getTranslator()->translate($msg);
+        if ($vars && preg_match_all('/{{([^ \t\r\n\(\)\.}]+)}}/', $str, $tags)) {
+            for($i=0; $i<count($tags[0]); $i++) {
+                $str = str_replace("{$tags[0][$i]}", $vars[$tags[1][$i]], $str);
+            }
+        }
+        return $str;
     }
 
     public function getPageSize() {
