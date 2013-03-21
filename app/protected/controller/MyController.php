@@ -9,8 +9,8 @@ class MyController extends BaseController {
     protected $helper = 'ApplicationHelper';
 
     private function setMessage() {
-        if ($this->user->hasApplicationsToFillIn()) {
-            $this->data['message'] = $this->t('applications_to_fill_in', array('url'=>'applications'));
+        if ($todo = $this->user->toDo()) {
+            $this->data['message'] = $this->t($todo, array('url'=>'applications'));
         }
     }
 

@@ -93,6 +93,21 @@ class User extends DooSmartModel{
         return $app->count(array('where'=>"user_id={$this->id} and status='".Application::CREATED."'")) > 0;
     }
 
+    public function hasApplicationsToConfirm() {
+        Doo::loadModel('Application');
+        $app = new Application();
+        return $app->count(array('where'=>"assignee_id={$this->id} and status='".Application::SUBMITTED."'")) > 0;
+    }
+
+    public function toDo() {
+        if ($this->hasApplicationsToFillIn()) {
+            return 'applications_to_fill_in';
+        } else if ($this->hasApplicationsToConfirm()) {
+            return 'applications_to_confirm';
+        }
+        return '';
+    }
+
     public function delete($opt=NULL){
         if ($apps = $this->relateApplication()) {
             foreach($apps as $app) {
