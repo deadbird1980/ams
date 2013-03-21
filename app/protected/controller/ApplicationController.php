@@ -115,12 +115,9 @@ class ApplicationController extends BaseController {
             $app->type = $_POST['type'];
             $app->assignee_id = $this->user->id;
             $app->status = Application::CREATED;
-            if ($id = $app->insert()) {
-                $app->id = $id;
-                if ($app->isSchool()) {
-                    $app_detail = $app->createDetailApplication($_POST);
-                }
-                $this->data['message'] = $this->t('created');
+            if ($id = $app->create($_POST)) {
+                $hash = array('url'=>$id);
+                $this->data['message'] = $this->t('application_created', $hash);
             }
             $this->renderAction('/my/application/created');
         } else {

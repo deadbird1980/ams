@@ -109,6 +109,17 @@ class Application extends DooSmartModel {
         return $a;
     }
 
+    public function create($hash) {
+        if ($id = $this->insert()) {
+            $this->id = $id;
+            if ($this->isSchool()) {
+                $app_detail = $this->createDetailApplication($hash);
+            }
+            return $id;
+        }
+        return -1;
+    }
+
     public function isVisa() {
         return ApplicationType::isVisa($this->type);
     }

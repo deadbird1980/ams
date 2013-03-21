@@ -93,6 +93,7 @@ applications_to_confirm|"您有<a href={{url}}>申请</a>需要确认！"
 customer|"客户"
 assignee|"对应人"
 application_submitted|"申请已经提交！"
+application_created|"申请已经创建，请点击<a href={{url}}>这里</a>查看"
 
 created|"创建"
 updated|"已更新"
