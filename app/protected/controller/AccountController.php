@@ -41,7 +41,7 @@ class AccountController extends BaseController{
                 $u = new User();
                 $u->confirm_code = $_POST['confirm_code'];
                 $u = $this->db()->find($u, array('limit'=>1));
-                $u->password = $_POST['password'];
+                $u->setPassword ($_POST['password']);
                 $u->status = $_POST['status'];
                 $u->update(array('where'=>"id={$u->id}"));
                 $this->data['message'] = $this->t('updated');
@@ -83,6 +83,7 @@ class AccountController extends BaseController{
         if ($form->isValid($_POST)) {
             Doo::loadModel('User');
             $user = new User($_POST);
+            $user->setPassword($_POST['password']);
             $user->type = 'customer';
             $user->status = 'registered';
             // calculate confirm key
@@ -106,40 +107,29 @@ class AccountController extends BaseController{
         $form = $this->helper->getLoginForm();
         $this->data['message'] = $this->t('wrong_email_password');
         if ($form->isValid($_POST)) {
-            if(isset($_POST['email']) && isset($_POST['password']) ){
-
-                $_POST['email'] = trim($_POST['email']);
-                $_POST['password'] = trim($_POST['password']);
-                //check User existance in DB, if so start session and redirect to home page.
-                if(!empty($_POST['email']) && !empty($_POST['password'])){
-                        $user = Doo::loadModel('User', true);
-                        $user->email = $_POST['email'];
-                        $user->password = $_POST['password'];
-                        if (Doo::conf()->APP_MODE == 'dev') {
-                            $user = $user->getByEmail_first($_POST['email']);
+            $_POST['email'] = trim($_POST['email']);
+            $_POST['password'] = trim($_POST['password']);
+            if(!empty($_POST['email']) && !empty($_POST['password'])){
+                $user = Doo::loadModel('User', true);
+                $user = $user->getByEmail_first($_POST['email']);
+                if($user && ($this->isDev() || $user->confirmPassword($_POST['password']))) {
+                    if ($user->isRegistered()) {
+                        $this->data['message'] = $this->t('not_activated');
+                    } else {
+                        Doo::loadCore('session/DooSession');
+                        $this->session->start();
+                        unset($this->session->user);
+                        $this->session->user = array(
+                                                    'id'=>$user->id,
+                                                    'email'=>$user->email,
+                                                    'type'=>$user->type,
+                                                );
+                        if ($user->isAdmin()) {
+                            return Doo::conf()->APP_URL . 'index.php/admin/';
                         } else {
-                            $user = $this->db()->find($user, array('limit'=>1));
+                            return Doo::conf()->APP_URL . 'index.php/my/';
                         }
-
-                        if($user){
-                            if ($user->isRegistered()) {
-                                $this->data['message'] = $this->t('not_activated');
-                            } else {
-                                Doo::loadCore('session/DooSession');
-                                $this->session->start();
-                                unset($this->session->user);
-                                $this->session->user = array(
-                                                            'id'=>$user->id, 
-                                                            'email'=>$user->email, 
-                                                            'type'=>$user->type, 
-                                                        );
-                                if ($user->isAdmin()) {
-                                    return Doo::conf()->APP_URL . 'index.php/admin/';
-                                } else {
-                                    return Doo::conf()->APP_URL . 'index.php/my/';
-                                }
-                            }
-                        }
+                    }
                 }
             }
         }

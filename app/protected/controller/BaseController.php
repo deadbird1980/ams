@@ -167,5 +167,9 @@ class BaseController extends DooController {
         }
         return true;
     }
+
+    public function isDev() {
+        return Doo::conf()->APP_MODE == 'dev';
+    }
 }
 ?>

@@ -102,5 +102,19 @@ class User extends DooSmartModel{
         parent::delete($opt);
     }
 
+    public function setPassword($password) {
+        $this->password = md5($this->email . '@' . Doo::conf()->SITE_ID.'@'.$password);
+    }
+
+    private function encryptPassword($password) {
+        return md5($this->email . '@' . Doo::conf()->SITE_ID.'@'.$password);
+    }
+
+    public function confirmPassword($password) {
+        if ($this->password == $password || $this->password == $this->encryptPassword($password)) {
+            return true;
+        }
+        return false;
+    }
 }
 ?>
