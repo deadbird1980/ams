@@ -82,6 +82,7 @@ $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplic
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 // admin/counselor/executor
 $route['get']['/my/users'] = array('UserController', 'index');
+$route['get']['/my/users/sort/:sortField/:orderType/page/:pindex'] = array('UserController', 'index');
 $route['*']['/my/users/:id'] = array('UserController', 'edit');
 $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/page/:pindex'] = array('ApplicationController', 'index');
