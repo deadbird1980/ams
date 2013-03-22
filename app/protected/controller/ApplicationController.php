@@ -113,7 +113,7 @@ class ApplicationController extends BaseController {
             $app = new Application($_POST);
             $app->user_id = $this->params['user_id'];
             $app->type = $_POST['type'];
-            $app->assignee_id = $this->user->id;
+            $app->assignee_id = $this->auth->user->id;
             $app->status = Application::CREATED;
             if ($id = $app->create($_POST)) {
                 $hash = array('url'=>$id);
@@ -126,6 +126,26 @@ class ApplicationController extends BaseController {
             $this->renderAction('/my/application/type');
         }
     }
+
+    public function editType() {
+        $app = Doo::loadModel('Application', true);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        $form = $this->helper->getApplicationTypeForm($app);
+        $id = $app->id;
+        if ($this->isPost()) {
+            if ($app->canChangeTo($_POST['type'])) {
+                $app->update_attributes($_POST, array('where'=>"id=${id}"));
+                if ($app->isSchool()) {
+                    $app->getDetail()->update_attributes($_POST, array('where'=>"id=${id}"));
+                }
+            }
+            $this->leaveMessage($this->t('updated'));
+            return DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$id), true);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/type');
+    }
+
     public function edit() {
         Doo::loadModel('Application');
 
@@ -171,36 +191,6 @@ class ApplicationController extends BaseController {
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/status');
-    }
-
-    public function apply() {
-        Doo::loadModel('Application');
-        $app = new Application();
-        $app->type = $this->params['type'];
-        $this->data['application'] = $app;
-        $form = $this->getEuropeVisaForm();
-        if ($this->isPost() && $form->isValid($_POST)) {
-            Doo::loadModel('Application');
-            $a = new Application();
-            $a->user_id = $this->user->id;
-            if ($this->user->activated_by) {
-                $a->assignee_id = $this->user->activated_by;
-            }
-            $this->data['message'] = "User activated!";
-            $a->type = 'visa';
-            $a->status = 'in_progress';
-            $id = $a->insert();
-            // application detail
-            if ($this->params['type'] == 'visa') {
-                Doo::loadModel('VisaApplication');
-                $a = new VisaApplication($_POST);
-                $a->id = $id;
-                $a->insert();
-            }
-            return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
-        }
-        $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/edit');
     }
 
     public function uploadFiles() {

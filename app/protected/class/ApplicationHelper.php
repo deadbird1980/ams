@@ -496,7 +496,7 @@ class ApplicationHelper extends Helper {
         return $form;
     }
 
-    public function getTypeForm() {
+    public function getNewApplicationForm() {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
         $action = DooUrlBuilder::url2('ApplicationController', 'create', array('user_id'=>$this->controller->params['user_id']), true);
@@ -553,6 +553,72 @@ class ApplicationHelper extends Helper {
                  )),
                  'submit' => array('submit', array(
                      'label' => $this->t('create'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
+
+    public function getApplicationTypeForm($app) {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$app->id), true);
+        $options = array('' => '----------',
+                         'visa_europe' => $this->t('visa_europe'),
+                         '-' => '----'.$this->t('europe_visa').'----',
+                         'visa_t1' => $this->t('visa_t1'),
+                         'visa_t2' => $this->t('visa_t2'),
+                         'visa_t4' => $this->t('visa_t4'),
+                         'visa_other' => $this->t('visa_other'),
+                         '--' => '----'.$this->t('school').'----',
+                         'language' => $this->t('language'),
+                         'gcse' => $this->t('gcse'),
+                         'a-level' => $this->t('a-level'),
+                         'pre-bachelor' => $this->t('pre-bachelor'),
+                         'bachelor' => $this->t('bachelor'),
+                         'pre-master' => $this->t('pre-master'),
+                         'master' => $this->t('master'),
+                         'doctor' => $this->t('doctor'),
+                        );
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'type' => array('select', array(
+                     'label' => $this->t('type'),
+                     'required' => true,
+                     'value' => $app->type,
+                     'multioptions' => $options,
+                     'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'school' => array('text', array(
+                     'label' => $this->t('school'),
+                     'required' => false,
+                     'value' => $app->getDetail()->school,
+                     'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'subject' => array('text', array(
+                     'label' => $this->t('subject'),
+                     'required' => false,
+                     'value' => $app->getDetail()->subject,
+                     'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'course' => array('text', array(
+                     'label' => $this->t('course'),
+                     'required' => false,
+                     'value' => $app->getDetail()->course,
+                     'attributes' => array('class' => 'control textbox'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('update'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

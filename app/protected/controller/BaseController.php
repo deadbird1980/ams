@@ -43,14 +43,14 @@ class BaseController extends DooController {
 	}
 
     protected function pickMessage() {
-        if (isset($this->session->message)) {
-            $this->data['message'] = $this->session->message;
-            unset($this->session->message);
+        if (strlen($this->auth->message) > 0) {
+            $this->data['message'] = $this->auth->message;
+            unset($this->auth->message);
         }
     }
 
     protected function leaveMessage($msg) {
-        $this->session->message = $msg;
+        $this->auth->message = $msg;
     }
 
     protected function setTranslator() {

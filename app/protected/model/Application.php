@@ -14,6 +14,8 @@ class Application extends DooSmartModel {
     public $start_date;
     public $end_date;
     public $paid;
+
+    public $detail;
     public $_table = 'application';
     public $_primarykey = 'id';
     public $_fields = array('id','user_id','type','status','assignee_id','start_date','end_date','paid');
@@ -72,13 +74,15 @@ class Application extends DooSmartModel {
     }
 
     public function getDetail() {
-        if (ApplicationType::isVisa($this->type)) {
-            $a = new VisaApplication();
-        } else {
-            $a = new SchoolApplication();
+        if (!isset($this->detail)) {
+            if (ApplicationType::isVisa($this->type)) {
+                $a = new VisaApplication();
+            } else {
+                $a = new SchoolApplication();
+            }
+            $this->detail = $a->getByid_first($this->id);
         }
-        $a = $a->getByid_first($this->id);
-        return $a;
+        return $this->detail;
     }
 
     public function delete($opt=NULL){
@@ -134,6 +138,17 @@ class Application extends DooSmartModel {
             $this->update();
         }
         return true;
+    }
+
+    public function canChangeTo($type) {
+        if (!$this->isCreated()) {
+            return false;
+        }
+        if ((ApplicationType::isVisa($this->type) && ApplicationType::isVisa($type)) ||
+            (ApplicationType::isSchool($this->type) && ApplicationType::isSchool($type))) {
+                return true;
+            }
+        return false;
     }
 
     public function export() {

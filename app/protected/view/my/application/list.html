@@ -4,35 +4,21 @@
             <tbody>
 
                 <tr>
-                <!-- if ({{role}}=='customer') -->
-                <th># </th>
-                <th>{{t('type')}}</th>
-                <th>{{t('start_date')}}</th>
-                <th>{{t('end_date')}}</th>
-                <th>{{t('status')}}</th>
-                <!-- else -->
                     <th><a href="{{baseurl}}{{range}}/applications/sort/application.id/{{orderType}}/page/1">#</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/application.type/{{orderType}}/page/1">{{t('type')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/user.first_name/{{orderType}}/page/1">{{t('customer')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/start_date/{{orderType}}/page/1">{{t('start_date')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/end_date/{{orderType}}/page/1">{{t('end_date')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
-                <!-- endif -->
                 </tr>
                 <!-- loop applications -->
                 <tr>
                 <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
-                <td>{{t(applications' value.@type)}}</td>
-                <!-- if ({{role}}!='customer') -->
+                <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}/type'>{{t(applications' value.@type)}}</a></td>
                 <td><a href='{{baseurl}}index.php/my/users/{{applications' value.@user_id}}'>{{applications' value.@User.@first_name}}</a></td>
-                <!-- endif -->
                 <td>{{applications' value.@start_date}}</td>
                 <td>{{applications' value.@end_date}}</td>
-                <!-- if ({{role}}!='customer') -->
                 <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
-                <!-- else -->
-                <td>{{applications' value.@status}}</td>
-                <!-- endif -->
                 </tr>
                 <!-- endloop -->
 

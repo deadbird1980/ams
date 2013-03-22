@@ -73,6 +73,7 @@ $route['*']['/my/applications'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/page/:pindex'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/sort/:sortField/:orderType/page/:pindex'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
+$route['*']['/my/applications/:id/type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
 $route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
@@ -88,6 +89,7 @@ $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 
 $route['*']['/my/users/:user_id/applications/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
 $route['*']['/my/users/activate'] = array('UserController', 'activate');
+$route['*']['/my/applications/:id/type'] = array('ApplicationController', 'editType');
 $route['*']['/admin/users/:user_id/applications'] = array('ApplicationController', 'index');
 $route['*']['/admin/users/:user_id/applications/create'] = array('ApplicationController', 'create');
 

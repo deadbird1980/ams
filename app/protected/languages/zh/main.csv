@@ -69,6 +69,7 @@ already_activated|"用户已激活"
 user_activated|"用户激活成功!"
 
 create|"创建"
+update|"更新"
 type|"类型"
 visa_europe|"欧洲签证"
 visa_t1|"T1签证"
@@ -84,6 +85,8 @@ bachelor|"本科"
 master|"硕士"
 pre-master|"硕士预科"
 doctor|"博士"
+subject|"专业"
+course|"课程"
 
 activate_user|"激活用户"
 
