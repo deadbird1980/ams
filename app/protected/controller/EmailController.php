@@ -6,10 +6,10 @@ class EmailController extends BaseController {
         Doo::loadHelper('DooPager');
         Doo::loadModel('Email');
         $email = new Email();
-        $options = $email->scopeSeenByUser($this->user);
+        $options = $email->scopeSeenByUser($this->auth->user);
         if(isset($this->params['user_id'])) {
-            if ($u = $this->user->getById_first($this->params['user_id'])) {
-                if ($u->isAvailabeTo($this->user)) {
+            if ($u = $this->auth->user->getById_first($this->params['user_id'])) {
+                if ($u->isAvailabeTo($this->auth->user)) {
                     $options['where'] = "{$options['where']} and user_id={$u->id}";
                 } else {
                     return array('not available', 404);
@@ -20,7 +20,7 @@ class EmailController extends BaseController {
             }
             $this->data['user_id'] = $this->params['user_id'];
         } else {
-            $u = $this->user;
+            $u = $this->auth->user;
         }
         // operations
         if ($this->isPost() && isset($_POST['operation'])) {
@@ -80,7 +80,7 @@ class EmailController extends BaseController {
                 $this->data['order'] = 'desc';
                 $this->data['orderType'] = 'asc';
             }
-            if ($this->user->isAdmin()) {
+            if ($this->auth->user->isAdmin()) {
                 $this->data['applications'] = $email->relateMany(array('User','Assignee'),array('User'=>$options));
             } else {
                 $this->data['applications'] = $email->relateUser($options);
@@ -88,7 +88,7 @@ class EmailController extends BaseController {
             $this->data['sortField'] = $this->sortField;
         }
 
-        if ($this->user->isAdmin()) {
+        if ($this->auth->user->isAdmin()) {
             $this->renderAction('/admin/email/index');
         } else {
             $this->renderAction('/my/email/index');

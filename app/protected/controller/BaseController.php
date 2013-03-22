@@ -1,12 +1,12 @@
 <?php
+Doo::loadCore('auth/DooAuth');
+Doo::loadModel('User');
 
 class BaseController extends DooController {
 
     protected $data = array();
-    protected $session;
     protected $auth;
     protected $translator;
-    protected $user;
     protected $helper;
 
 	public function beforeRun($resource, $action){
@@ -15,22 +15,27 @@ class BaseController extends DooController {
         $this->data['rootUrl'] = $this->data['baseurl'] = Doo::conf()->APP_URL;
         $this->data['indexUrl'] = Doo::conf()->APP_URL . 'index.php';
         $this->data['message'] = '';
-        $this->session = Doo::session('ams');
-        Doo::loadCore('auth/DooAuth');
         $this->auth = new DooAuth('ams');
+        $this->auth->setSecurityLevel(3);
+        $this->auth->setSalt(Doo::conf()->SITE_ID);
+        $this->auth->start();
 		//if not login, group = anonymous
-        $role = (isset($this->session->user['type'])) ? $this->session->user['type'] : 'anonymous';
+        $role = isset($this->auth->group) ? $this->auth->group : 'anonymous';
 
         if($rs = $this->acl()->process($role, $resource, $action )){
             //echo $role .' is not allowed for '. $resource . ' '. $action;
             return $rs;
         }
         $this->data['role'] = $role;
-        if ($this->session->user['id']) {
-            Doo::loadModel('User');
-            $u = new User();
-            $this->user = $u->getById_first($this->session->user['id']);
-            $this->data['range'] = $this->getRange();
+        if (isset($this->auth->group)) {
+            if ($this->auth->group == 'admin') {
+                $this->data['range'] = 'admin';
+            } else {
+                $this->data['range'] = 'my';
+            }
+            $this->auth->setSecurityLevel(1);
+        } else {
+            $this->auth->setData('nouser', $role);
         }
         $this->setTranslator();
         $this->setHelper();
@@ -79,30 +84,17 @@ class BaseController extends DooController {
     }
 
     public function getAuthenticityToken() {
-        if (!isset($this->session->token)) {
-            $token = md5(time() . rand(1,100) . Doo::conf()->SITE_ID);
-            $this->session->token = $token;
-        }
-        return $this->session->token;
+        return $this->auth->securityToken();
     }
 
     public function isValidToken() {
         if (!isset($_POST['token'])) {
             return false;
         }
-        if ($this->session->token == $_POST['token']) {
-            unset($this->session->token);
+        if ($this->auth->validateForm($_POST['token'])) {
             return true;
         }
         return false;
-    }
-
-    protected function getRange() {
-        if ($this->user && $this->user->isAdmin()) {
-            return 'admin';
-        } else {
-            return 'my';
-        }
     }
 
     public function isAdmin() {

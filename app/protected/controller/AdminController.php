@@ -53,7 +53,7 @@ class AdminController extends BaseController {
 
         $app = new Application();
         $app = $this->data['application'] = $app->getById_first($this->params['id']);
-        if ($app && !$app->canBeSeen($this->user)) {
+        if ($app && !$app->canBeSeen($this->admin->user)) {
             $app = null;
         }
         return $app;
@@ -163,7 +163,7 @@ class AdminController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User();
             $u->findByConfirm_code($_POST['confirm_code']);
-            $u->activate($this->user);
+            $u->activate($this->admin->user);
             $this->data['message'] = "User activated!";
         }
         Doo::loadHelper('DooUrlBuilder');

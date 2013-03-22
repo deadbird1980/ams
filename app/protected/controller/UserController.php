@@ -21,7 +21,7 @@ class UserController extends BaseController {
 
 	public function index() {
         Doo::loadHelper('DooPager');
-        $user = $this->user;
+        $user = $this->auth->user;
         $u = new User;
         $scope = $user->scopeSeenByMe();
         // operations
@@ -73,7 +73,7 @@ class UserController extends BaseController {
         }
         $form = $this->helper->getActivateUserForm();
         $this->data['form'] = $form->render();
-        if ($this->user->isAdmin()) {
+        if ($this->auth->user->isAdmin()) {
             $this->renderAction('/admin/user/index');
         } else {
             $this->renderAction('/my/user/index');
@@ -125,7 +125,7 @@ class UserController extends BaseController {
             $u->password = $_POST['password'];
             $u->qq = $_POST['qq'];
             $u->confirm_code = $_POST['confirm_code'];
-            if ($this->user->isAdmin() && isset($_POST['type'])) {
+            if ($this->auth->user->isAdmin() && isset($_POST['type'])) {
                 $u->type = $_POST['type'];
             }
             $u->status = $_POST['status'];
@@ -146,7 +146,7 @@ class UserController extends BaseController {
             if (!$u->isRegistered()) {
                 $this->data['message'] = $this->t('already_activated');
             } else {
-                $u->activate($this->user->id);
+                $u->activate($this->auth->user->id);
                 $this->data['message'] = $this->t('user_activated');
             }
         }

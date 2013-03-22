@@ -9,7 +9,7 @@ class MyController extends BaseController {
     protected $helper = 'ApplicationHelper';
 
     private function setMessage() {
-        if ($todo = $this->user->toDo()) {
+        if ($todo = $this->auth->user->toDo()) {
             $this->data['message'] = $this->t($todo, array('url'=>'applications'));
         }
     }
@@ -23,7 +23,7 @@ class MyController extends BaseController {
         Doo::loadHelper('DooPager');
         Doo::loadModel('Application');
         $app = new Application();
-        $options = $app->scopeSeenByUser($this->user);
+        $options = $app->scopeSeenByUser($this->auth->user);
         if (($count = $app->count($options)) > 0) {
             $row_perpage = $this->getPageSize();
             $pages = $this->getPages();
@@ -64,7 +64,7 @@ class MyController extends BaseController {
 		$this->data['title'] = 'User';
         $form = $this->getProfileForm();
         if ($this->isPost() && $form->isValid($_POST)) {
-            $u = $this->user;
+            $u = $this->auth->user;
             $u->first_name = $_POST['first_name'];
             $u->last_name = $_POST['last_name'];
             $u->first_name_alphabet = $_POST['first_name_alphabet'];
@@ -133,9 +133,9 @@ class MyController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             Doo::loadModel('Application');
             $a = new Application();
-            $a->user_id = $this->user->id;
-            if ($this->user->activated_by) {
-                $a->assignee_id = $this->user->activated_by;
+            $a->user_id = $this->auth->user->id;
+            if ($this->auth->user->activated_by) {
+                $a->assignee_id = $this->auth->user->activated_by;
             }
             $this->data['message'] = "User activated!";
             $a->type = 'visa';
@@ -163,7 +163,7 @@ class MyController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User();
             $u->findByConfirm_code($_POST['confirm_code']);
-            $u->activate($this->user);
+            $u->activate($this->auth->user);
             $this->data['message'] = "User activated!";
         }
         Doo::loadHelper('DooUrlBuilder');
@@ -189,7 +189,7 @@ class MyController extends BaseController {
 
         $app = new Application();
         $app = $this->data['application'] = $app->getById_first($this->params['id']);
-        if ($app && !$app->canBeSeen($this->user)) {
+        if ($app && !$app->canBeSeen($this->auth->user)) {
             $app = null;
         }
         return $app;
@@ -217,7 +217,7 @@ class MyController extends BaseController {
     }
 
     private function getProfileForm() {
-        $u = $this->user;
+        $u = $this->auth->user;
         Doo::loadHelper('DooForm');
         $action = Doo::conf()->APP_URL . 'index.php/my/profile';
         $form = new DooForm(array(

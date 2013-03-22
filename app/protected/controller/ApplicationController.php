@@ -12,10 +12,10 @@ class ApplicationController extends BaseController {
         Doo::loadHelper('DooPager');
         Doo::loadModel('Application');
         $app = new Application();
-        $options = $app->scopeSeenByUser($this->user);
+        $options = $app->scopeSeenByUser($this->auth->user);
         if(isset($this->params['user_id'])) {
-            if ($u = $this->user->getById_first($this->params['user_id'])) {
-                if ($u->isAvailabeTo($this->user)) {
+            if ($u = $this->auth->user->getById_first($this->params['user_id'])) {
+                if ($u->isAvailabeTo($this->auth->user)) {
                     $options['where'] = "{$options['where']} and user_id={$u->id}";
                 } else {
                     return array('not available', 404);
@@ -26,7 +26,7 @@ class ApplicationController extends BaseController {
             }
             $this->data['user_id'] = $this->params['user_id'];
         } else {
-            $u = $this->user;
+            $u = $this->auth->user;
         }
         // operations
         if ($this->isPost() && isset($_POST['operation'])) {
@@ -92,7 +92,7 @@ class ApplicationController extends BaseController {
                 $this->data['order'] = 'desc';
                 $this->data['orderType'] = 'asc';
             }
-            if ($this->user->isAdmin()) {
+            if ($this->auth->user->isAdmin()) {
                 $this->data['applications'] = $app->relateMany(array('User','Assignee'),array('User'=>$options));
             } else {
                 $this->data['applications'] = $app->relateUser($options);
@@ -100,7 +100,7 @@ class ApplicationController extends BaseController {
             $this->data['sortField'] = $this->sortField;
         }
 
-        if ($this->user->isAdmin()) {
+        if ($this->auth->user->isAdmin()) {
             $this->renderAction('/admin/application/index');
         } else {
             $this->renderAction('/my/application/index');
@@ -212,7 +212,7 @@ class ApplicationController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User();
             $u->findByConfirm_code($_POST['confirm_code']);
-            $u->activate($this->user);
+            $u->activate($this->auth->user);
             $this->data['message'] = "User activated!";
         }
         $this->data['form'] = $form->render();

@@ -116,14 +116,8 @@ class AccountController extends BaseController{
                     if ($user->isRegistered()) {
                         $this->data['message'] = $this->t('not_activated');
                     } else {
-                        Doo::loadCore('session/DooSession');
-                        $this->session->start();
-                        unset($this->session->user);
-                        $this->session->user = array(
-                                                    'id'=>$user->id,
-                                                    'email'=>$user->email,
-                                                    'type'=>$user->type,
-                                                );
+                        $this->auth->setData($user->email, $user->type);
+                        $this->auth->user = $user;
                         if ($user->isAdmin()) {
                             return Doo::conf()->APP_URL . 'index.php/admin/';
                         } else {
@@ -138,7 +132,7 @@ class AccountController extends BaseController{
     }
 
     public function logout(){
-        $this->session->destroy();
+        $this->auth->finalize();
         return Doo::conf()->APP_URL;
     }
 
