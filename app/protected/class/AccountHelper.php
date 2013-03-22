@@ -5,11 +5,6 @@ class AccountHelper extends Helper {
         Doo::loadHelper('DooForm');
         $action = DooUrlBuilder::url2('AccountController', 'login', null, true);
         $elements = array(
-                 'token' => array('hidden', array(
-                     'required' => true,
-                     'value' => $this->controller->getAuthenticityToken(),
-                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
-                 )),
                  'email' => array('text', array(
                      'required' => true,
                      'validators' => array(array('email'), array('dbExist', 'user', 'email', 'User/Password Wrong!')),
