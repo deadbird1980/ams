@@ -523,7 +523,7 @@ class ApplicationHelper extends Helper {
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
                  'type' => array('select', array(
-                     'label' => $this->t('type'),
+                     'label' => $this->t('type').'&nbsp;&nbsp(<a id="add-school" href="#">+</a>)',
                      'required' => true,
                      'value' => array(''),
                      'multioptions' => $options,
@@ -534,21 +534,21 @@ class ApplicationHelper extends Helper {
                      'label' => $this->t('school'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('class' => 'control textbox'),
+                     'attributes' => array('name'=>'schools[]', 'class' => 'control textbox'),
                      'element-wrapper' => 'div',
                  )),
                  'subject' => array('text', array(
                      'label' => $this->t('subject'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('class' => 'control textbox'),
+                     'attributes' => array('name'=>'subjects[]', 'class' => 'control textbox'),
                      'element-wrapper' => 'div',
                  )),
                  'course' => array('text', array(
                      'label' => $this->t('course'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('class' => 'control textbox'),
+                     'attributes' => array('name'=>'courses[]', 'class' => 'control textbox'),
                      'element-wrapper' => 'div',
                  )),
                  'submit' => array('submit', array(
@@ -625,6 +625,7 @@ class ApplicationHelper extends Helper {
                  ))
              )
         ));
+        $form->addDisplayGroup('group', array('school','course', 'subject'));
         return $form;
     }
 
