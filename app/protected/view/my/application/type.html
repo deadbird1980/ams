@@ -52,7 +52,7 @@
                   var s = $("#submit-field-wrapper");
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").clone().insertBefore(s);
-                      $("#"+elements[i]+"-element-wrapper").clone().insertBefore(s);
+                      $("#"+elements[i]+"-element-wrapper").clone().find("input:text").val("").end().insertBefore(s);
                   }
               });
               checkApplicationType();
