@@ -500,28 +500,33 @@ class ApplicationHelper extends Helper {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
         $action = DooUrlBuilder::url2('ApplicationController', 'create', array('user_id'=>$this->controller->params['user_id']), true);
-        $options = array('' => '----------',
+        //<optgroup label="----------"></optgroup>
+        $options = array( ''=>'',
+                          '----'.$this->t('visa').'----' => array(
                          'visa_europe' => $this->t('visa_europe'),
-                         '-' => '----'.$this->t('europe_visa').'----',
                          'visa_t1' => $this->t('visa_t1'),
                          'visa_t2' => $this->t('visa_t2'),
                          'visa_t4' => $this->t('visa_t4'),
-                         'visa_other' => $this->t('visa_other'),
-                         '--' => '----'.$this->t('school').'----',
-                         'language' => $this->t('language'),
+                         'visa_other' => $this->t('visa_other')),
+                         '----'.$this->t('school').'----' => array('language' => $this->t('language'),
                          'gcse' => $this->t('gcse'),
                          'a-level' => $this->t('a-level'),
                          'pre-bachelor' => $this->t('pre-bachelor'),
                          'bachelor' => $this->t('bachelor'),
                          'pre-master' => $this->t('pre-master'),
                          'master' => $this->t('master'),
-                         'doctor' => $this->t('doctor'),
+                         'doctor' => $this->t('doctor'))
                         );
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
              'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
              'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
                  'type' => array('select', array(
                      'label' => $this->t('type').'&nbsp;&nbsp(<a id="add-school" href="#">+</a>)',
                      'required' => true,
