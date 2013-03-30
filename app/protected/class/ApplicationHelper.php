@@ -535,6 +535,9 @@ class ApplicationHelper extends Helper {
                      'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
                  'element-wrapper' => 'div'
                  )),
+                 's1'=> array('display', array(
+                     'content' => '&nbsp&nbsp',
+                 )),
                  'school' => array('text', array(
                      'label' => $this->t('school'),
                      'required' => false,
