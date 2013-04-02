@@ -98,7 +98,7 @@ class BaseController extends DooController {
     }
 
     public function isAdmin() {
-        if ($this->user && $this->user->isAdmin()) {
+        if ($this->auth->user && $this->auth->user->isAdmin()) {
             return true;
         }
         return false;
