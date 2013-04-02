@@ -23,9 +23,12 @@
                   $("dd").addClass('hidden');
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").hide();
-                      $("label[for='"+elements[i]+"']").addClass('hidden');
                       $("#"+elements[i]+"-element-wrapper").hide();
-                      $("#"+elements[i]+"-element").addClass('hidden');
+                      if (schools_count > 1) {
+                          for(var j=2; j<=schools_count; j++) {
+                              $("#"+elements[i]+"-element-wrapper-"+j).hide();
+                          }
+                      }
                   }
               } else {
                   $("dd").removeClass('hidden');
@@ -34,6 +37,11 @@
                       $("label[for='"+elements[i]+"']").removeClass('hidden');
                       $("#"+elements[i]+"-element-wrapper").show();
                       $("#"+elements[i]+"-element").removeClass('hidden');
+                      if (schools_count > 1) {
+                          for(var j=2; j<=schools_count; j++) {
+                              $("#"+elements[i]+"-element-wrapper-"+j).show();
+                          }
+                      }
                   }
               }
           }
