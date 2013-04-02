@@ -386,7 +386,7 @@ class ApplicationHelper extends Helper {
         } else {
             $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
         }
-        $visaapp = $app->createDetailApplication();
+        $school_app = $app->createDetailApplication();
         $elements = array(
                  'token' => array('hidden', array(
                      'required' => true,
@@ -402,42 +402,42 @@ class ApplicationHelper extends Helper {
                  'passport_no' => array('text', array(
                      'label' => $this->t('passport_no'),
                      'required' => true,
-                     'value' => $visaapp->passport_no,
+                     'value' => $school_app->passport_no,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_name' => array('text', array(
                      'label' => $this->t('passport_name'),
                      'required' => true,
-                     'value' => $visaapp->passport_name,
+                     'value' => $school_app->passport_name,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'birthday' => array('text', array(
                      'label' => $this->t('birthday'),
                      'required' => true,
-                     'value' => $this->convertDateFromDB($visaapp->birthday),
+                     'value' => $this->convertDateFromDB($school_app->birthday),
                      'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('text', array(
                      'label' => $this->t('passport_start_date'),
                      'required' => true,
-                     'value' => $this->convertDateFromDB($visaapp->passport_start_date),
+                     'value' => $this->convertDateFromDB($school_app->passport_start_date),
                      'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('text', array(
                      'label' => $this->t('passport_end_date'),
                      'required' => true,
-                     'value' => $this->convertDateFromDB($visaapp->passport_end_date),
+                     'value' => $this->convertDateFromDB($school_app->passport_end_date),
                      'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
                  'address' => array('text', array(
                      'label' => $this->t('cn_address'),
                      'required' => true,
-                     'value' => $visaapp->address,
+                     'value' => $school_app->address,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  ))
@@ -446,40 +446,35 @@ class ApplicationHelper extends Helper {
             $elements['school'] = array('text', array(
                          'label' => $this->t('school'),
                          'required' => true,
-                         'value' => $visaapp->school,
+                         'value' => $school_app->school,
                          'attributes' => array('class' => 'control textbox validate[required]'),
                      'element-wrapper' => 'div'
                      ));
             $elements['subject'] = array('text', array(
                          'label' => $this->t('subject'),
                          'required' => true,
-                         'value' => $visaapp->subject,
+                         'value' => $school_app->subject,
                          'attributes' => array('class' => 'control textbox validate[required]'),
                      'element-wrapper' => 'div'
                  ));
             $elements['course'] = array('text', array(
                          'label' => $this->t('course'),
                          'required' => true,
-                         'value' => $visaapp->course,
+                         'value' => $school_app->course,
                          'attributes' => array('class' => 'control textbox validate[required]'),
                      'element-wrapper' => 'div'
                      ));
         } else {
-            $elements['school'] = array('display', array(
-                         'label' => $this->t('school'),
-                         'content' => $visaapp->school,
-                     'element-wrapper' => 'div'
-                     ));
-            $elements['subject'] = array('display', array(
-                         'label' => $this->t('subject'),
-                         'content' => $visaapp->subject,
-                     'element-wrapper' => 'div'
-                 ));
-            $elements['course'] = array('display', array(
-                         'label' => $this->t('course'),
-                         'content' => $visaapp->course,
-                     'element-wrapper' => 'div'
-                     ));
+            $apps = $school_app->CourseApplication;
+            $i = 1;
+            foreach($apps as $app) {
+                $elements['school'.$i] = array('display', array(
+                             'label' => $this->t('school'). ' ' . $i,
+                             'content' => "{$app->school}  {$app->subject}  {$app->course}",
+                         'element-wrapper' => 'div'
+                         ));
+                $i++;
+            }
         }
         $elements['submit'] = array('submit', array(
                      'label' => $this->t('next'),

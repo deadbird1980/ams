@@ -103,11 +103,12 @@ class Application extends DooSmartModel {
             }
         } else {
             $a = new SchoolApplication();
-            if (!$this->id || !($a = $a->getByid_first($this->id))) {
+            if (!$this->id || !($a = $a->relateCourseApplication_first(array('where'=>'school_application.id='.$this->id)))) {
                 $a = new SchoolApplication($data);
                 $a->id = $this->id;
                 $a->application_id = $this->id;
                 $a->insert();
+                $a->createDetailApplication($data);
             }
         }
         return $a;

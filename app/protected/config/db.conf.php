@@ -19,6 +19,11 @@ $dbmap['Attachment']['belongs_to']['Application'] = array('foreign_key'=>'id');
 $dbmap['Attachment']['belongs_to']['ApplicationFile'] = array('foreign_key'=>'id');
 $dbmap['ApplicationFile']['has_many']['Attachment'] = array('foreign_key'=>'application_file_id');
 
+$dbmap['Application']['has_many']['CourseApplication'] = array('foreign_key'=>'application_id');
+$dbmap['SchoolApplication']['has_many']['CourseApplication'] = array('foreign_key'=>'application_id');
+$dbmap['CourseApplication']['belongs_to']['Application'] = array('foreign_key'=>'id');
+$dbmap['CourseApplication']['belongs_to']['SchoolApplication'] = array('foreign_key'=>'id');
+
 $dbconfig['dev'] = array('localhost', 'ams_dev', 'root', '', 'mysql',true);
 if (isset($_ENV['CLEARDB_DATABASE_URL'])) {
     $url = parse_url($_ENV["CLEARDB_DATABASE_URL"]);

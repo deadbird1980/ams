@@ -121,7 +121,7 @@ class ApplicationController extends BaseController {
             }
             $this->renderAction('/my/application/created');
         } else {
-            $form = $this->helper->getTypeForm();
+            $form = $this->helper->getNewApplicationForm();
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/type');
         }

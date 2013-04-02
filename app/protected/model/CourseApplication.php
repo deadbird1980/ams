@@ -1,7 +1,7 @@
 <?php
 Doo::loadCore('db/DooSmartModel');
 
-class ApplicationCourse extends DooSmartModel{
+class CourseApplication extends DooSmartModel{
 
     public $id;
     public $application_id;
@@ -9,7 +9,8 @@ class ApplicationCourse extends DooSmartModel{
     public $subject;
     public $course;
     public $status;
-    public $_table = 'application_course';
+    public $sent;
+    public $_table = 'course_application';
     public $_primarykey = 'id';
     public $_fields = array('id','application_id','school','subject','course','status');
     public function __construct($properties=null){
