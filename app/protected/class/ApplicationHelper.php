@@ -528,7 +528,7 @@ class ApplicationHelper extends Helper {
                      'validators' => array(array('custom', array($this->controller,'isValidToken'))),
                  )),
                  'type' => array('select', array(
-                     'label' => $this->t('type').'&nbsp;&nbsp(<a id="add-school" href="#">+</a>)',
+                     'label' => $this->t('type'),
                      'required' => true,
                      'value' => array(''),
                      'multioptions' => $options,
@@ -536,27 +536,32 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  's1'=> array('display', array(
-                     'content' => '&nbsp&nbsp',
+                     'content' => '&nbsp;&nbsp',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'add_link'=> array('display', array(
+                     'content' => '&nbsp;&nbsp<a id="add-school" href="#">'.$this->t('add_school').'</a>',
+                     'attributes' => array('class' => 'hidden'),
                  )),
                  'school' => array('text', array(
                      'label' => $this->t('school'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('name'=>'schools[]', 'class' => 'control textbox'),
+                     'attributes' => array('name'=>'schools[]', 'class' => 'control textbox hidden'),
                      'element-wrapper' => 'div',
                  )),
                  'subject' => array('text', array(
                      'label' => $this->t('subject'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('name'=>'subjects[]', 'class' => 'control textbox'),
+                     'attributes' => array('name'=>'subjects[]', 'class' => 'control textbox hidden'),
                      'element-wrapper' => 'div',
                  )),
                  'course' => array('text', array(
                      'label' => $this->t('course'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('name'=>'courses[]', 'class' => 'control textbox'),
+                     'attributes' => array('name'=>'courses[]', 'class' => 'control textbox hidden'),
                      'element-wrapper' => 'div',
                  )),
                  'submit' => array('submit', array(

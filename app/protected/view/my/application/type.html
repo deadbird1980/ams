@@ -20,14 +20,20 @@
           function checkApplicationType() {
               var type = $("#type-element").val();
               if (type=='' || type.indexOf('visa_') >= 0) {
+                  $("dd").addClass('hidden');
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").hide();
+                      $("label[for='"+elements[i]+"']").addClass('hidden');
                       $("#"+elements[i]+"-element-wrapper").hide();
+                      $("#"+elements[i]+"-element").addClass('hidden');
                   }
               } else {
+                  $("dd").removeClass('hidden');
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").show();
+                      $("label[for='"+elements[i]+"']").removeClass('hidden');
                       $("#"+elements[i]+"-element-wrapper").show();
+                      $("#"+elements[i]+"-element").removeClass('hidden');
                   }
               }
           }

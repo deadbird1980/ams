@@ -176,7 +176,7 @@ color:#fff;}
 .center         { text-align: center }
 .clear          { clear: both }
 .first          { margin-left: 0; padding-left: 0 }
-.hidden         { visibility: hidden }
+.hidden         { visibility: hidden; display:none }
 .highlight      { background: #ccf }
 .inline         { display: inline }
 .last           { margin-right: 0; padding-right: 0 }
