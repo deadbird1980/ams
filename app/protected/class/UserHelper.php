@@ -4,9 +4,9 @@ class UserHelper extends Helper {
     public function getUserForm($u) {
         Doo::loadHelper('DooForm');
         if ($u->id) {
-            $action = Doo::conf()->APP_URL . 'index.php/my/users/'.$u->id;
+            $action = Doo::conf()->APP_URL . 'index.php/'.$this->controller->getRange().'/users/'.$u->id;
         } else {
-            $action = Doo::conf()->APP_URL . 'index.php/my/users/save';
+            $action = Doo::conf()->APP_URL . 'index.php/'.$this->controller->getRange().'/users/save';
         }
         $elements = array(
                  'token' => array('hidden', array(

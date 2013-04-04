@@ -163,5 +163,13 @@ class BaseController extends DooController {
     public function isDev() {
         return Doo::conf()->APP_MODE == 'dev';
     }
+
+    public function getRange() {
+        if ($this->auth->user && $this->auth->user->isAdmin()) {
+            return 'admin';
+        } else {
+            return 'my';
+        }
+    }
 }
 ?>
