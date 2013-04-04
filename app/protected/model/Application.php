@@ -51,8 +51,10 @@ class Application extends DooSmartModel {
     public function canBeSeen($user) {
         if ($user->isAdmin()) {
             return true;
-        } elseif ($user->isCounselor() || $user->isExecutor()) {
+        } elseif ($user->isCounselor()) {
             return $this->assignee_id == $user->id;
+        } elseif ($user->isExecutor()) {
+            return $this->isSubmitted() || $this->assignee_id == $user->id;
         } elseif ($user->isCustomer()) {
             return $this->user_id= $user->id;
         }

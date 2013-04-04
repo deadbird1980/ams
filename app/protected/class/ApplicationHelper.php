@@ -156,12 +156,6 @@ class ApplicationHelper extends Helper {
                  'type' => array('hidden', array(
                      'value' => $app->type,
                  )),
-                 'start_date' => array('display', array(
-                     'label' => $this->t('plan_start_date'),
-                     'content' => $visaapp->start_date,
-                     'attributes' => array('class' => 'control'),
-                 'element-wrapper' => 'div'
-                 )),
                  'passport' => array('display', array(
                      'content' => '护照信息:',
                  )),
