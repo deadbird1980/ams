@@ -73,13 +73,14 @@ $route['*']['/my/applications'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/page/:pindex'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/sort/:sortField/:orderType/page/:pindex'] = array('MyController', 'listApplications');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
-$route['*']['/my/applications/:id/type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
 $route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
 $route['*']['/my/applications/:id/confirm'] = array('MyController', 'confirmApplication');
 $route['*']['/my/applications/:id/status'] = array('ApplicationController', 'status');
+$route['*']['/my/applications/:id/courses'] = array('ApplicationController', 'courses');
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
+$route['*']['/my/applications/:id/courses'] = array('CourseController', 'index');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 // admin/counselor/executor
 $route['get']['/my/users'] = array('UserController', 'index');

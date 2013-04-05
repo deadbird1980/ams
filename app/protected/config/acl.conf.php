@@ -21,6 +21,7 @@ $acl['executor']['allow'] = array(
 							'MyController'=>'*',
 							'AccountController'=>'*',
 							'UserController'=>'*',
+							'CourseController'=>'*',
 							'ApplicationController'=>'*'
 						);
 

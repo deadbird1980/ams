@@ -1,0 +1,30 @@
+        <!-- if {{isset(applications)}} && !{{empty(applications)}} -->
+        <div class="list">
+        <table class="list">
+            <tbody>
+
+                <tr>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.id/{{orderType}}/page/1">#</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.school/{{orderType}}/page/1">{{t('school')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.subject/{{orderType}}/page/1">{{t('subject')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.course/{{orderType}}/page/1">{{t('course')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
+                </tr>
+                <!-- loop applications -->
+                <tr>
+                <td><a href='{{baseurl}}index.php/my/courses/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
+                <td>{{t(applications' value.@school)}}</td>
+                <td>{{t(applications' value.@subject)}}</td>
+                <td>{{t(applications' value.@course)}}</td>
+                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
+                </tr>
+                <!-- endloop -->
+
+        </tbody></table>
+        </div>
+
+        <hr class="divider"/>
+        {{pager}}
+        <!-- else -->
+        {{t('no_records')}}
+        <!-- endif -->
