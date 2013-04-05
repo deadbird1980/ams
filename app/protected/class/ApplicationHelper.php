@@ -23,8 +23,10 @@ class ApplicationHelper extends Helper {
 
     public function getConfirmVisaForm($app) {
         if (!$app->isSubmitted()) {
+            //confirm page for student
             $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
         } else {
+            //confirm page for executor
             $action = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$app->id), true);
         }
         Doo::loadModel('VisaApplication');
@@ -143,7 +145,7 @@ class ApplicationHelper extends Helper {
         if ($app->beforeSubmitted()) {
             $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
         } else {
-            $action = DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$app->id), true);
+            $action = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$app->id), true);
         }
         Doo::loadModel('VisaApplication');
         $visaapp = $app->createDetailApplication();
@@ -212,7 +214,7 @@ class ApplicationHelper extends Helper {
                  ));
         } else {
             $elements['submit'] = array('submit', array(
-                     'label' => $this->t('next'),
+                     'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

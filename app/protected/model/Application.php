@@ -1,5 +1,6 @@
 <?php
 Doo::loadCore('db/DooSmartModel');
+Doo::loadCore('db/DooDbExpression');
 Doo::loadClass('ApplicationType');
 Doo::loadModel('SchoolApplication');
 Doo::loadModel('VisaApplication');
@@ -46,7 +47,7 @@ class Application extends DooSmartModel {
         } elseif ($user->isCounselor()) {
             return array('where'=>'assignee_id='.$user->id);
         } elseif ($user->isExecutor()) {
-            return array('where'=>"(application.status='SUBMITTED' or application.assignee_id={$user->id})");
+            return array('where'=>"(application.status='SUBMITTED' or application.executor_id={$user->id})");
         } elseif ($user->isCustomer()) {
             return array('where'=>'user_id='.$user->id);
         }
@@ -59,7 +60,7 @@ class Application extends DooSmartModel {
         } elseif ($user->isCounselor()) {
             return $this->assignee_id == $user->id;
         } elseif ($user->isExecutor()) {
-            return $this->isSubmitted() || $this->assignee_id == $user->id;
+            return $this->isSubmitted() || $this->executor_id == $user->id;
         } elseif ($user->isCustomer()) {
             return $this->user_id= $user->id;
         }
@@ -164,6 +165,13 @@ class Application extends DooSmartModel {
     public function export() {
     }
 
+    public function todo() {
+        if ($this->isSubmitted()) {
+            return 'confirm';
+        }
+        return '';
+    }
+
     public function filesEssential() {
         Doo::loadModel('ApplicationFile');
         $appFile = new ApplicationFile();
@@ -178,6 +186,13 @@ class Application extends DooSmartModel {
         $options = array('where'=>"application_id='{$this->id}'");
         $a = $a->find($options);
         return $a;
+    }
+
+    public function doConfirm($user) {
+        $this->status = 'confirmed';
+        $this->confirmed = new DooDbExpression('NOW()');
+        $this->executor_id = $user->id;
+        $this->update();
     }
 
     public function isFilesReady() {

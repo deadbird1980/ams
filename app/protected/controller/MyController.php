@@ -202,15 +202,10 @@ class MyController extends BaseController {
         }
 
         $form = $this->helper->getConfirmApplicationForm($app);
-        if ($this->isPost() && $form->isValid($_POST)) {
-            $id = $this->params['id'];
-            $app->id = $id;
-            if ($app->isSubmitted()) {
-                $_POST['status'] = 'confirmed';
-            }
-            $this->notifyAdmin("Applicatioin {$id} is confirmed","Applicatioin {$id} is confirmed");
-            $app->update_attributes($_POST, array('where'=>"id=${id}"));
-            return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
+        if ($this->isPost()) {
+            $app->doConfirm($this->auth->user);
+            $this->notifyAdmin("Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
+            return Doo::conf()->APP_URL . "index.php/my/applications";
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/confirm');

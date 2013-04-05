@@ -187,7 +187,7 @@ class ApplicationController extends BaseController {
             $visaapp = $app->createDetailApplication();
             $app->update_attributes($_POST, array('where'=>"id=${id}"));
             Doo::loadHelper('DooUrlBuilder');
-            return DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$id), true);
+            return DooUrlBuilder::url2('MyController', 'listApplications', array('id'=>$id), true);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/status');
