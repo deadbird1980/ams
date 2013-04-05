@@ -11,14 +11,19 @@ class Application extends DooSmartModel {
     public $type;
     public $status; // in_progress/submitted
     public $assignee_id;
+    public $executor_id;
     public $start_date;
     public $end_date;
     public $paid;
+    public $submitted;
+    public $confirmed;
+    public $created;
+    public $updated;
 
     public $detail;
     public $_table = 'application';
     public $_primarykey = 'id';
-    public $_fields = array('id','user_id','type','status','assignee_id','start_date','end_date','paid');
+    public $_fields = array('id','user_id','type','status','assignee_id','executor_id','start_date','end_date','paid','submitted','confirmed','created','updated');
 
     //status
     const CREATED = 'created';

@@ -9,5 +9,9 @@ CREATE TABLE `application` (
   `paid` tinyint(1) NOT NULL DEFAULT '0',
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
+  `submitted` datetime DEFAULT NULL,
+  `confirmed` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
