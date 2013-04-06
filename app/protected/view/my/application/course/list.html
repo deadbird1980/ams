@@ -20,7 +20,7 @@
                 <td>{{t(applications' value.@course)}}</td>
                 <td><a href="{{baseurl}}my/courses/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
                 <td>{{t(applications' value.@sent)}}</td>
-                <td><a href="{{baseurl}}my/courses/{{applications' value.@id}}/send">{{t('send')}}</a></td>
+                <td><a href="{{baseurl}}my/courses/{{applications' value.@id}}/{{applications' value.@todo!}}">{{t(applications' value.@todo!)}}</a></td>
                 </tr>
                 <!-- endloop -->
 

@@ -129,5 +129,20 @@ class CourseController extends BaseController {
         $app->send();
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
+
+    public function reply() {
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+
+        $form = $this->helper->getCourseReplyForm($app);
+
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $app->update_attributes($_POST, array('where'=>"id={$app->id}"));
+            Doo::loadHelper('DooUrlBuilder');
+            return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/status');
+    }
 }
 ?>

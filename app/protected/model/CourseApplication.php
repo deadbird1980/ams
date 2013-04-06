@@ -23,6 +23,11 @@ class CourseApplication extends DooSmartModel{
     const REPLIED = 'replied';
     const DONE = 'done';
 
+    //result
+    const APPROVED = 'approved';
+    const CONDITION_APPROVED = 'condition_approved';
+    const REFUSED = 'refused';
+
     public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()
         parent::__construct($properties);
@@ -55,6 +60,17 @@ class CourseApplication extends DooSmartModel{
         $this->status = 'sent';
         $this->sent = new DooDbExpression('NOW()');
         $this->update();
+    }
+
+    public function todo() {
+        if ($this->isSubmitted()) {
+            return 'confirm';
+        } elseif ($this->isConfirmed()) {
+            return 'send';
+        } elseif ($this->isSent()) {
+            return 'reply';
+        } elseif ($this->isReplied()) {
+        }
     }
 
     public function reply() {
