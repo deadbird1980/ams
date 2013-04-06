@@ -1,6 +1,8 @@
 <?php
 Doo::loadCore('db/DooSmartModel');
 Doo::loadCore('db/DooDbExpression');
+Doo::loadModel('Application');
+Doo::loadModel('SchoolApplication');
 
 class CourseApplication extends DooSmartModel{
 
@@ -79,7 +81,7 @@ class CourseApplication extends DooSmartModel{
             return false;
         }
         $this->result = $result;
-        //$this->status = 'replied';
+        $this->status = CourseApplication::REPLIED;
         $this->replied = new DooDbExpression('NOW()');
         return $this->update();
     }

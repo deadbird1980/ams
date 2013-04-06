@@ -14,6 +14,8 @@ $dbmap['Application']['has_many']['Attachment'] = array('foreign_key'=>'applicat
 $dbmap['Application']['belongs_to']['User'] = array('foreign_key'=>'id');
 $dbmap['Application']['belongs_to']['Assignee'] = array('foreign_key'=>'id');
 $dbmap['Assignee']['has_many']['Application'] = array('foreign_key'=>'assignee_id');
+$dbmap['Application']['belongs_to']['Executor'] = array('foreign_key'=>'id');
+$dbmap['Executor']['has_many']['Application'] = array('foreign_key'=>'executor_id');
 //$dbmap['Food']['has_many']['Ingredient'] = array('foreign_key'=>'food_id', 'through'=>'food_has_ingredient');
 $dbmap['Attachment']['belongs_to']['Application'] = array('foreign_key'=>'id');
 $dbmap['Attachment']['belongs_to']['ApplicationFile'] = array('foreign_key'=>'id');

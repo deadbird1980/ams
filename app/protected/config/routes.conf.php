@@ -78,10 +78,16 @@ $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles')
 $route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
 $route['*']['/my/applications/:id/confirm'] = array('MyController', 'confirmApplication');
 $route['*']['/my/applications/:id/status'] = array('ApplicationController', 'status');
-$route['*']['/my/applications/:id/courses'] = array('ApplicationController', 'courses');
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
 $route['*']['/my/applications/:id/courses'] = array('CourseController', 'index');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
+
+// Courses
+$route['*']['/my/courses/:id'] = array('CourseController', 'edit');
+$route['*']['/my/courses/:id/send'] = array('CourseController', 'send');
+$route['*']['/my/courses/:id/reply'] = array('CourseController', 'reply');
+$route['*']['/my/courses/:id/status'] = array('CourseController', 'status');
+
 // admin/counselor/executor
 $route['get']['/my/users'] = array('UserController', 'index');
 $route['get']['/my/users/sort/:sortField/:orderType/page/:pindex'] = array('UserController', 'index');

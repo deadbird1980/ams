@@ -145,6 +145,12 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
+            $a = new Application();
+            $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
+            //notify users
+            $this->notifyAdmin("Course application {$app->id} is replied", "Course application replied with {$_POST['result']}");
+            $this->notifyUser($a->Assignee, "Course application {$app->id} is replied", "Course application replied with {$_POST['result']}");
+
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();
