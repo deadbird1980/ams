@@ -802,6 +802,8 @@ class DooView {
         else if(strpos($matches[1], '.@')!==FALSE){
             $varname = str_replace('.@', '->', $matches[1]);
             $varname = explode('->', $varname);
+            $varname = str_replace('!', '()', $varname);
+
             $firstname = $varname[0];
             array_splice($varname, 0, 1);
             $loopname =  '$data[\''.$firstname.'\']->' . implode('->', $varname) ;
@@ -903,6 +905,7 @@ class DooView {
                 array_splice($properties, 0, 1);
                 $varname .= "\$data['$objname']->". implode("->", $properties);
             }
+            $varname = str_replace('!', '()', $varname);
 
         } else if(strpos($str, '.')!==FALSE){
             $properties = explode('.', $str);
@@ -1011,6 +1014,7 @@ class DooView {
                 $varname .= str_replace('.@', '->', $matches[2]);
                 $varname = str_replace("' value",'', $varname);
                 $varname = str_replace("' v",'', $varname);
+                $varname = str_replace('!', '()', $varname);
             }
             else if(strpos($matches[2], '.')!==FALSE){
                 $properties = explode('.', $matches[2]);
