@@ -138,8 +138,15 @@ name|"名称"
 
 files_required|"可提交的文件如下（*表示必须提交）: "
 
-
 error_application_missing_files|"所需文件尚缺，请返回重新上载！"
 
 add_school|"添加学校"
 add_file|"添加文件"
+
+reply|"回复"
+approved|"申请通过"
+condtion_approved|"有条件通过"
+refused|"被拒"
+
+result|"结果"
+action|"操作"
