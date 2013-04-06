@@ -139,6 +139,21 @@ class CourseHelper extends Helper {
                      'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
                  )),
+                 's1'=> array('display', array(
+                     'content' => '&nbsp;&nbsp',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'add_link'=> array('display', array(
+                     'content' => '&nbsp;&nbsp<a id="add-file" href="#">'.$this->t('add_file').'</a>',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'file' => array('file', array(
+                     'label' => $this->t('file'),
+                     'required' => false,
+                     'value' => '',
+                     'attributes' => array('name'=>'files[]', 'class' => 'control textbox hidden'),
+                     'element-wrapper' => 'div',
+                 )),
                  'submit' => array('submit', array(
                      'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),

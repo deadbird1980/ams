@@ -140,3 +140,6 @@ files_required|"可提交的文件如下（*表示必须提交）: "
 
 
 error_application_missing_files|"所需文件尚缺，请返回重新上载！"
+
+add_school|"添加学校"
+add_file|"添加文件"

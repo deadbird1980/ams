@@ -15,17 +15,17 @@
     </div>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
       <script type="text/javascript">
-          var elements = ['school', 'subject', 'course'];
-          var schools_count = 1;
-          function checkApplicationType() {
-              var type = $("#type-element").val();
-              if (type=='' || type.indexOf('visa_') >= 0) {
+          var elements = ['file'];
+          var files_count = 1;
+          function checkApplicationResult() {
+              var result = $("#result-element").val();
+              if (result=='' || result == 'refused') {
                   $("dd").addClass('hidden');
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").hide();
                       $("#"+elements[i]+"-element-wrapper").hide();
-                      if (schools_count > 1) {
-                          for(var j=2; j<=schools_count; j++) {
+                      if (files_count > 1) {
+                          for(var j=2; j<=files_count; j++) {
                               $("#"+elements[i]+"-element-wrapper-"+j).hide();
                           }
                       }
@@ -37,8 +37,8 @@
                       $("label[for='"+elements[i]+"']").removeClass('hidden');
                       $("#"+elements[i]+"-element-wrapper").show();
                       $("#"+elements[i]+"-element").removeClass('hidden');
-                      if (schools_count > 1) {
-                          for(var j=2; j<=schools_count; j++) {
+                      if (files_count > 1) {
+                          for(var j=2; j<=files_count; j++) {
                               $("#"+elements[i]+"-element-wrapper-"+j).show();
                           }
                       }
@@ -59,21 +59,21 @@
                       validate_all:false,
                       error_messages:{"type-element":{"required":required_error},
               }});
-              $("#type-element").bind('change', function() {
-                  checkApplicationType();
+              $("#result-element").bind('change', function() {
+                  checkApplicationResult();
               });
 
-              $("#add-school").bind('click', function() {
+              $("#add-file").bind('click', function() {
                   var s = $("#submit-field-wrapper");
                   var cnt = $("#course-application-count").val();
-                  schools_count++;
+                  files_count++;
                   $("dd").first().clone().insertBefore(s);
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").first().clone().insertBefore(s);
-                      $("#"+elements[i]+"-element-wrapper").clone().attr('id', elements[i]+"-element-wrapper-"+schools_count).find("input:text").val("").end().insertBefore(s);
+                      $("#"+elements[i]+"-element-wrapper").clone().attr('id', elements[i]+"-element-wrapper-"+files_count).find("input:text").val("").end().insertBefore(s);
                   }
               });
-              checkApplicationType();
+              checkApplicationResult();
           }
           init()
       </script>

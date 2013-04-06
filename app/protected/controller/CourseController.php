@@ -142,7 +142,7 @@ class CourseController extends BaseController {
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/status');
+        $this->renderAction('/my/application/course/reply');
     }
 }
 ?>
