@@ -9,6 +9,8 @@
                     <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.subject/{{orderType}}/page/1">{{t('subject')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.course/{{orderType}}/page/1">{{t('course')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/course_application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
+                    <th>{{t('sent')}}</th>
+                    <th>{{t('action')}}</th>
                 </tr>
                 <!-- loop applications -->
                 <tr>
@@ -16,7 +18,9 @@
                 <td>{{t(applications' value.@school)}}</td>
                 <td>{{t(applications' value.@subject)}}</td>
                 <td>{{t(applications' value.@course)}}</td>
-                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
+                <td><a href="{{baseurl}}my/courses/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
+                <td>{{t(applications' value.@sent)}}</td>
+                <td><a href="{{baseurl}}my/courses/{{applications' value.@id}}/send">{{t('send')}}</a></td>
                 </tr>
                 <!-- endloop -->
 

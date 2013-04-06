@@ -106,27 +106,28 @@ class CourseController extends BaseController {
     }
 
     public function status() {
-        Doo::loadModel('Application');
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
 
-        $app = new Application();
-        $this->data['application'] = $app;
-        if (isset($this->params['id'])) {
-            $app = $this->data['application'] = $app->getById_first($this->params['id']);
-        } else {
-        }
-        $form = $this->helper->getApplicationStatusForm($app);
+        $form = $this->helper->getCourseStatusForm($app);
 
         if ($this->isPost() && $form->isValid($_POST)) {
-            $id = $this->params['id'];
-            $app = new Application();
-            $app = $app->getById_first($id);
-            $visaapp = $app->createDetailApplication();
-            $app->update_attributes($_POST, array('where'=>"id=${id}"));
+            $app->update_attributes($_POST, array('where'=>"id={$app->id}"));
             Doo::loadHelper('DooUrlBuilder');
-            return DooUrlBuilder::url2('MyController', 'listApplications', array('id'=>$id), true);
+            return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/status');
+    }
+
+    public function send() {
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $app->relateApplication_first(array('where'=>'course_application.id='.$this->params['id']));
+        if (!$app->Application->canBeSeen($this->auth->user)) {
+            return array('can not be seen', 404);
+        }
+        $app->send();
+        return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
 }
 ?>

@@ -68,10 +68,10 @@ class CourseHelper extends Helper {
         return $form;
     }
 
-    public function getApplicationStatusForm($app) {
+    public function getCourseStatusForm($app) {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
-        $action = DooUrlBuilder::url2('ApplicationController', 'status', array('id'=>$app->id), true);
+        $action = DooUrlBuilder::url2('CourseController', 'status', array('id'=>$app->id), true);
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
@@ -82,9 +82,6 @@ class CourseHelper extends Helper {
                      'value' => $this->controller->getAuthenticityToken(),
                      'validators' => array(array('custom', array($this->controller,'isValidToken'))),
                  )),
-                 'type' => array('hidden', array(
-                     'value' => $app->type,
-                 )),
                  'school' => array('display', array(
                      'label' => $this->t('school'),
                      'content' => "{$app->school}  {$app->subject}  {$app->course}",
@@ -92,13 +89,11 @@ class CourseHelper extends Helper {
                  )),
                  'status' => array('select', array(
                      'required' => true,
-                     'multioptions' => array(Application::CREATED=>$this->t(Application::CREATED),
-                                             Application::IN_PROGRESS=>$this->t(Application::IN_PROGRESS),
-                                             Application::SUBMITTED=>$this->t(Application::SUBMITTED),
-                                             Application::CONFIRMED=>$this->t(Application::CONFIRMED),
-                                             Application::SENT=>$this->t(Application::SENT),
-                                             Application::REPLIED=>$this->t(Application::REPLIED),
-                                             Application::DONE=>$this->t(Application::DONE),),
+                     'multioptions' => array(CourseApplication::SUBMITTED=>$this->t(CourseApplication::SUBMITTED),
+                                             CourseApplication::CONFIRMED=>$this->t(CourseApplication::CONFIRMED),
+                                             CourseApplication::SENT=>$this->t(CourseApplication::SENT),
+                                             CourseApplication::REPLIED=>$this->t(CourseApplication::REPLIED),
+                                             CourseApplication::DONE=>$this->t(CourseApplication::DONE),),
                      'label' => $this->t('status'),
                      'value' => $app->status,
                      'attributes' => array('class' => 'control type validate[required]'),
@@ -165,34 +160,6 @@ class CourseHelper extends Helper {
         return $form;
     }
 
-    public function getCourseStatusForm($app) {
-        if ($app && $app->id) {
-            $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
-        } else {
-            $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
-        }
-        $elements = array(
-                 'token' => array('hidden', array(
-                     'required' => true,
-                     'value' => $this->controller->getAuthenticityToken(),
-                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
-                 )),
-             );
-        $i = 1;
-        $elements['submit'] = array('submit', array(
-                     'label' => $this->t('next'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ));
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements'=>$elements
-        ));
-        return $form;
-    }
     public function getEditCourseForm($app) {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
