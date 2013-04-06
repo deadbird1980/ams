@@ -1,0 +1,34 @@
+        <!-- if {{isset(applications)}} && !{{empty(applications)}} -->
+        <div class="list">
+        <table class="list">
+            <tbody>
+
+                <tr>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/application.id/{{orderType}}/page/1">#</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/application.type/{{orderType}}/page/1">{{t('type')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/user.first_name/{{orderType}}/page/1">{{t('customer')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/start_date/{{orderType}}/page/1">{{t('start_date')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/end_date/{{orderType}}/page/1">{{t('end_date')}}</a> </th>
+                    <th><a href="{{baseurl}}{{range}}/applications/sort/application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
+                    <th>{{t('school')}}</th>
+                </tr>
+                <!-- loop applications -->
+                <tr>
+                <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
+                <td>{{t(applications' value.@type)}}</td>
+                <td>{{applications' value.@User.@first_name}}</td>
+                <td>{{applications' value.@start_date}}</td>
+                <td>{{applications' value.@end_date}}</td>
+                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{applications' value.@status}}</a></td>
+                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/courses">{{count(applications' value.@CourseApplication)}}</a></td>
+                </tr>
+                <!-- endloop -->
+
+        </tbody></table>
+        </div>
+
+        <hr class="divider"/>
+        {{pager}}
+        <!-- else -->
+        {{t('no_records')}}
+        <!-- endif -->

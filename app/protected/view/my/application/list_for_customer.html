@@ -1,0 +1,30 @@
+        <!-- if {{isset(applications)}} && !{{empty(applications)}} -->
+        <div class="list">
+        <table class="list">
+            <tbody>
+
+                <tr>
+                <th># </th>
+                <th>{{t('type')}}</th>
+                <th>{{t('start_date')}}</th>
+                <th>{{t('end_date')}}</th>
+                <th>{{t('status')}}</th>
+                </tr>
+                <!-- loop applications -->
+                <tr>
+                <td><a href='{{baseurl}}index.php/my/applications/{{applications' value.@id}}'>{{applications' value.@id}}</a></td>
+                <td>{{t(applications' value.@type)}}</td>
+                <td>{{applications' value.@start_date}}</td>
+                <td>{{applications' value.@end_date}}</td>
+                <td>{{applications' value.@status}}</td>
+                </tr>
+                <!-- endloop -->
+
+        </tbody></table>
+        </div>
+
+        <hr class="divider"/>
+        {{pager}}
+        <!-- else -->
+        {{t('no_records')}}
+        <!-- endif -->
