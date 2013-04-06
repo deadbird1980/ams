@@ -70,7 +70,7 @@
                   $("dd").first().clone().insertBefore(s);
                   for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").first().clone().insertBefore(s);
-                      $("#"+elements[i]+"-element-wrapper").clone().attr('id', elements[i]+"-element-wrapper-"+files_count).find("input:text").val("").end().insertBefore(s);
+                      $("#"+elements[i]+"-element-wrapper").clone().attr('id', elements[i]+"-element-wrapper-"+files_count).find("input:file").val("").end().insertBefore(s);
                   }
               });
               checkApplicationResult();

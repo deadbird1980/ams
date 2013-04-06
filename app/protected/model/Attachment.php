@@ -22,7 +22,11 @@ class Attachment extends DooSmartModel{
     public function fileExist($file) {
         $a = new Attachment();
         $a->application_id = $this->application_id;
-        $a->application_file_id = $file->application_file;
+        if (isset($file->application_file)) {
+            $a->application_file_id = $file->application_file;
+        } else {
+            $a->file_name = $file->name;
+        }
         $fnd = $this->db()->find($a, array('limit'=>1));
         if ($fnd) {
             return true;
@@ -34,13 +38,15 @@ class Attachment extends DooSmartModel{
         $this->file_name = $file->name;
         $this->file_size = $file->size;
         $this->file_type = $file->type;
-        $this->application_file_id = $file->application_file;
+        if (isset($file->application_file)) {
+            $this->application_file_id = $file->application_file;
+            $af = new ApplicationFile();
+            $af = $af->getById_first($this->application_file_id);
+            $file->application_file = $af->name;
+            $file->mandatory = $af->mandatory;
+            $file->application_file_id = $this->application_file_id;
+        }
         // replace id with name for display
-        $af = new ApplicationFile();
-        $af = $af->getById_first($this->application_file_id);
-        $file->application_file = $af->name;
-        $file->mandatory = $af->mandatory;
-        $file->application_file_id = $this->application_file_id;
         $file->id = $this->insert();
         return $file;
     }

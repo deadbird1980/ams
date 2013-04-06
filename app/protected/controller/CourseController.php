@@ -137,8 +137,14 @@ class CourseController extends BaseController {
         $form = $this->helper->getCourseReplyForm($app);
 
         if ($this->isPost() && $form->isValid($_POST)) {
-            $app->update_attributes($_POST, array('where'=>"id={$app->id}"));
-            Doo::loadHelper('DooUrlBuilder');
+            $app->reply($_POST['result']);
+            Doo::loadModel('Attachment');
+            $attachment = new Attachment();
+            $attachment->application_id = $app->application_id;
+            $options['upload_model'] = $attachment;
+            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
+            Doo::loadClass('UploadHandler');
+            $handler = new UploadHandler($options, false);
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();

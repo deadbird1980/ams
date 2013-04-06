@@ -113,7 +113,7 @@ class CourseHelper extends Helper {
     public function getCourseReplyForm($app) {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
-        $action = DooUrlBuilder::url2('CourseController', 'status', array('id'=>$app->id), true);
+        $action = DooUrlBuilder::url2('CourseController', 'reply', array('id'=>$app->id), true);
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
