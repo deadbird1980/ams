@@ -24,7 +24,7 @@ class FileController extends BaseController {
         Doo::loadModel('User');
 
         $u = new User();
-        $u->id = $this->session->user['id'];
+        $u->id = $this->auth->user->id;
         $this->user = $this->db()->find($u, array('limit'=>1));
         $this->setHandler();
 	}
@@ -69,8 +69,7 @@ class FileController extends BaseController {
                        'delete_type'=>'POST',
                        'download_via_php'=>true);
         if (isset($_GET['application_id'])) {
-            Doo::loadModel('Attachment');
-            $attachment = new Attachment();
+            $attachment = Doo::loadModel('ApplicationAttachment', true);
             $attachment->application_id = $_GET['application_id'];
             $options['upload_model'] = $attachment;
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;

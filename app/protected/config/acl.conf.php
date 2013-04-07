@@ -15,7 +15,8 @@ $acl['counselor']['allow'] = array(
 							'MyController'=>'*',
 							'AccountController'=>'*',
 							'UserController'=>'*',
-							'ApplicationController'=>'*'
+							'ApplicationController'=>'*',
+							'CourseController'=>'*',
 						);
 $acl['executor']['allow'] = array(
 							'MyController'=>'*',

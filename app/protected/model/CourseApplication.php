@@ -2,6 +2,7 @@
 Doo::loadCore('db/DooSmartModel');
 Doo::loadCore('db/DooDbExpression');
 Doo::loadModel('Application');
+Doo::loadModel('Attachment');
 Doo::loadModel('SchoolApplication');
 
 class CourseApplication extends DooSmartModel{
@@ -18,7 +19,7 @@ class CourseApplication extends DooSmartModel{
     public $done;
     public $_table = 'course_application';
     public $_primarykey = 'id';
-    public $_fields = array('id','application_id','school','subject','course','status','sent','replied','resent','done');
+    public $_fields = array('id','application_id','school','subject','course','status','sent','replied','approved_document_id','resent','done');
     //status
     const SUBMITTED = 'submitted';
     const CONFIRMED = 'confirmed';
@@ -84,6 +85,11 @@ class CourseApplication extends DooSmartModel{
         $this->status = CourseApplication::REPLIED;
         $this->replied = new DooDbExpression('NOW()');
         return $this->update();
+    }
+
+    public function attachments() {
+        $a = new Attachment();
+        return $a->getByApplication_id__type($this->application_id, 'reply');
     }
 }
 ?>

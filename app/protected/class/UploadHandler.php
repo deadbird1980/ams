@@ -163,7 +163,7 @@ class UploadHandler
 
     protected function get_application_path() {
         if ($this->options['upload_model']) {
-            return $this->options['upload_model']->application_id.'/';
+            return $this->options['upload_model']->getGroupPath().'/';
         }
         return '';
     }
@@ -180,7 +180,8 @@ class UploadHandler
         if ($this->options['download_via_php']) {
             $url = $this->options['script_url'].'?file='.rawurlencode($file_name);
             if ($this->options['upload_model']) {
-                $url .= '&application_id='.$this->options['upload_model']->application_id;
+                $field = $this->options['upload_model']->group_field;
+                $url .= "&$field={$this->options['upload_model']->$field}";
             }
             if ($version) {
                 $url .= '&version='.rawurlencode($version);
@@ -197,7 +198,10 @@ class UploadHandler
             .'?file='.rawurlencode($file->name);
         if (isset($file->id)) {
             $file->delete_url .= '&id='.$file->id;
-            $file->delete_url .= '&application_id='.$file->application_id;
+        }
+        if ($this->options['upload_model']) {
+            $field = $this->options['upload_model']->group_field;
+            $file->delete_url .= "&$field={$file->$field}";
         }
         $file->delete_type = $this->options['delete_type'];
         if ($file->delete_type !== 'DELETE') {
@@ -243,7 +247,8 @@ class UploadHandler
             $file = new stdClass();
             if (isset($att)) {
                 $file->id = $att->id;
-                $file->application_id = $att->application_id;
+                $field = $att->group_field;
+                $file->$field = $att->$field;
             }
             $file->name = $file_name;
             $file->size = $this->get_file_size(
@@ -289,7 +294,7 @@ class UploadHandler
         }
         $files = array();
         if ($att = $this->options['upload_model']) {
-            $atts = $att->sameApplication();
+            $atts = $att->sameGroup();
             foreach($atts as $att) {
                 $files[] = $att;
             }
@@ -561,7 +566,8 @@ class UploadHandler
                 $file->error = 'File already exists!';
                 return $file;
             }
-            $file->application_id = $this->options['upload_model']->application_id;
+            $field = $this->options['upload_model']->groupField();
+            $file->application_id = $this->options['upload_model']->$field;
         }
 
         if ($this->validate($uploaded_file, $file, $error, $index)) {
@@ -822,7 +828,9 @@ class UploadHandler
         if ($file_id) {
             $att = $this->options['upload_model'];
             $att = $att->getById_first($file_id);
-            $att->delete();
+            if (!$att->remove()) {
+               return $this->generate_response(array('success' => false, $print_response));
+            }
         }
         $success = is_file($file_path) && $file_name[0] !== '.' && unlink($file_path);
         if ($success) {

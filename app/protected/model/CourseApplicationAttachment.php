@@ -2,18 +2,16 @@
 Doo::loadCore('db/DooSmartModel');
 Doo::loadModel('ApplicationFile');
 
-class Attachment extends DooSmartModel{
+class CourseApplicationAttachment extends DooSmartModel{
 
     public $id;
-    public $file_name;
-    public $file_size;
-    public $file_type;
+    public $course_application_id;
+    public $attachment_id;
+    public $type; //basic/reply/additional
 
-    public $group;
-    public $title;
-    public $_table = 'attachment';
+    public $_table = 'course_application_attachment';
     public $_primarykey = 'id';
-    public $_fields = array('id','file_name','file_size','file_type','title');
+    public $_fields = array('id','course_application_id','attachment_id','type');
 
     public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()
@@ -35,16 +33,28 @@ class Attachment extends DooSmartModel{
     }
 
     public function importFile($file) {
-        $this->file_name = $file->name;
-        $this->file_size = $file->size;
-        $this->file_type = $file->type;
-        // replace id with name for display
-        $file->id = $this->insert();
+        $attachment = Doo::loadModel('Attachment', true);
+        $file = $attachment->importFile($file);
+        $this->attachment_id = $attachment->id;
+        $this->save();
+        $file->id = $this->id;
         return $file;
     }
 
     public function sameApplication() {
         return $this->find(array('where'=>"application_id={$this->application_id}"));
+    }
+
+    public function getApplicationPath() {
+        return "{$this->application_id}/{$this->id}";
+    }
+
+    public function destroy() {
+        $att = Doo::loadModel('Attachment', true);
+        $att = $att->getById_first($this->attachment_id);
+        if ($att->delete()) {
+            $this->delete();
+        }
     }
 }
 ?>

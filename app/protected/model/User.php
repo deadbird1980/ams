@@ -108,6 +108,11 @@ class User extends DooSmartModel{
         return '';
     }
 
+    public function applicationCount() {
+        $app = Doo::loadModel('Application', true);
+        return $app->count(array('where'=>"user_id={$this->id}"));
+    }
+
     public function delete($opt=NULL){
         if ($apps = $this->relateApplication()) {
             foreach($apps as $app) {
