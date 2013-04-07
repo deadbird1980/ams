@@ -62,15 +62,17 @@ class ApplicationController extends BaseController {
             $pages = $this->getPages();
 
             if (isset($this->params['user_id'])) {
-                $url = Doo::conf()->APP_URL.$this->data['range'].'/users/'.$this->params['user_id'].'/applications/page';
+                $url = Doo::conf()->APP_URL.$this->data['range'].'/users/'.$this->params['user_id'].'/applications/';
             } else {
-                $url = Doo::conf()->APP_URL.$this->data['range'].'/applications/page';
+                $url = Doo::conf()->APP_URL.$this->data['range'].'/applications/';
             }
 
             if($this->sortField=='Application.id' && $this->orderType=='desc'){
+                $url .= 'page';
                 $pager = new DooPager($url, $count, $page_size, $pages);
             }else{
-                $pager = new DooPager(Doo::conf()->APP_URL.$this->data['range']."/applications/sort/{$this->sortField}/{$this->orderType}/page", $count, $page_size, $pages);
+                $url .= "sort/{$this->sortField}/{$this->orderType}/page";
+                $pager = new DooPager($url, $count, $page_size, $pages);
             }
 
             if(isset($this->params['pindex']))
@@ -92,11 +94,8 @@ class ApplicationController extends BaseController {
                 $this->data['order'] = 'desc';
                 $this->data['orderType'] = 'asc';
             }
-            if ($this->auth->user->isAdmin()) {
-                $this->data['applications'] = $app->relateMany(array('User','Assignee'),array('User'=>$options));
-            } else {
-                $this->data['applications'] = $app->relateUser($options);
-            }
+
+            $this->data['applications'] = $app->relateMany(array('User','Assignee', 'CourseApplication'),array('User'=>$options));
             $this->data['sortField'] = $this->sortField;
         }
 
