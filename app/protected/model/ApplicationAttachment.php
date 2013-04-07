@@ -94,7 +94,6 @@ class ApplicationAttachment extends DooSmartModel{
         $this->beginTransaction();
         $att = $this->attachment;
         if ($this->delete() && $att->delete()) {
-        //if ($this->attachment->delete() && $this->delete()) {
             $this->commit();
             return true;
         }

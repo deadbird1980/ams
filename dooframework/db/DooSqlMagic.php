@@ -2326,6 +2326,7 @@ class DooSqlMagic {
             $rs = $this->query($sql, $where_values);
         else
             $rs = $this->query($sql);
+        return $rs;
     }
 
     /**
