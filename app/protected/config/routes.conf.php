@@ -54,7 +54,6 @@ $route['*']['/admin/users/sort/:sortField/:orderType/page/:pindex'] = array('Use
 $route['*']['/admin/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:code/active'] = array('UserController', 'active');
-$route['post']['/admin/users/:id'] = array('UserController', 'update');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
 $route['post']['/admin/users/save'] = array('UserController', 'save');
 
