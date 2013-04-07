@@ -2,10 +2,9 @@ DROP TABLE IF EXISTS `attachment`;
 
 CREATE TABLE `attachment` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `application_id` int(11) NOT NULL,
-  `application_file_id` int(11) NOT NULL,
-  `file_name` char(50) DEFAULT NULL,
-  `file_size` char(50) DEFAULT NULL,
-  `file_type` char(50) DEFAULT NULL,
+  `file_name` varchar(50) DEFAULT NULL,
+  `file_size` varchar(50) DEFAULT NULL,
+  `file_type` varchar(50) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
