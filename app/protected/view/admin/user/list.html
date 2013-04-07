@@ -35,7 +35,13 @@
                 <td>{{users' value.@type}}</td>
                 <td>{{users' value.@status}}</td>
                 <td>{{users' value.@confirm_code}}</td>
-                <td><a href="{{baseurl}}index.php/admin/users/{{users' value.@id}}/applications">{{t('application')}}</a></td>
+                <td>
+                    <!-- if {{applications' value.@applicationCount!}} > 0 -->
+                    <a href="{{baseurl}}index.php/my/users/{{users' value.@id}}/applications">{{users' value.@applicationCount!}}</a>
+                    <!-- else -->
+                    <a href="{{baseurl}}index.php/my/users/{{users' value.@id}}/applications/create">{{t('create')}}</a>
+                    <!-- endif -->
+                </td>
                 </tr>
                 <!-- endloop -->
 
