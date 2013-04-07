@@ -74,6 +74,11 @@ class FileController extends BaseController {
             $options['upload_model'] = $attachment;
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             $options['additional_elements'] = array('application_file');
+        } elseif (isset($_GET['course_application_id'])) {
+            $attachment = Doo::loadModel('CourseApplicationAttachment', true);
+            $attachment->course_application_id = $_GET['course_application_id'];
+            $options['upload_model'] = $attachment;
+            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
         }
         Doo::loadClass('UploadHandler');
         $this->handler = new UploadHandler($options, false);

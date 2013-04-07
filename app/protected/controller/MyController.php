@@ -55,7 +55,6 @@ class MyController extends BaseController {
                 $options['desc'] = $this->sortField;
                 $this->data['orderType'] = 'asc';
             }
-            $this->data['applications'] = $app->relateUser($options);
             $this->data['applications'] = $app->relateMany(array('User','Assignee', 'CourseApplication'),array('User'=>$options));
         }
         $this->renderAction('/my/application/index');

@@ -87,9 +87,17 @@ class CourseApplication extends DooSmartModel{
         return $this->update();
     }
 
-    public function attachments() {
-        $a = new Attachment();
-        return $a->getByApplication_id__type($this->application_id, 'reply');
+    public function attachment() {
+        if ($this->isReplied()) {
+            $a = Doo::loadModel('CourseApplicationAttachment', true);
+            $a = $a->getByType__Course_application_id_first('reply', $this->id);
+            if ($a) {
+                return $a;
+            }
+        }
+        $a = new StdClass();
+        $a->id = null;
+        return $a;
     }
 }
 ?>

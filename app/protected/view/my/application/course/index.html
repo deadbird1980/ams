@@ -5,7 +5,11 @@
         <!-- if {{role}}!='customer' && isset({{user_id}}) -->
         <a href="applications/create">{{t('create')}}</a><br>
         <!-- endif -->
+        <!-- if {{role}}=='counselor' -->
+        <!-- include '/my/application/course/list_for_counselor' -->
+        <!-- else -->
         <!-- include '/my/application/course/list' -->
+        <!-- endif -->
     </div>
 
     <div class="right">

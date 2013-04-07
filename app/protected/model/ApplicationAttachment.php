@@ -71,6 +71,9 @@ class ApplicationAttachment extends DooSmartModel{
         $file = $attachment->importFile($file);
         if (isset($file->application_file)) {
             $this->application_file_id = $file->application_file;
+            if (!isset($this->application_file)) {
+                $this->setApplicationFile();
+            }
             $af = $this->application_file;
             $file->application_file = $af->name;
             $file->mandatory = $af->mandatory;

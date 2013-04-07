@@ -9,6 +9,8 @@ class CourseApplicationAttachment extends DooSmartModel{
     public $attachment_id;
 
     public $application_id;
+    public $course_application;
+
     protected $attachment;
 
     public $group_field = 'course_application_id';
@@ -30,11 +32,16 @@ class CourseApplicationAttachment extends DooSmartModel{
             }
             if ($this->attachment && in_array($key, $this->attachment->_fields)) {
                 return $this->attachment->$key;
-            } elseif (in_array($key, $this->application_file->_fields)) {
-                return $this->application_file->$key;
+            } elseif (in_array($key, $this->course_application->_fields)) {
+                return $this->course_application->$key;
             }
         }
         return parent::__get($key);
+    }
+
+    protected function setCourseApplication() {
+        $att = Doo::loadModel('CourseApplication', true);
+        $this->course_application = $att->getById_first($this->course_application_id);
     }
 
     protected function setAttachment() {
@@ -60,11 +67,14 @@ class CourseApplicationAttachment extends DooSmartModel{
     }
 
     public function sameGroup() {
-        return $this->find(array('where'=>"course_application_id={$this->application_id}"));
+        return $this->find(array('where'=>"course_application_id={$this->course_application_id}"));
     }
 
     public function getGroupPath() {
-        return "{$this->application_id}/{$this->course_application_id}";
+        if (!$this->course_application) {
+            $this->setCourseApplication();
+        }
+        return "{$this->course_application->application_id}/{$this->course_application_id}";
     }
 
     public function remove() {

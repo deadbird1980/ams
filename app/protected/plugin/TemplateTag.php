@@ -3,7 +3,7 @@
 //register global/PHP functions to be used with your template files
 //You can move this to common.conf.php   $config['TEMPLATE_GLOBAL_TAGS'] = array('isset', 'empty');
 //Every public static methods in TemplateTag class (or tag classes from modules) are available in templates without the need to define in TEMPLATE_GLOBAL_TAGS 
-Doo::conf()->TEMPLATE_GLOBAL_TAGS = array('count', 'upper', 'tofloat', 'sample_with_args', 'debug', 'url', 'url2', 'function_deny', 'isset', 'empty', 't');
+Doo::conf()->TEMPLATE_GLOBAL_TAGS = array('count', 'upper', 'tofloat', 'sample_with_args', 'debug', 'url', 'url2', 'function_deny', 'isset', 'empty', 't', 'file_link');
 
 /**
 Define as class (optional)
@@ -82,6 +82,15 @@ function url2($controller, $method, $param=null, $addRootUrl=false){
 
 function t($str){
     return Doo::getTranslator()->translate($str);
+}
+
+function file_link($attachment) {
+    $html = "";
+    $baseurl = Doo::conf()->APP_URL . 'index.php';
+    if (isset($attachment->id)) {
+        $html = "<a href='$baseurl/files?file={$attachment->file_name}&course_application_id={$attachment->course_application_id}&id={$attachment->id}&download=1'>{$attachment->file_name}</a>";
+    }
+    return $html;
 }
 
 ?>

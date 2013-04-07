@@ -161,7 +161,7 @@ class UploadHandler
         return '';
     }
 
-    protected function get_application_path() {
+    protected function get_group_path() {
         if ($this->options['upload_model']) {
             return $this->options['upload_model']->getGroupPath().'/';
         }
@@ -171,9 +171,10 @@ class UploadHandler
     protected function get_upload_path($file_name = null, $version = null) {
         $file_name = $file_name ? $file_name : '';
         $version_path = empty($version) ? '' : $version.'/';
-        return $this->options['upload_dir'].$this->get_user_path()
-            .$this->get_application_path()
+        $path = $this->options['upload_dir'].$this->get_user_path()
+            .$this->get_group_path()
             .$version_path.$file_name;
+        return $path;
     }
 
     protected function get_download_url($file_name, $version = null) {
@@ -269,6 +270,8 @@ class UploadHandler
             if (isset($this->options['upload_model'])) {
                 $attachment = $this->options['upload_model'];
                 $attachment->file_name = $file_name;
+                //$field = $this->options['upload_model']->group_field;
+                //$file->$field = $this->options['upload_model']->$field;
                 foreach($this->options['additional_elements'] as $element) {
                     if ($element == 'application_file') {
                         $at = $attachment->relateApplicationFile_first($attachment)->ApplicationFile;
