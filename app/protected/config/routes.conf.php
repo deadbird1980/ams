@@ -98,6 +98,7 @@ $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 
 $route['*']['/my/users/:user_id/applications/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/sort/:sortField/:orderType/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
+$route['*']['/my/users/:user_id/applications/:id'] = array('ApplicationController', 'edit');
 $route['*']['/my/users/activate'] = array('UserController', 'activate');
 $route['*']['/my/applications/:id/type'] = array('ApplicationController', 'editType');
 $route['*']['/admin/users/:user_id/applications'] = array('ApplicationController', 'index');

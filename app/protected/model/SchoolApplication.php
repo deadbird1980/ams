@@ -28,7 +28,7 @@ class SchoolApplication extends DooSmartModel{
     public function createDetailApplication($data=null) {
         $cnt = count($data['schools']);
         for($i=0; $i<$cnt; $i++) {
-            if (strlen(trim($data['schools'])) == 0) continue;
+            if (strlen(trim($data['schools'][$i])) == 0) continue;
             $a = new CourseApplication();
             $a->school = $data['schools'][$i];
             $a->subject = $data['subjects'][$i];

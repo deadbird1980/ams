@@ -151,7 +151,7 @@ class ApplicationController extends BaseController {
         $app = new Application();
         $this->data['application'] = $app;
         if (isset($this->params['id'])) {
-            $this->data['application'] = $app->getById_first($this->params['id']);
+            $app = $this->data['application'] = $app->getById_first($this->params['id']);
         }
         $form = $this->helper->getApplicationForm($app);
 
