@@ -142,7 +142,7 @@ class CourseController extends BaseController {
             $attachment->application_id = $app->application_id;
             $attachment->type = 'reply';
             $options['upload_model'] = $attachment;
-            $options['upload_dir'] = $attachment->getGroupPath();
+            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
             $handler->post(true);
