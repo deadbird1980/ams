@@ -10,7 +10,6 @@ class CourseController extends BaseController {
 
 	public function index() {
         Doo::loadHelper('DooPager');
-        Doo::loadModel('Application');
         $app = Doo::loadModel('Application', true);
         $app = $app->getById_first($this->params['id']);
         if (!$app->canBeSeen($this->auth->user)) {
@@ -138,13 +137,15 @@ class CourseController extends BaseController {
 
         if ($this->isPost() && $form->isValid($_POST)) {
             $app->reply($_POST['result']);
-            Doo::loadModel('Attachment');
-            $attachment = new Attachment();
+            $attachment = Doo::loadModel('CourseApplicationAttachment', true);
+            $attachment->course_application_id = $app->id;
             $attachment->application_id = $app->application_id;
+            $attachment->type = 'reply';
             $options['upload_model'] = $attachment;
-            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
+            $options['upload_dir'] = $attachment->getGroupPath();
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
+            $handler->post(true);
             $a = new Application();
             $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users

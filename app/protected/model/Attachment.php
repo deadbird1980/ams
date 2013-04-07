@@ -8,9 +8,8 @@ class Attachment extends DooSmartModel{
     public $file_name;
     public $file_size;
     public $file_type;
-
-    public $group;
     public $title;
+
     public $_table = 'attachment';
     public $_primarykey = 'id';
     public $_fields = array('id','file_name','file_size','file_type','title');

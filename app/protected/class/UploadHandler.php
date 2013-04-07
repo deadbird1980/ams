@@ -566,7 +566,7 @@ class UploadHandler
                 $file->error = 'File already exists!';
                 return $file;
             }
-            $field = $this->options['upload_model']->groupField();
+            $field = $this->options['upload_model']->group_field;
             $file->application_id = $this->options['upload_model']->$field;
         }
 
