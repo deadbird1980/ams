@@ -165,6 +165,105 @@ class CourseHelper extends Helper {
         return $form;
     }
 
+    public function getCourseFinishForm($app) {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('CourseController', 'finish', array('id'=>$app->id), true);
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'school' => array('display', array(
+                     'label' => $this->t('school'),
+                     'content' => "{$app->school}  {$app->subject}  {$app->course}",
+                     'element-wrapper' => 'div'
+                 )),
+                 'result' => array('select', array(
+                     'required' => true,
+                     'multioptions' => array(CourseApplication::REFUSED=>$this->t(CourseApplication::REFUSED),
+                                             CourseApplication::APPROVED=>$this->t(CourseApplication::APPROVED),),
+                     'label' => $this->t('status'),
+                     'value' => $app->status,
+                     'attributes' => array('class' => 'control type validate[required]'),
+                     'element-wrapper' => 'div'
+                 )),
+                 's1'=> array('display', array(
+                     'content' => '&nbsp;&nbsp',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'add_link'=> array('display', array(
+                     'content' => '&nbsp;&nbsp<a id="add-file" href="#">'.$this->t('add_file').'</a>',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'file' => array('file', array(
+                     'label' => $this->t('file'),
+                     'required' => false,
+                     'value' => '',
+                     'attributes' => array('name'=>'files[]', 'class' => 'control textbox hidden'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('submit'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
+
+    public function getCourseChooseForm($app) {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('CourseController', 'choose', array('id'=>$app->id), true);
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'school' => array('display', array(
+                     'label' => $this->t('school'),
+                     'content' => "{$app->school}  {$app->subject}  {$app->course}",
+                     'element-wrapper' => 'div'
+                 )),
+                 's1'=> array('display', array(
+                     'content' => '&nbsp;&nbsp',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'add_link'=> array('display', array(
+                     'content' => '&nbsp;&nbsp<a id="add-file" href="#">'.$this->t('add_file').'</a>',
+                     'attributes' => array('class' => 'hidden'),
+                 )),
+                 'file' => array('file', array(
+                     'label' => $this->t('file'),
+                     'required' => false,
+                     'value' => '',
+                     'attributes' => array('name'=>'files[]', 'class' => 'control textbox hidden'),
+                     'element-wrapper' => 'div',
+                 )),
+                 'submit' => array('submit', array(
+                     'label' => $this->t('submit'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ))
+             )
+        ));
+        return $form;
+    }
+
     public function getCourseForm($app) {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);

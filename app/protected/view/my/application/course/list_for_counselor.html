@@ -24,8 +24,8 @@
                 <td>{{applications' value.@status}}</td>
                 <!-- if {{applications' value.@status=='replied'}} -->
                 <td>{{t(applications' value.@result)}}</td>
-                <td>{{file_link(applications' value.@attachment!)}}
-                <td>{{t(applications' value.@todo!)}}</td>
+                <td>{{file_link(applications' value.@attachment!)}}</td>
+                <td><a href='{{baseurl}}index.php/my/courses/{{applications' value.@id}}/{{applications' value.@todo!}}'>{{t(applications' value.@todo!)}}</a></td>
                 <!-- endif -->
                 </tr>
                 <!-- endloop -->

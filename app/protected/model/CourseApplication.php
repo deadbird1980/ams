@@ -25,6 +25,8 @@ class CourseApplication extends DooSmartModel{
     const CONFIRMED = 'confirmed';
     const SENT = 'sent';
     const REPLIED = 'replied';
+    const CHOSEN = 'chosen';
+    const RESENT = 'resent';
     const DONE = 'done';
 
     //result
@@ -53,6 +55,15 @@ class CourseApplication extends DooSmartModel{
         return $this->status == CourseApplication::REPLIED;
     }
 
+    public function isChosen() {
+        return $this->status == CourseApplication::CHOSEN;
+    }
+
+    public function isResent() {
+        return $this->status == CourseApplication::RESENT;
+    }
+
+
     public function isDone() {
         return $this->status == CourseApplication::DONE;
     }
@@ -66,6 +77,15 @@ class CourseApplication extends DooSmartModel{
         $this->update();
     }
 
+    public function resend() {
+        if ($this->status == 'resent') {
+            return;
+        }
+        $this->status = 'resent';
+        $this->resent = new DooDbExpression('NOW()');
+        $this->update();
+    }
+
     public function todo() {
         if ($this->isSubmitted()) {
             return 'confirm';
@@ -74,6 +94,13 @@ class CourseApplication extends DooSmartModel{
         } elseif ($this->isSent()) {
             return 'reply';
         } elseif ($this->isReplied()) {
+            if ($this->result != CourseApplication::REFUSED) {
+                return 'choose';
+            }
+        } elseif ($this->isChosen()) {
+            return 'resend';
+        } elseif ($this->isResent()) {
+            return 'finish';
         }
     }
 
@@ -84,6 +111,26 @@ class CourseApplication extends DooSmartModel{
         $this->result = $result;
         $this->status = CourseApplication::REPLIED;
         $this->replied = new DooDbExpression('NOW()');
+        return $this->update();
+    }
+
+    public function finish($result) {
+        if ($this->isDone()) {
+            return false;
+        }
+        $this->result = $result;
+        $this->status = CourseApplication::DONE;
+        $this->done = new DooDbExpression('NOW()');
+        //update application
+        $this->application->finish();
+        return $this->update();
+    }
+
+    public function choose() {
+        if ($this->isChosen()) {
+            return false;
+        }
+        $this->status = CourseApplication::CHOSEN;
         return $this->update();
     }
 
@@ -98,6 +145,14 @@ class CourseApplication extends DooSmartModel{
         $a = new StdClass();
         $a->id = null;
         return $a;
+    }
+
+    public function application() {
+        if (!isset($this->application)) {
+            $app = Doo::loadModel('Application');
+            $this->application = $app->getById_first($this->application_id);
+        }
+        return $this->application;
     }
 }
 ?>

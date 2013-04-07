@@ -86,6 +86,9 @@ $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 $route['*']['/my/courses/:id'] = array('CourseController', 'edit');
 $route['*']['/my/courses/:id/send'] = array('CourseController', 'send');
 $route['*']['/my/courses/:id/reply'] = array('CourseController', 'reply');
+$route['*']['/my/courses/:id/choose'] = array('CourseController', 'choose');
+$route['*']['/my/courses/:id/resend'] = array('CourseController', 'resend');
+$route['*']['/my/courses/:id/finish'] = array('CourseController', 'finish');
 $route['*']['/my/courses/:id/status'] = array('CourseController', 'status');
 
 // admin/counselor/executor
@@ -94,6 +97,7 @@ $route['get']['/my/users/sort/:sortField/:orderType/page/:pindex'] = array('User
 $route['*']['/my/users/:id'] = array('UserController', 'edit');
 $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/page/:pindex'] = array('ApplicationController', 'index');
+$route['*']['/my/users/:user_id/applications/sort/:sortField/:orderType/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
 $route['*']['/my/users/activate'] = array('UserController', 'activate');
 $route['*']['/my/applications/:id/type'] = array('ApplicationController', 'editType');

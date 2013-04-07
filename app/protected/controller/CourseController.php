@@ -129,6 +129,16 @@ class CourseController extends BaseController {
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
 
+    public function resend() {
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $app->relateApplication_first(array('where'=>'course_application.id='.$this->params['id']));
+        if (!$app->Application->canBeSeen($this->auth->user)) {
+            return array('can not be seen', 404);
+        }
+        $app->resend();
+        return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
+    }
+
     public function reply() {
         $app = Doo::loadModel('CourseApplication', true);
         $app = $this->data['application'] = $app->getById_first($this->params['id']);
@@ -151,6 +161,64 @@ class CourseController extends BaseController {
             //notify users
             $this->notifyAdmin("Course application {$app->id} is replied", "Course application replied with {$_POST['result']}");
             $this->notifyUser($a->Assignee, "Course application {$app->id} is replied", "Course application replied with {$_POST['result']}");
+
+            return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/course/reply');
+    }
+
+    public function choose() {
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+
+        $form = $this->helper->getCourseChooseForm($app);
+
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $app->choose();
+            $attachment = Doo::loadModel('CourseApplicationAttachment', true);
+            $attachment->course_application_id = $app->id;
+            $attachment->application_id = $app->application_id;
+            $attachment->type = 'additional';
+            $options['upload_model'] = $attachment;
+            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
+            Doo::loadClass('UploadHandler');
+            $handler = new UploadHandler($options, false);
+            $handler->post(true);
+            $a = new Application();
+            $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
+            //notify users
+            $this->notifyAdmin("Course application {$app->id} is chosen", "Course application is chosen");
+            $this->notifyUser($a->Assignee, "Course application {$app->id} is chosen", "Course application is chosen");
+
+            return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/course/reply');
+    }
+
+    public function finish() {
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+
+        $form = $this->helper->getCourseFinishForm($app);
+
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $app->finish($_POST['result']);
+            $attachment = Doo::loadModel('CourseApplicationAttachment', true);
+            $attachment->course_application_id = $app->id;
+            $attachment->application_id = $app->application_id;
+            $attachment->type = 'finish';
+            $options['upload_model'] = $attachment;
+            $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
+            Doo::loadClass('UploadHandler');
+            $handler = new UploadHandler($options, false);
+            $handler->post(true);
+            $a = new Application();
+            $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
+            //notify users
+            $this->notifyAdmin("Course application {$app->id} is completed", "Course application compled with {$_POST['result']}");
+            $this->notifyUser($a->Assignee, "Course application {$app->id} is completed", "Course application completed with {$_POST['result']}");
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
