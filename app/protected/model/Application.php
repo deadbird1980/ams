@@ -70,6 +70,19 @@ class Application extends DooSmartModel {
         return false;
     }
 
+    public function canBeModified($user) {
+        if ($user->isAdmin()) {
+            return true;
+        } elseif ($user->isCounselor()) {
+            return $this->assignee_id == $user->id && ($this->beforeSubmitted() || $this->isRejected());
+        } elseif ($user->isExecutor()) {
+            return false;
+        } elseif ($user->isCustomer()) {
+            return $this->user_id= $user->id && $this->beforeSubmitted();
+        }
+        return false;
+    }
+
     public function isSubmitted() {
         return $this->status == Application::SUBMITTED;
     }
@@ -78,8 +91,12 @@ class Application extends DooSmartModel {
         return $this->status == Application::CONFIRMED;
     }
 
+    public function isRejected() {
+        return $this->status == Application::REJECTED;
+    }
+
     public function afterSubmitted() {
-        return $this->status == Application::SUBMITTED || $this->status == Application::CONFIRMED;
+        return !$this->beforeSubmitted();
     }
 
     public function beforeSubmitted() {

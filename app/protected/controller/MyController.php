@@ -107,7 +107,7 @@ class MyController extends BaseController {
         if (!($app = $this->setApplication())) {
             return array('no access', 404);
         }
-        if ($this->data['application']->afterSubmitted()) {
+        if (!$app->canBeModified($this->auth->user)) {
             $form = $this->helper->getConfirmApplicationForm($app);
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/view');

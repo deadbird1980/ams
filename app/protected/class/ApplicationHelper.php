@@ -211,7 +211,7 @@ class ApplicationHelper extends Helper {
                      'order' => 100,
                  'field-wrapper' => 'div'
                  ));
-        } else {
+        } elseif ($app->isSubmitted()) {
             $elements = array_merge($elements, $this->getApproveElements());
             $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
