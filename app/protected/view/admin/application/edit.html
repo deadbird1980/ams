@@ -22,27 +22,27 @@
               }
               var required_error = "{{t('required_error')}}";
               var pinyin_error = "{{t('pinyin_error')}}";
+              var date_error = "{{t('date_error')}}";
+              var messages = {"passport_no-element":{"required":required_error},
+                      "passport_name-element":{"required":required_error},
+                      "address-element":{"required":required_error}};
+
+              var date_elements = ['start_date','birthday','passport_start_date','passport_end_date','visa_start_date','visa_end_date'];
+              var dp_options = { dateFormat: "dd/mm/yy" };
+              for(var i=0; i<date_elements.length; i++) {
+                  var ele = date_elements[i]+"-element";
+                  if ($('#'+ele).length > 0) {
+                      messages[ele] = {"required":required_error,"regexp":date_error};
+                      $('#'+ele).datepicker(dp_options);
+                  }
+              }
               $("#form").Zebra_Form({scroll_to_error:true,
                       tips_position:'left',
                       close_tips:true,
                       validate_on_the_fly:false,
                       validate_all:false,
-                      error_messages:{"start_date-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "passport_end_date-element":{"required":required_error},
-                      "visa_start_date-element":{"required":required_error},
-                      "visa_end_date-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "passport_start_date-element":{"required":required_error},
-                      "attachment-element":{"required":required_error},
-                      }})
-              var dp_options = { dateFormat: "yy-mm-dd" };
-              $('#start_date-element').datepicker(dp_options);
-              $('#passport_start_date-element').datepicker(dp_options);
-              $('#passport_end_date-element').datepicker(dp_options);
-              $('#birthday-element').datepicker(dp_options);
-              $('#visa_start_date-element').datepicker(dp_options);
-              $('#visa_end_date-element').datepicker(dp_options);
+                      error_messages:messages})
+              $('#birthday-element').datepicker({ dateFormat: "dd/mm/yy", defaultDate: '01/01/1990'});
           }
           init()
       </script>
