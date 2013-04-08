@@ -1,5 +1,6 @@
 <?php
 require_once 'BaseController.php';
+Doo::loadModel('Application');
 
 class ApplicationController extends BaseController {
 
@@ -10,7 +11,6 @@ class ApplicationController extends BaseController {
 
 	public function index() {
         Doo::loadHelper('DooPager');
-        Doo::loadModel('Application');
         $app = new Application();
         $options = $app->scopeSeenByUser($this->auth->user);
         if(isset($this->params['user_id'])) {
@@ -108,7 +108,6 @@ class ApplicationController extends BaseController {
 
     public function create() {
         if ($this->isPost()) {
-            Doo::loadModel('Application');
             $app = new Application($_POST);
             $app->user_id = $this->params['user_id'];
             $app->type = $_POST['type'];
@@ -146,8 +145,6 @@ class ApplicationController extends BaseController {
     }
 
     public function edit() {
-        Doo::loadModel('Application');
-
         $app = new Application();
         $this->data['application'] = $app;
         if (isset($this->params['id'])) {
@@ -193,7 +190,9 @@ class ApplicationController extends BaseController {
     }
 
     public function status() {
-        Doo::loadModel('Application');
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
 
         $app = new Application();
         $this->data['application'] = $app;
@@ -217,9 +216,11 @@ class ApplicationController extends BaseController {
     }
 
     public function uploadFiles() {
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
         Doo::loadModel('Application');
-        $app = new Application();
-        $this->data['application'] = $app->getById_first($this->params['id']);
+        $this->data['application'] = $app;
 
         $form = $this->getFilesForm();
         if ($this->isPost() && $form->isValid($_POST)) {
@@ -232,26 +233,59 @@ class ApplicationController extends BaseController {
         $this->renderAction('/my/application/files');
     }
 
-    public function confirmApplication() {
+    public function confirm() {
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
+
+        $this->data['application'] = $app;
+
+        $form = $this->helper->getConfirmApplicationForm($app);
+        if ($this->isPost() && $form->isValid($_POST)) {
+            if ($_POST['action'] == '1') {
+                $app->confirm($this->auth->user);
+                $this->notifyAdmin("Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
+                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
+            } elseif ($_POST['action'] == '2') {
+                $app->reject($this->auth->user, $_POST['comment']);
+                $this->notifyAdmin("Applicatioin {$app->id} is rejected","Applicatioin {$app->id} is rejected with following comment:\n{$app->comment}");
+                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is rejected","Applicatioin {$app->id} is rejected with following comment:\n{$app->comment}");
+            }
+            return Doo::conf()->APP_URL . "index.php/my/applications";
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/confirm');
+    }
+
+    public function submit() {
+        Doo::loadModel('User');
+
+        $app = new Application();
+        // confirm all the files uploaded
+        $app = $app->getById_first($this->params['id']);
+        if ($app->isFilesReady()) {
+            $app->submit();
+
+            $this->notifyAdmin("Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->data['message'] = $this->t('application_submitted');
+            $this->renderAction('/my/application/submitted');
+        } else {
+            $this->leaveMessage($this->t('error_application_missing_files'));
+            return Doo::conf()->APP_URL . "index.php/my/applications/{$app->id}/confirm";
+        }
+    }
+
+    private function setApplication() {
         Doo::loadModel('Application');
 
         $app = new Application();
-        $this->data['application'] = $app->getById_first($this->params['id']);
-
-        $form = $this->getConfirmApplicationForm();
-        if ($this->isPost() && $form->isValid($_POST)) {
-            $id = $this->params['id'];
-            $app = new Application();
-            $app = $app->getById_first($id);
-            $visaapp = new VisaApplication();
-            $visaapp = $visaapp->getById_first($id);
-            $app = new VisaApplication($_POST);
-            $app->id = $id;
-            $app->update_attributes($_POST, array('where'=>"id=${id}"));
-            return Doo::conf()->APP_URL . "index.php/my/applications/{$id}/files";
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        if ($app && !$app->canBeSeen($this->auth->user)) {
+            $app = null;
         }
-        $this->data['form'] = $form->render();
-        $this->renderAction('/my/application/edit');
+        return $app;
     }
 
 }

@@ -233,6 +233,14 @@ label {
 	line-height: 1.1;
 	color:#666;
 }
+
+label[for=action-1] {
+	background-color:transparent;
+}
+label[for=action-2] {
+	background-color:transparent;
+}
+
 .Zebra_Form {
 	margin:0;
 	padding:0;
@@ -279,7 +287,7 @@ label {
 	padding-left:5px;
 }
 
-.textbox {
+.textbox, .textarea {
 	background-image: url(../img/16t.png);
 	background-color:#FFFFFF;
 	background-repeat: no-repeat;
@@ -289,6 +297,7 @@ label {
 	color: #999999;
 	padding:3px 5px 3px 19px;
 }
+
 .textbox:focus, .textbox:hover {
 	background-color:#F0FFE6;
 }
@@ -321,6 +330,10 @@ label {
 	background-color:#F0FFE6;
 }
 
+#comment-element-wrapper {
+	height:85px;
+    overflow:hidden;
+}
 #submit-field-wrapper, .button_div {
 	width:287px;
 	float:right;

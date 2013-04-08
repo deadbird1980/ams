@@ -11,6 +11,8 @@ CREATE TABLE `application` (
   `end_date` datetime DEFAULT NULL,
   `submitted` datetime DEFAULT NULL,
   `confirmed` datetime DEFAULT NULL,
+  `rejected` datetime DEFAULT NULL,
+  `comment` text DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

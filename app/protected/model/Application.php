@@ -10,7 +10,7 @@ class Application extends DooSmartModel {
     public $id;
     public $user_id;
     public $type;
-    public $status; // in_progress/submitted
+    public $status; // in_progress/submitted/confirmed/returned
     public $assignee_id;
     public $executor_id;
     public $start_date;
@@ -18,18 +18,21 @@ class Application extends DooSmartModel {
     public $paid;
     public $submitted;
     public $confirmed;
+    public $rejected;
+    public $comment;
     public $created;
     public $updated;
 
     public $detail;
     public $_table = 'application';
     public $_primarykey = 'id';
-    public $_fields = array('id','user_id','type','status','assignee_id','executor_id','start_date','end_date','paid','submitted','confirmed','created','updated');
+    public $_fields = array('id','user_id','type','status','assignee_id','executor_id','start_date','end_date','paid','submitted','confirmed','rejected','comment','created','updated');
 
     //status
     const CREATED = 'created';
     const IN_PROGRESS = 'in_progress';
     const SUBMITTED = 'submitted';
+    const REJECTED = 'rejected';
     const CONFIRMED = 'confirmed';
     const SENT = 'sent';
     const REPLIED = 'replied';
@@ -197,10 +200,19 @@ class Application extends DooSmartModel {
         return $aa->find(array('where'=>"application_id={$this->id}"));
     }
 
-    public function doConfirm($user) {
-        $this->status = 'confirmed';
+    public function confirm($user) {
+        $this->status = Application::CONFIRMED;
         $this->confirmed = new DooDbExpression('NOW()');
         $this->executor_id = $user->id;
+        $this->update();
+    }
+
+    public function reject($user, $comment) {
+        $this->status = Application::REJECTED;
+        $this->confirmed = new DooDbExpression('NULL');
+        $this->rejected = new DooDbExpression('NOW()');
+        $this->executor_id = $user->id;
+        $this->comment = $comment;
         $this->update();
     }
 

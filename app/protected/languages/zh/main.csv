@@ -54,6 +54,7 @@ qq|"QQ号码"
 register|"注册"
 save|"保存"
 confirm|"确认"
+deny|"退回"
 
 login|"登录"
 my_users|"我的客户"

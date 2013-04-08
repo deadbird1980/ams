@@ -203,7 +203,7 @@ class MyController extends BaseController {
 
         $form = $this->helper->getConfirmApplicationForm($app);
         if ($this->isPost()) {
-            $app->doConfirm($this->auth->user);
+            $app->confirm($this->auth->user);
             $this->notifyAdmin("Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
             return Doo::conf()->APP_URL . "index.php/my/applications";
         }

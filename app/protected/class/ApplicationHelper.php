@@ -27,7 +27,7 @@ class ApplicationHelper extends Helper {
             $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
         } else {
             //confirm page for executor
-            $action = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$app->id), true);
+            $action = DooUrlBuilder::url2('ApplicationController', 'confirm', array('id'=>$app->id), true);
         }
 
         $files_url = DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$app->id), true);
@@ -118,11 +118,6 @@ class ApplicationHelper extends Helper {
              'element-wrapper' => 'div'
              ));
 
-        $elements['action'] = array('MultiRadio', array(
-             'label' => "<a target='_blank' href='{$files_url}'>{$this->t('file')}</a>",
-             'multioptions' => array(1 => $this->t('confirm'), 2 => $this->t('deny')),
-             'element-wrapper' => 'div'
-             ));
         if (!$app->AfterSubmitted()) {
             $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
@@ -132,6 +127,7 @@ class ApplicationHelper extends Helper {
                  ));
         } else {
             if ($app->isSubmitted()) {
+                $elements = array_merge($elements, $this->getApproveElements());
                 $elements['submit'] = array('submit', array(
                          'label' => $this->t('confirm'),
                          'attributes' => array('class' => 'buttons'),
@@ -153,9 +149,9 @@ class ApplicationHelper extends Helper {
         if ($app->beforeSubmitted()) {
             $action = DooUrlBuilder::url2('MyController', 'submitApplication', array('id'=>$app->id), true);
         } else {
-            $action = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$app->id), true);
+            $action = DooUrlBuilder::url2('ApplicationController', 'confirm', array('id'=>$app->id), true);
         }
-        Doo::loadModel('VisaApplication');
+
         $visaapp = $app->createDetailApplication();
         $files_url = DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$app->id), true);
         $elements =  array(
@@ -173,31 +169,26 @@ class ApplicationHelper extends Helper {
                  'passport_no' => array('display', array(
                      'label' => $this->t('passport_no'),
                      'content' => $visaapp->passport_no,
-                     'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_name' => array('display', array(
                      'label' => $this->t('passport_name'),
                      'content' => $visaapp->passport_name,
-                     'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'birthday' => array('display', array(
                      'label' => $this->t('birthday'),
                      'content' => $visaapp->birthday,
-                     'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_start_date' => array('display', array(
                      'label' => $this->t('passport_start_date'),
                      'content' => $visaapp->passport_start_date,
-                     'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'passport_end_date' => array('display', array(
                      'label' => $this->t('passport_end_date'),
                      'content' => $visaapp->passport_end_date,
-                     'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )),
                  'visa' => array('display', array(
@@ -206,21 +197,11 @@ class ApplicationHelper extends Helper {
                  'address' => array('display', array(
                      'label' => $this->t('cn_address'),
                      'content' => $visaapp->address,
-                     'attributes' => array('class' => 'control'),
                  'element-wrapper' => 'div'
                  )));
         $elements['files'] = array('display', array(
              'label' => "<a target='_blank' href='$files_url'>{$this->t('file')}</a>",
              'content' => '',
-             'element-wrapper' => 'div'
-             ));
-        $elements['action'] = array('MultiRadio', array(
-             'multioptions' => array(1 => $this->t('confirm'), 2 => $this->t('deny')),
-             'attributes' => array('class' => 'control'),
-             'element-wrapper' => 'div'
-             ));
-        $elements['comment'] = array('textarea', array(
-             'attributes' => array('class' => 'control textarea hidden'),
              'element-wrapper' => 'div'
              ));
         if ($app->beforeSubmitted()) {
@@ -231,6 +212,7 @@ class ApplicationHelper extends Helper {
                  'field-wrapper' => 'div'
                  ));
         } else {
+            $elements = array_merge($elements, $this->getApproveElements());
             $elements['submit'] = array('submit', array(
                      'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
@@ -688,6 +670,27 @@ class ApplicationHelper extends Helper {
              )
         ));
         return $form;
+    }
+
+    private function getApproveElements() {
+        $elements = array();
+        $elements['action'] = array('MultiRadio', array(
+             'multioptions' => array(1 => $this->t('confirm'), 2 => $this->t('deny')),
+             'label' => $this->t('action'),
+             'attributes' => array('class' => 'control radio'),
+             'element-wrapper' => 'div',
+             ));
+        $elements['comment'] = array('textarea', array(
+             'attributes' => array('class' => 'control textarea'),
+             'element-wrapper' => 'div',
+             ));
+        $elements['submit'] = array('submit', array(
+                 'label' => $this->t('submit'),
+                 'attributes' => array('class' => 'buttons'),
+                 'order' => 100,
+             'field-wrapper' => 'div'
+             ));
+        return $elements;
     }
 }
 ?>

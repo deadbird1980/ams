@@ -13,6 +13,61 @@
         </fieldset>
     </div>
 <!-- include '/my/application/file/nav' -->
+  <script type="text/javascript">
+      function checkAction() {
+          var action = $("#action-element").val();
+          if (action=='') {
+              $("dd").addClass('hidden');
+              for(var i=0; i<elements.length; i++) {
+                  $("label[for='"+elements[i]+"-element']").hide();
+                  $("#"+elements[i]+"-element-wrapper").hide();
+                  if (schools_count > 1) {
+                      for(var j=2; j<=schools_count; j++) {
+                          $("#"+elements[i]+"-element-wrapper-"+j).hide();
+                      }
+                  }
+              }
+          } else {
+              $("dd").removeClass('hidden');
+              for(var i=0; i<elements.length; i++) {
+                  $("label[for='"+elements[i]+"-element']").show();
+                  $("label[for='"+elements[i]+"']").removeClass('hidden');
+                  $("#"+elements[i]+"-element-wrapper").show();
+                  $("#"+elements[i]+"-element").removeClass('hidden');
+                  if (schools_count > 1) {
+                      for(var j=2; j<=schools_count; j++) {
+                          $("#"+elements[i]+"-element-wrapper-"+j).show();
+                      }
+                  }
+              }
+          }
+      }
+
+      function init() {
+          if(typeof jQuery=="undefined"||typeof jQuery.fn.Zebra_Form=="undefined") {
+              setTimeout("init()",100);
+              return
+          }
+          var required_error = "{{t('required_error')}}";
+          $("#form").Zebra_Form({scroll_to_error:true,
+                  tips_position:'left',
+                  close_tips:true,
+                  validate_on_the_fly:false,
+                  validate_all:false,
+                  error_messages:{"action-1":{"required":required_error},
+          }});
+
+          $('#comment-element-wrapper').hide();
+          $("#action-element-wrapper input[type='radio']").live('click', function() {
+              if (this.value == '2') {
+              $('#comment-element-wrapper').show();
+              } else {
+              $('#comment-element-wrapper').hide();
+              }
+          });
+      }
+      init()
+  </script>
 </div>
 </div>
     </div>
