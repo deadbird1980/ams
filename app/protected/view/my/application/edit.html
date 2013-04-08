@@ -28,7 +28,7 @@
                       "address-element":{"required":required_error}};
 
               var date_elements = ['start_date','birthday','passport_start_date','passport_end_date','visa_start_date','visa_end_date'];
-              var dp_options = { dateFormat: "dd/mm/yy" };
+              var dp_options = { dateFormat: "dd/mm/yy", changeMonth: true, changeYear: true};
               for(var i=0; i<date_elements.length; i++) {
                   var ele = date_elements[i]+"-element";
                   if ($('#'+ele).length > 0) {
@@ -41,8 +41,8 @@
                       close_tips:true,
                       validate_on_the_fly:false,
                       validate_all:false,
-                      error_messages:messages})
-              $('#birthday-element').datepicker({ dateFormat: "dd/mm/yy", defaultDate: '01/01/1990'});
+                      error_messages:messages});
+              $('#birthday-element').datepicker($.extend(dp_options, {defaultDate:'01/01/1990'}));
           }
           init()
       </script>
