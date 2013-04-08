@@ -161,10 +161,6 @@ class MyController extends BaseController {
         }
         $form = $this->helper->getFilesForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
-            $u = new User();
-            $u->findByConfirm_code($_POST['confirm_code']);
-            $u->activate($this->auth->user);
-            $this->data['message'] = "User activated!";
         }
         Doo::loadHelper('DooUrlBuilder');
         $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
@@ -176,7 +172,7 @@ class MyController extends BaseController {
         $this->data['application_file'] = $h->getFilesForApplication($app);
         $files = $h->getFileNames($app);
         $this->data['instruction'] = $this->t('files_required') . join($files, ',');
-        $this->data['files'] = json_encode($app->filesEssential());
+        $this->data['files'] = $h->getFileJSON($app);
         if ($this->data['application']->beforeSubmitted()) {
             $this->renderAction('/my/application/file/edit');
         } else {

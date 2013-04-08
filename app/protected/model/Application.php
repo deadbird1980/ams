@@ -177,9 +177,17 @@ class Application extends DooSmartModel {
     }
 
     public function filesEssential() {
+        return $this->applicationFiles(true);
+    }
+
+    public function applicationFiles($required=false) {
         Doo::loadModel('ApplicationFile');
         $appFile = new ApplicationFile();
-        $options = array('where'=>"application_type='{$this->type}' and mandatory=1");
+        $where = "application_type='{$this->type}'";
+        if ($required) {
+            $where .= " and mandatory=1";
+        }
+        $options = array('where'=>$where);
         $rtn = $appFile->find($options);
         return $rtn;
     }

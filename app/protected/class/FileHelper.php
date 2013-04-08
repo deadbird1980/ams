@@ -2,7 +2,7 @@
 class FileHelper extends Helper {
 
     public function getFilesForApplication($app) {
-        $files = $app->filesEssential();
+        $files = $app->applicationFiles();
         $html = "<select name='application_file[]' required>";
         foreach($files as $file) {
             $required = $file->mandatory ? '*' : '';
@@ -13,7 +13,7 @@ class FileHelper extends Helper {
     }
 
     public function getFileNames($app) {
-        $files = $app->filesEssential();
+        $files = $app->applicationFiles();
         $required = array();
         foreach($files as $file) {
             if ($file->mandatory) {
@@ -24,5 +24,18 @@ class FileHelper extends Helper {
         }
         return $required;
     }
+
+    public function getFileJSON($app) {
+        $afs = $app->applicationFiles();
+        $files = array();
+        foreach($afs as $af) {
+            $file = new StdClass();
+            $file->id = $af->id;
+            $file->mandatory = $af->mandatory;
+            $files[] = $file;
+        }
+        return json_encode($files);
+    }
+
 }
 ?>
