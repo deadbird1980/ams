@@ -26,7 +26,7 @@ class Helper {
         if (strlen($date) == 0) {
             return "";
         }
-        return date("Y-m-d", strtotime($date));
+        return date_format(date_create_from_format('d/m/Y', $date), 'Y-m-d');
     }
 
     public function formatDate($arr) {
