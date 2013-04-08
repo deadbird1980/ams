@@ -439,27 +439,16 @@ class ApplicationHelper extends Helper {
                  ))
              );
         if ($this->controller->isAdmin()) {
-            $elements['school'] = array('text', array(
-                         'label' => $this->t('school'),
-                         'required' => true,
-                         'value' => $school_app->school,
-                         'attributes' => array('class' => 'control textbox validate[required]'),
-                     'element-wrapper' => 'div'
-                     ));
-            $elements['subject'] = array('text', array(
-                         'label' => $this->t('subject'),
-                         'required' => true,
-                         'value' => $school_app->subject,
-                         'attributes' => array('class' => 'control textbox validate[required]'),
-                     'element-wrapper' => 'div'
-                 ));
-            $elements['course'] = array('text', array(
-                         'label' => $this->t('course'),
-                         'required' => true,
-                         'value' => $school_app->course,
-                         'attributes' => array('class' => 'control textbox validate[required]'),
-                     'element-wrapper' => 'div'
-                     ));
+            $apps = $school_app->CourseApplication;
+            $i = 1;
+            foreach($apps as $app) {
+                $elements['school'.$i] = array('display', array(
+                             'label' => $this->t('school'). ' ' . $i,
+                             'content' => "{$app->school}  {$app->subject}  {$app->course}",
+                         'element-wrapper' => 'div'
+                         ));
+                $i++;
+            }
         } else {
             $apps = $school_app->CourseApplication;
             $i = 1;

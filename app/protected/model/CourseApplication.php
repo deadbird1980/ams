@@ -40,11 +40,12 @@ class CourseApplication extends DooSmartModel{
     }
 
     public function isSubmitted() {
-        return $this->status == CourseApplication::SUBMITTED;
+        return $this->application()->isSubmitted();
     }
 
     public function isConfirmed() {
-        return $this->status == CourseApplication::CONFIRMED;
+        if ($this->status) return false;
+        return $this->application()->isConfirmed();
     }
 
     public function isSent() {
@@ -149,7 +150,7 @@ class CourseApplication extends DooSmartModel{
 
     public function application() {
         if (!isset($this->application)) {
-            $app = Doo::loadModel('Application');
+            $app = Doo::loadModel('Application', true);
             $this->application = $app->getById_first($this->application_id);
         }
         return $this->application;

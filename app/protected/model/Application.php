@@ -71,6 +71,10 @@ class Application extends DooSmartModel {
         return $this->status == Application::SUBMITTED;
     }
 
+    public function isConfirmed() {
+        return $this->status == Application::CONFIRMED;
+    }
+
     public function afterSubmitted() {
         return $this->status == Application::SUBMITTED || $this->status == Application::CONFIRMED;
     }
@@ -175,17 +179,14 @@ class Application extends DooSmartModel {
     public function filesEssential() {
         Doo::loadModel('ApplicationFile');
         $appFile = new ApplicationFile();
-        $options = array('where'=>"application_type='{$this->type}'");
+        $options = array('where'=>"application_type='{$this->type}' and mandatory=1");
         $rtn = $appFile->find($options);
         return $rtn;
     }
 
-    public function files() {
-        Doo::loadModel('Attachment');
-        $a = new Attachment();
-        $options = array('where'=>"application_id='{$this->id}'");
-        $a = $a->find($options);
-        return $a;
+    public function attachments() {
+        $aa = Doo::loadModel('ApplicationAttachment', true);
+        return $aa->find(array('where'=>"application_id={$this->id}"));
     }
 
     public function doConfirm($user) {
@@ -196,7 +197,15 @@ class Application extends DooSmartModel {
     }
 
     public function isFilesReady() {
-        return count($this->files()) == count($this->filesEssential());
+        foreach($this->attachments() as $a) {
+            $ids[] = $a->application_file_id;
+        }
+        foreach($this->filesEssential()  as $file) {
+            if (!in_array($file->id, $ids)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 ?>
