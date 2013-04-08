@@ -83,6 +83,7 @@ class MyController extends BaseController {
     }
 
     public function submitApplication() {
+        Doo::loadModel('User');
         Doo::loadModel('Application');
 
         $app = new Application();
@@ -90,7 +91,10 @@ class MyController extends BaseController {
         $app = $app->getById_first($this->params['id']);
         if ($app->isFilesReady()) {
             $app->submit();
+
             $this->notifyAdmin("Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "Application {$app->id} is submitted");
             $this->data['message'] = $this->t('application_submitted');
             $this->renderAction('/my/application/submitted');
         } else {

@@ -23,7 +23,7 @@ class BaseController extends DooController {
         $role = isset($this->auth->group) ? $this->auth->group : 'anonymous';
 
         if($rs = $this->acl()->process($role, $resource, $action )){
-            //echo $role .' is not allowed for '. $resource . ' '. $action;
+            //echo $role .' is not allowed for '. $resource . ' '. $action; exit;
             return $rs;
         }
         $this->data['role'] = $role;
@@ -156,6 +156,23 @@ class BaseController extends DooController {
         $mail->setBodyHtml($body);
         $mail->setFrom(Doo::conf()->support_email, 'no reply');
         if ($mail->send()) {
+        }
+        return true;
+    }
+
+    public function notifyRole($role, $subject, $body) {
+        Doo::loadHelper('DooMailer');
+        $u = Doo::loadModel('User', true);
+        $users = $u->getByGroup($role);
+        foreach($users as $user) {
+            $mail = new DooMailer();
+            $mail->addTo($user->email, $user->first_name);
+            $mail->setSubject($subject);
+            $mail->setBodyText($body);
+            $mail->setBodyHtml($body);
+            $mail->setFrom(Doo::conf()->support_email, 'no reply');
+            if ($mail->send()) {
+            }
         }
         return true;
     }

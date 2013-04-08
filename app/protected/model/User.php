@@ -19,6 +19,17 @@ class User extends DooSmartModel{
     public $_table = 'user';
     public $_primarykey = 'id';
     public $_fields = array('id','email','password','type','first_name','last_name','first_name_alphabet','last_name_alphabet','phone','qq','confirm_code','status','activated_by');
+
+    const ADMIN = 'admin';
+    const COUNSELOR = 'counselor';
+    const EXECUTOR = 'executor';
+    const CUSTOMER = 'customer';
+    //status
+    const REGISTERED = 'registered';
+    const ACTIVE = 'active';
+    const OBSOLETE = 'obsolete';
+    const INACTIVE = 'inactive';
+
     public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Food::_count(), Food::getById()
         parent::__construct($properties);
@@ -47,31 +58,31 @@ class User extends DooSmartModel{
     }
 
     public function isAdmin() {
-      return $this->type == 'admin';
+      return $this->type == User::ADMIN;
     }
 
     public function isExecutor() {
-      return $this->type == 'executor';
+      return $this->type == User::EXECUTOR;
     }
 
     public function isCounselor() {
-      return $this->type == 'counselor';
+      return $this->type == User::COUNSELOR;
     }
 
     public function isCustomer() {
-      return $this->type == 'customer';
+      return $this->type == User::CUSTOMER;
     }
 
     public function isRegistered() {
-        if ($this->status == 'registered') {
+        if ($this->status == User::REGISTERED) {
             return true;
         }
         return false;
     }
 
     public function activate($user_id) {
-        if ($this->status == 'registered') {
-            $this->status = 'active';
+        if ($this->isRegistered()) {
+            $this->status = User::ACTIVE;
             $this->activated_by = $user_id;
             $this->update();
             return true;

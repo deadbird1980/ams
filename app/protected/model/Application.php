@@ -225,5 +225,10 @@ class Application extends DooSmartModel {
         $this->update();
         return true;
     }
+
+    public function assignee() {
+        $u = Doo::loadModel('User', true);
+        return $u->getById_first($this->assignee_id);
+    }
 }
 ?>
