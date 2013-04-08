@@ -32,7 +32,7 @@
 <script type="text/javascript">
 $(function () {
     //'use strict';
-    var files_url = "{{url2('FileController', 'view')}}" + '?application_id={{application.@id}}';
+    var files_url = "{{url2('FileController', 'view', true)}}" + '?application_id={{application.@id}}';
     // Load existing files:
     $.ajax({
         url: files_url,
