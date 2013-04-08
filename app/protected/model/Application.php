@@ -215,5 +215,15 @@ class Application extends DooSmartModel {
         }
         return true;
     }
+
+    public function submit() {
+        if ($this->isSubmitted()) {
+            return;
+        }
+        $this->status = Application::SUBMITTED;
+        $this->start_date = new DooDbExpression('NOW()');
+        $this->update();
+        return true;
+    }
 }
 ?>
