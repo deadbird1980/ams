@@ -29,6 +29,8 @@ class ApplicationHelper extends Helper {
             //confirm page for executor
             $action = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$app->id), true);
         }
+
+        $files_url = DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$app->id), true);
         Doo::loadModel('VisaApplication');
         $visaapp = new VisaApplication();
         $visaapp = $visaapp->getById_first($app->id);
@@ -111,8 +113,14 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )));
         $elements['files'] = array('display', array(
-             'label' => "<a target='_blank' href='files'>{$this->t('file')}</a>",
+             'label' => "<a target='_blank' href='{$files_url}'>{$this->t('file')}</a>",
              'content' => '',
+             'element-wrapper' => 'div'
+             ));
+
+        $elements['action'] = array('MultiRadio', array(
+             'label' => "<a target='_blank' href='{$files_url}'>{$this->t('file')}</a>",
+             'multioptions' => array(1 => $this->t('confirm'), 2 => $this->t('deny')),
              'element-wrapper' => 'div'
              ));
         if (!$app->AfterSubmitted()) {
@@ -149,6 +157,7 @@ class ApplicationHelper extends Helper {
         }
         Doo::loadModel('VisaApplication');
         $visaapp = $app->createDetailApplication();
+        $files_url = DooUrlBuilder::url2('MyController', 'uploadFiles', array('id'=>$app->id), true);
         $elements =  array(
                  'token' => array('hidden', array(
                      'required' => true,
@@ -201,8 +210,17 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )));
         $elements['files'] = array('display', array(
-             'label' => "<a target='_blank' href='files'>{$this->t('file')}</a>",
+             'label' => "<a target='_blank' href='$files_url'>{$this->t('file')}</a>",
              'content' => '',
+             'element-wrapper' => 'div'
+             ));
+        $elements['action'] = array('MultiRadio', array(
+             'multioptions' => array(1 => $this->t('confirm'), 2 => $this->t('deny')),
+             'attributes' => array('class' => 'control'),
+             'element-wrapper' => 'div'
+             ));
+        $elements['comment'] = array('textarea', array(
+             'attributes' => array('class' => 'control textarea hidden'),
              'element-wrapper' => 'div'
              ));
         if ($app->beforeSubmitted()) {
