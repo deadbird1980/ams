@@ -20,7 +20,7 @@
                 <td>{{applications' value.@User.@first_name}}</td>
                 <td>{{applications' value.@start_date}}</td>
                 <td>{{applications' value.@end_date}}</td>
-                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{t(applications' value.@status)}}</a></td>
+                <td>{{t(applications' value.@status)}}</td>
                 <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/courses">{{count(applications' value.@CourseApplication)}}</a></td>
                 <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/{{applications' value.@todo!}}">{{t(applications' value.@todo!)}}</a></td>
                 </tr>

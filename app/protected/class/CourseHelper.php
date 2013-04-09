@@ -136,7 +136,7 @@ class CourseHelper extends Helper {
                                              CourseApplication::APPROVED=>$this->t(CourseApplication::APPROVED),),
                      'label' => $this->t('status'),
                      'value' => $app->status,
-                     'attributes' => array('class' => 'control type validate[required]'),
+                     'attributes' => array('class' => 'control validate[required]'),
                      'element-wrapper' => 'div'
                  )),
                  's1'=> array('display', array(
@@ -265,6 +265,10 @@ class CourseHelper extends Helper {
     }
 
     public function getCourseForm($app) {
+        return $this->getCourseViewForm($app);
+    }
+
+    public function getCourseEditForm($app) {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
         } else {
@@ -305,6 +309,43 @@ class CourseHelper extends Helper {
                      'order' => 100,
                  'field-wrapper' => 'div'
                  ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements'=>$elements
+        ));
+        return $form;
+    }
+
+    public function getCourseViewForm($app) {
+        if ($app && $app->id) {
+            $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
+        } else {
+            $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
+        }
+        $elements = array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'school' => array('display', array(
+                     'label' => $this->t('school'),
+                     'content' => $app->school,
+                     'element-wrapper' => 'div',
+                 )),
+                 'subject' => array('display', array(
+                     'label' => $this->t('subject'),
+                     'content' => $app->subject,
+                     'element-wrapper' => 'div',
+                 )),
+                 'course' => array('display', array(
+                     'label' => $this->t('course'),
+                     'content' => $app->course,
+                     'element-wrapper' => 'div',
+                 )),
+             );
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,

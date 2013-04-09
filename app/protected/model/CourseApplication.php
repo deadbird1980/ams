@@ -15,11 +15,12 @@ class CourseApplication extends DooSmartModel{
     public $status;
     public $sent;
     public $replied;
+    public $result;
     public $resent;
     public $done;
     public $_table = 'course_application';
     public $_primarykey = 'id';
-    public $_fields = array('id','application_id','school','subject','course','status','sent','replied','approved_document_id','resent','done');
+    public $_fields = array('id','application_id','school','subject','course','status','sent','replied','result','resent','done');
     //status
     const SUBMITTED = 'submitted';
     const CONFIRMED = 'confirmed';
@@ -88,21 +89,28 @@ class CourseApplication extends DooSmartModel{
     }
 
     public function todo() {
-        if ($this->isSubmitted()) {
+        if ($this->application()->isSubmitted() || $this->isSubmitted()) {
             return 'confirm';
-        } elseif ($this->isConfirmed()) {
-            return 'send';
+        } elseif ($this->isDone()) {
+            return '';
         } elseif ($this->isSent()) {
             return 'reply';
         } elseif ($this->isReplied()) {
-            if ($this->result != CourseApplication::REFUSED) {
+            if ($this->result == CourseApplication::APPROVED) {
+                return 'choose';
+            } elseif ($this->result == CourseApplication::REFUSED) {
+                return 'finish';
+            } elseif ($this->result == CourseApplication::CONDITION_APPROVED) {
                 return 'choose';
             }
         } elseif ($this->isChosen()) {
             return 'resend';
         } elseif ($this->isResent()) {
             return 'finish';
+        } elseif ($this->application()->isConfirmed() || $this->isConfirmed()) {
+            return 'send';
         }
+        return '';
     }
 
     public function reply($result) {
@@ -123,7 +131,7 @@ class CourseApplication extends DooSmartModel{
         $this->status = CourseApplication::DONE;
         $this->done = new DooDbExpression('NOW()');
         //update application
-        $this->application->finish();
+        $this->application()->finish();
         return $this->update();
     }
 
@@ -132,7 +140,15 @@ class CourseApplication extends DooSmartModel{
             return false;
         }
         $this->status = CourseApplication::CHOSEN;
+        foreach($this->siblings() as $app) {
+            $app->status = CourseApplication::DONE;
+            $app->update();
+        }
         return $this->update();
+    }
+
+    public function siblings() {
+        return $this->find(array('where'=>"application_id={$this->application_id} and id<>{$this->id}"));
     }
 
     public function attachment() {
