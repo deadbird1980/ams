@@ -168,7 +168,7 @@ class MyController extends BaseController {
         }
         Doo::loadHelper('DooUrlBuilder');
         $this->data['prev_url'] = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$this->params['id']), true);
-        $this->data['next_url'] = DooUrlBuilder::url2('MyController', 'confirmApplication', array('id'=>$this->params['id']), true);
+        $this->data['next_url'] = Doo::conf()->APP_URL . "index.php/my/applications/{$this->params['id']}/confirm";
         $this->data['form'] = $form->render();
         // application file
         Doo::loadClass('FileHelper');

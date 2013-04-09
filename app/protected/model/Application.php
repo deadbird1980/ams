@@ -100,7 +100,7 @@ class Application extends DooSmartModel {
     }
 
     public function beforeSubmitted() {
-        return $this->status == Application::IN_PROGRESS || $this->status == Application::CREATED;
+        return $this->status == Application::IN_PROGRESS || $this->status == Application::CREATED || $this->status == Application::REJECTED;
     }
 
     public function isCreated() {
