@@ -274,7 +274,7 @@ class UploadHandler
                 //$file->$field = $this->options['upload_model']->$field;
                 foreach($this->options['additional_elements'] as $element) {
                     if ($element == 'application_file') {
-                        $at = $attachment->relateApplicationFile_first($attachment)->ApplicationFile;
+                        $at = $att->application_file;
                         $file->$element = $at->name;
                         $file->application_file_id = $at->id;
                         $file->mandatory = $at->mandatory;
