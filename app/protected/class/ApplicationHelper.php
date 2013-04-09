@@ -438,6 +438,14 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  ))
              );
+        if ($app->isRejected()) {
+            $elements['comment'] = array('display', array(
+                 'label' => $this->t('comment'),
+                 'content' => $app->comment,
+                 'element-wrapper' => 'div'
+                 ));
+        }
+
         if ($this->controller->isAdmin()) {
             $apps = $school_app->CourseApplication;
             $i = 1;
@@ -461,6 +469,7 @@ class ApplicationHelper extends Helper {
                 $i++;
             }
         }
+
         $elements['submit'] = array('submit', array(
                      'label' => $this->t('next'),
                      'attributes' => array('class' => 'buttons'),
