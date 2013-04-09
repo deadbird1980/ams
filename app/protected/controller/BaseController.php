@@ -128,26 +128,32 @@ class BaseController extends DooController {
         return 10;
     }
 
-    public function notifyAdmin($subject, $body) {
+    public function notifyAdmin($subject, $template) {
         Doo::loadModel('User');
         $u = new User();
         $admins = $u->getByType('admin');
-        Doo::loadHelper('DooMailer');
+        $body = $this->renderEmail($template, $this->data);
         foreach($admins as $admin) {
-            $mail = new DooMailer();
-            $mail->addTo($admin->email, $admin->first_name);
-            $mail->setSubject($subject);
-            $mail->setBodyText($body);
-            $mail->setBodyHtml($body);
-            $mail->setFrom(Doo::conf()->support_email, 'no reply');
-            if ($mail->send()) {
-
-            }
+            $this->sendMail($admin, $subject, $body);
         }
         return true;
     }
 
-    public function notifyUser($user, $subject, $body) {
+    public function notifyUser($user, $subject, $template) {
+        $body = $this->renderEmail($template, $this->data);
+        $this->sendMail($user, $subject, $body);
+    }
+
+    public function notifyRole($role, $subject, $template) {
+        Doo::loadHelper('DooMailer');
+        $u = Doo::loadModel('User', true);
+        $users = $u->getByGroup($role);
+        foreach($users as $user) {
+            $this->notifyUser($user, $subject, $template);
+        }
+    }
+
+    public function sendMail($user, $subject, $body) {
         Doo::loadHelper('DooMailer');
         $mail = new DooMailer();
         $mail->addTo($user->email, $user->first_name);
@@ -156,23 +162,6 @@ class BaseController extends DooController {
         $mail->setBodyHtml($body);
         $mail->setFrom(Doo::conf()->support_email, 'no reply');
         if ($mail->send()) {
-        }
-        return true;
-    }
-
-    public function notifyRole($role, $subject, $body) {
-        Doo::loadHelper('DooMailer');
-        $u = Doo::loadModel('User', true);
-        $users = $u->getByGroup($role);
-        foreach($users as $user) {
-            $mail = new DooMailer();
-            $mail->addTo($user->email, $user->first_name);
-            $mail->setSubject($subject);
-            $mail->setBodyText($body);
-            $mail->setBodyHtml($body);
-            $mail->setFrom(Doo::conf()->support_email, 'no reply');
-            if ($mail->send()) {
-            }
         }
         return true;
     }
@@ -187,6 +176,14 @@ class BaseController extends DooController {
         } else {
             return 'my';
         }
+    }
+
+    public function renderEmail($templatefile, $data) {
+        ob_start();
+        $this->view()->render("/email/$templatefile", $data);
+        $data = ob_get_contents();
+        ob_end_clean();
+        return $data;
     }
 }
 ?>

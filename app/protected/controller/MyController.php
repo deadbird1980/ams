@@ -88,13 +88,13 @@ class MyController extends BaseController {
 
         $app = new Application();
         // confirm all the files uploaded
-        $app = $app->getById_first($this->params['id']);
+        $this->data['application'] = $app = $app->getById_first($this->params['id']);
         if ($app->isFilesReady()) {
             $app->submit();
 
-            $this->notifyAdmin("Application {$app->id} submitted", "Application {$app->id} is submitted");
-            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "Application {$app->id} is submitted");
-            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->notifyAdmin("Application {$app->id} submitted", "submitted");
+            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "submitted");
+            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "submitted");
             $this->data['message'] = $this->t('application_submitted');
             $this->renderAction('/my/application/submitted');
         } else {

@@ -244,12 +244,12 @@ class ApplicationController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             if ($_POST['action'] == '1') {
                 $app->confirm($this->auth->user);
-                $this->notifyAdmin("Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
-                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
+                $this->notifyAdmin("Applicatioin {$app->id} is confirmed",'confirmed');
+                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed",'confirmed');
             } elseif ($_POST['action'] == '2') {
                 $app->reject($this->auth->user, $_POST['comment']);
-                $this->notifyAdmin("Applicatioin {$app->id} is rejected","Applicatioin {$app->id} is rejected with following comment:\n{$app->comment}");
-                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is rejected","Applicatioin {$app->id} is rejected with following comment:\n{$app->comment}");
+                $this->notifyAdmin("Applicatioin {$app->id} is rejected","rejected");
+                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is rejected","rejected");
             }
             return Doo::conf()->APP_URL . "index.php/my/applications";
         }
@@ -266,9 +266,9 @@ class ApplicationController extends BaseController {
         if ($app->isFilesReady()) {
             $app->submit();
 
-            $this->notifyAdmin("Application {$app->id} submitted", "Application {$app->id} is submitted");
-            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "Application {$app->id} is submitted");
-            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "Application {$app->id} is submitted");
+            $this->notifyAdmin("Application {$app->id} submitted", "submitted");
+            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "submitted");
+            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "submitted");
             $this->data['message'] = $this->t('application_submitted');
             $this->renderAction('/my/application/submitted');
         } else {
