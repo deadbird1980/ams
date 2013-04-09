@@ -45,7 +45,6 @@ class CourseApplication extends DooSmartModel{
     }
 
     public function isConfirmed() {
-        if ($this->status) return false;
         return $this->application()->isConfirmed();
     }
 
@@ -89,9 +88,7 @@ class CourseApplication extends DooSmartModel{
     }
 
     public function todo() {
-        if ($this->application()->isSubmitted() || $this->isSubmitted()) {
-            return 'confirm';
-        } elseif ($this->isDone()) {
+        if ($this->isDone()) {
             return '';
         } elseif ($this->isSent()) {
             return 'reply';
@@ -107,7 +104,7 @@ class CourseApplication extends DooSmartModel{
             return 'resend';
         } elseif ($this->isResent()) {
             return 'finish';
-        } elseif ($this->application()->isConfirmed() || $this->isConfirmed()) {
+        } elseif ($this->isConfirmed()) {
             return 'send';
         }
         return '';
