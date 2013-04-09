@@ -11,6 +11,7 @@
                     <th><a href="{{baseurl}}{{range}}/applications/sort/end_date/{{orderType}}/page/1">{{t('end_date')}}</a> </th>
                     <th><a href="{{baseurl}}{{range}}/applications/sort/application.status/{{orderType}}/page/1">{{t('status')}}</a> </th>
                     <th>{{t('school')}}</th>
+                    <th>{{t('action')}}</th>
                 </tr>
                 <!-- loop applications -->
                 <tr>
@@ -21,6 +22,7 @@
                 <td>{{applications' value.@end_date}}</td>
                 <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/status">{{t(applications' value.@status)}}</a></td>
                 <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/courses">{{count(applications' value.@CourseApplication)}}</a></td>
+                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/{{applications' value.@todo!}}">{{t(applications' value.@todo!)}}</a></td>
                 </tr>
                 <!-- endloop -->
 
