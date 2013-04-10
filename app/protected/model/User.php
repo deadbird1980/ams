@@ -39,7 +39,7 @@ class User extends DooSmartModel{
         if ($this->isAdmin()) {
             return array('where'=>'1=1');
         } elseif ($this->isCounselor() || $this->isExecutor()) {
-            return array('where'=>'activated_by='.$this->id);
+            return array('where'=>'status<>\'inactive\' and activated_by='.$this->id);
         } elseif ($this->isCustomer()) {
             return array('where'=>'id='.$this->id);
         }
@@ -124,13 +124,18 @@ class User extends DooSmartModel{
         return $app->count(array('where'=>"user_id={$this->id}"));
     }
 
-    public function delete($opt=NULL){
-        if ($apps = $this->relateApplication()) {
-            foreach($apps as $app) {
-                $app->delete();
-            }
+    public function destroy(){
+        $this->status = User::INACTIVE;
+        $apps = $this->applications();
+        foreach($apps as $app) {
+            $app->archive();
         }
-        parent::delete($opt);
+        $this->update();
+    }
+
+    public function applications() {
+        $app = Doo::loadModel('Application', true);
+        return $app->find(array('where'=>"user_id={$this->id}"));
     }
 
     public function setPassword($password) {

@@ -37,6 +37,7 @@ class Application extends DooSmartModel {
     const SENT = 'sent';
     const REPLIED = 'replied';
     const DONE = 'done';
+    const ARCHIVE = 'archive';
 
     public function __construct($properties=null){
         parent::$className = __CLASS__;     //a must if you are using static querying methods Application::_count(), Application::getById()
@@ -48,9 +49,9 @@ class Application extends DooSmartModel {
         if ($user->isAdmin()) {
             return array('where'=>'1=1');
         } elseif ($user->isCounselor()) {
-            return array('where'=>'assignee_id='.$user->id);
+            return array('where'=>"status<>'archive' and assignee_id={$user->id}");
         } elseif ($user->isExecutor()) {
-            return array('where'=>"(application.status='SUBMITTED' or application.executor_id={$user->id})");
+            return array('where'=>"(status<>'archive' and (application.status='SUBMITTED' or application.executor_id={$user->id}))");
         } elseif ($user->isCustomer()) {
             return array('where'=>'user_id='.$user->id);
         }
@@ -230,6 +231,11 @@ class Application extends DooSmartModel {
         $this->rejected = new DooDbExpression('NOW()');
         $this->executor_id = $user->id;
         $this->comment = $comment;
+        $this->update();
+    }
+
+    public function archive() {
+        $this->status = Application::ARCHIVE;
         $this->update();
     }
 

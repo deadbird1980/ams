@@ -29,7 +29,7 @@ class UserController extends BaseController {
             if ($_POST['operation'] == 'delete') {
                 foreach($_POST['users'] as $id) {
                     $u = $user->getById_first($id);
-                    $u->delete();
+                    $u->destroy();
                 }
                 $this->data['message'] = $this->t('item_deleted');
             } else if ($_POST['operation'] == 'export') {
