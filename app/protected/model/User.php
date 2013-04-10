@@ -35,6 +35,17 @@ class User extends DooSmartModel{
         parent::__construct($properties);
     }
 
+    public static function register($data) {
+        $u = new User($data);
+        $u->setPassword($data['password']);
+        $u->type = 'customer';
+        $u->status = 'registered';
+        // calculate confirm key
+        $u->confirm_code = md5($u->email . '@' . Doo::conf()->SITE_ID.'@' . time());
+        $u->insert();
+        return $u;
+    }
+
     public function scopeSeenByMe() {
         if ($this->isAdmin()) {
             return array('where'=>'1=1');
@@ -152,5 +163,6 @@ class User extends DooSmartModel{
         }
         return false;
     }
+
 }
 ?>

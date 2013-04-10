@@ -81,19 +81,11 @@ class AccountController extends BaseController{
         $form = $this->helper->getRegisterForm();
         if ($form->isValid($_POST)) {
             Doo::loadModel('User');
-            $user = new User($_POST);
-            $user->setPassword($_POST['password']);
-            $user->type = 'customer';
-            $user->status = 'registered';
-            // calculate confirm key
-            $user->confirm_code = md5($user->email . '@' . Doo::conf()->SITE_ID.'@' . time());
-            $user->insert();
+            $user = User::register($_POST);
             $this->data['message'] = $this->t('registered'). $user->confirm_code;
             // send mail to the register
             $this->data['registered_user'] = $user;
             $this->notifyUser($user, $this->t('registered'), 'registered');
-            $msg = "New user registered with email {$user->email} and confirm code {$user->confirm_code}";
-            $this->notifyAdmin($this->t('registered'), 'registered');
             $this->renderAction('registered');
         } else {
             $this->data['message'] = 'User with details below not found';
