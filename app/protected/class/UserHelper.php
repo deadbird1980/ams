@@ -128,14 +128,14 @@ class UserHelper extends Helper {
                      'validators' => array(array('custom', array($this->controller,'isValidToken'))),
                  )),
                  'confirm_code' => array('text', array(
-                     'validators' => array(array('dbExist', 'user', 'confirm_code', 'The confirm code does not exist!')),
-                     'label' => 'Confirm Code:',
+                     'validators' => array(array('dbExist', 'user', 'confirm_code', $this->t('confirm_code_error'))),
+                     'label' => $this->t('confirm_code'),
                      'required' => true,
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
-                     'label' => "激活",
+                     'label' => $this->t('activate'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'

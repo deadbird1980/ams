@@ -91,10 +91,10 @@ class User extends DooSmartModel{
         return false;
     }
 
-    public function activate($user_id) {
+    public function activate($user) {
         if ($this->isRegistered()) {
             $this->status = User::ACTIVE;
-            $this->activated_by = $user_id;
+            $this->activated_by = $user->id;
             $this->update();
             return true;
         }
