@@ -91,6 +91,7 @@ class UserController extends BaseController {
             $u->last_name = $_POST['last_name'];
             $u->first_name_alphabet = $_POST['first_name_alphabet'];
             $u->last_name_alphabet = $_POST['last_name_alphabet'];
+            $u->phone = $_POST['phone'];
             $u->email = $_POST['email'];
             $u->password = $_POST['password'];
             $u->qq = $_POST['qq'];
@@ -134,7 +135,7 @@ class UserController extends BaseController {
             $form = $this->helper->getUserForm($u);
         }
         $this->data['form'] = $form->render();
-		$this->renderAction('/my/user/edit');
+		$this->renderAction('/'.$this->getRange().'/user/edit');
 	}
 
     public function activate() {

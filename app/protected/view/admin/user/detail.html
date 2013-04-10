@@ -15,16 +15,25 @@
                   setTimeout("init()",100);
                   return
               }
-              var required_error = "This field must be filled in!";
-              var pinyin_error = "Pinyin must be filled in!";
+              var required_error = "{{t('required_error')}}";
+              var pinyin_error = "{{t('pinyin_error')}}";
               $("#form").Zebra_Form({scroll_to_error:true,
                       tips_position:'left',
                       close_tips:true,
-                      validate_on_the_fly:false,
+                      validate_on_the_fly:true,
                       validate_all:false,
-                      error_messages:{"email-element":{"required":required_error,"email":"Email address seems to be invalid!"},"first_name-element":{"required":required_error},"last_name-element":{"required":required_error},"first_name_alphabet-element":{"required":required_error,"alphabet":pinyin_error},"last_name_alphabet-element":{"required":required_error,"alphabet":pinyin_error},"password-element":{"required":required_error},"phone-element":{"number":"invalid phone number!"},"qq-element":{"number":"invalid QQ number!"},"type-element":{"required":required_error}
+                      error_messages:{
+                      "first_name-element":{"required":required_error},
+                      "last_name-element":{"required":required_error},
+                      "first_name_alphabet-element":{"required":required_error,"alphabet":pinyin_error},
+                      "last_name_alphabet-element":{"required":required_error,"alphabet":pinyin_error},
+                      "password-element":{"required":"{{t('input_password')}}","length":"{{t('password_length')}}"},
+                      "email-element":{"required":required_error,"email":"Email address seems to be invalid!"},
+                      "phone-element":{"required":required_error,"number":"invalid phone number!"},
+                      "qq-element":{"number":"invalid QQ number!"},
+                      "type-element":{"required":required_error}
                       }})}
-          init()
+              init()
       </script>
 </div>
 </div>

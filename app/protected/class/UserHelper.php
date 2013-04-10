@@ -47,7 +47,7 @@ class UserHelper extends Helper {
                      'validators' => array('password'),
                      'label' => $this->t('password'),
                      'value' => $u->password,
-                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                 'attributes' => array('class' => 'control password validate[required,length(8,)]'),
                  'element-wrapper' => 'div'
                  )),
                  'email' => array('text', array(
