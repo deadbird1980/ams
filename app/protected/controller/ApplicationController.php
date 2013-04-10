@@ -244,12 +244,10 @@ class ApplicationController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             if ($_POST['action'] == '1') {
                 $app->confirm($this->auth->user);
-                $this->notifyAdmin("Applicatioin {$app->id} is confirmed",'confirmed');
                 $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed",'confirmed');
             } elseif ($_POST['action'] == '2') {
                 $app->reject($this->auth->user, $_POST['comment']);
-                $this->notifyAdmin("Applicatioin {$app->id} is rejected","rejected");
-                $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is rejected","rejected");
+                $this->notifyUser($app->assignee(), "申请{$app->id}被退回","rejected");
             }
             return Doo::conf()->APP_URL . "index.php/my/applications";
         }
@@ -259,14 +257,13 @@ class ApplicationController extends BaseController {
 
     public function submit() {
         Doo::loadModel('User');
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
 
-        $app = new Application();
-        // confirm all the files uploaded
-        $app = $app->getById_first($this->params['id']);
         if ($app->isFilesReady()) {
             $app->submit();
 
-            $this->notifyAdmin("Application {$app->id} submitted", "submitted");
             $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "submitted");
             $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "submitted");
             $this->data['message'] = $this->t('application_submitted');
@@ -275,6 +272,16 @@ class ApplicationController extends BaseController {
             $this->leaveMessage($this->t('error_application_missing_files'));
             return Doo::conf()->APP_URL . "index.php/my/applications/{$app->id}/confirm";
         }
+    }
+
+    public function email() {
+        $app = new Application();
+        $this->data['application'] = $app;
+        $this->data['user'] = $this->auth->user;
+        if (isset($this->params['id'])) {
+            $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        }
+        print $this->renderEmail($this->params['template'], $this->data);
     }
 
     private function setApplication() {

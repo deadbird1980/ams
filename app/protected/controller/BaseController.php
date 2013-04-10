@@ -140,6 +140,7 @@ class BaseController extends DooController {
     }
 
     public function notifyUser($user, $subject, $template) {
+        $this->data['user'] = $user;
         $body = $this->renderEmail($template, $this->data);
         $this->sendMail($user, $subject, $body);
     }

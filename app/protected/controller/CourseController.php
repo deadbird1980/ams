@@ -120,29 +120,26 @@ class CourseController extends BaseController {
     }
 
     public function send() {
-        $app = Doo::loadModel('CourseApplication', true);
-        $app = $app->relateApplication_first(array('where'=>'course_application.id='.$this->params['id']));
-        if (!$app->Application->canBeSeen($this->auth->user)) {
-            return array('can not be seen', 404);
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
         }
         $app->send();
+        $this->notifyUser($app->application()->assignee(), 'sent');
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
 
     public function resend() {
-        $app = Doo::loadModel('CourseApplication', true);
-        $app = $app->relateApplication_first(array('where'=>'course_application.id='.$this->params['id']));
-        if (!$app->Application->canBeSeen($this->auth->user)) {
-            return array('can not be seen', 404);
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
         }
         $app->resend();
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
 
     public function reply() {
-        $app = Doo::loadModel('CourseApplication', true);
-        $app = $this->data['application'] = $app->getById_first($this->params['id']);
-
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
         $form = $this->helper->getCourseReplyForm($app);
 
         if ($this->isPost() && $form->isValid($_POST)) {
@@ -156,11 +153,8 @@ class CourseController extends BaseController {
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
             $handler->post(true);
-            $a = new Application();
-            $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users
-            $this->notifyAdmin("Course application {$app->id} is replied", "Course application replied with {$_POST['result']}");
-            $this->notifyUser($a->Assignee, "Course application {$app->id} is replied", "Course application replied with {$_POST['result']}");
+            $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已回复", 'replied');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
@@ -224,6 +218,16 @@ class CourseController extends BaseController {
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/course/reply');
+    }
+
+    private function setApplication() {
+        Doo::loadModel('CourseApplication');
+        $app = new CourseApplication();
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        if ($app && !$app->canBeSeen($this->auth->user)) {
+            $app = null;
+        }
+        return $app;
     }
 }
 ?>

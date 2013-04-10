@@ -84,17 +84,16 @@ class MyController extends BaseController {
 
     public function submitApplication() {
         Doo::loadModel('User');
-        Doo::loadModel('Application');
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
 
-        $app = new Application();
         // confirm all the files uploaded
-        $this->data['application'] = $app = $app->getById_first($this->params['id']);
         if ($app->isFilesReady()) {
             $app->submit();
 
-            $this->notifyAdmin("Application {$app->id} submitted", "submitted");
-            $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "submitted");
-            $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "submitted");
+            $this->notifyRole(User::EXECUTOR, "申请{$app->id} 已经提交", "submitted");
+            $this->notifyUser($app->assignee(), "申请 {$app->id} 已经提交", "submitted");
             $this->data['message'] = $this->t('application_submitted');
             $this->renderAction('/my/application/submitted');
         } else {
@@ -204,7 +203,7 @@ class MyController extends BaseController {
         $form = $this->helper->getConfirmApplicationForm($app);
         if ($this->isPost()) {
             $app->confirm($this->auth->user);
-            $this->notifyAdmin("Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
+            $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed","Applicatioin {$app->id} is confirmed");
             return Doo::conf()->APP_URL . "index.php/my/applications";
         }
         $this->data['form'] = $form->render();

@@ -168,5 +168,9 @@ class CourseApplication extends DooSmartModel{
         }
         return $this->application;
     }
+
+    public function canBeSeen($user) {
+        return $this->application()->canBeSeen($user);
+    }
 }
 ?>

@@ -148,7 +148,6 @@ class UserController extends BaseController {
                 $this->data['message'] = $this->t('already_activated');
             } else {
                 $u->activate($this->auth->user);
-                $this->data['user'] = $this->auth->user;
                 $this->data['activated_user'] = $u;
                 $this->notifyUser($this->auth->user, $this->t('account_activated'), 'activated');
                 $this->data['message'] = $this->t('user_activated');
