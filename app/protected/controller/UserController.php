@@ -56,7 +56,7 @@ class UserController extends BaseController {
 
             $this->data['pager'] = $pager->output;
 
-            $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status';
+            $columns = 'id,email,first_name,last_name,first_name_alphabet,last_name_alphabet,phone,qq,status,confirm_code';
             //Order by ASC or DESC
             if($this->orderType=='desc'){
                 $this->data['users'] = $u->limit($pager->limit, null, $this->sortField,
