@@ -65,7 +65,8 @@ class AccountController extends BaseController{
                 $user = $user->getByEmail_first($_POST['email']);
                 $url = Doo::conf()->APP_URL.'reset_password?confirm_code='.$user->confirm_code;
                 $msg = "请点击<a href=$url>这里</a>重置密码！";
-                if ($this->notifyUser($user, $this->t('forgotten_password'), $msg)) {
+                $this->data['forgotten_password_user'] = $user;
+                if ($this->notifyUser($user, $this->t('forgotten_password'), 'forgotten_password')) {
                     $this->data['message'] = $this->t('forgotten_password_email_sent');
                 } else {
                     $this->data['message'] = $this->t('fail_to_send_email');
@@ -89,7 +90,8 @@ class AccountController extends BaseController{
             $user->insert();
             $this->data['message'] = $this->t('registered'). $user->confirm_code;
             // send mail to the register
-            $this->notifyUser($user, $this->t('registered'), $this->data['message']);
+            $this->data['registered_user'] = $user;
+            $this->notifyUser($user, $this->t('registered'), 'registered');
             $msg = "New user registered with email {$user->email} and confirm code {$user->confirm_code}";
             $this->notifyAdmin($this->t('registered'), 'registered');
             $this->renderAction('registered');
