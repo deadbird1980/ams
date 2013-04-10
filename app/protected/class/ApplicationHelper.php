@@ -118,22 +118,24 @@ class ApplicationHelper extends Helper {
              'element-wrapper' => 'div'
              ));
 
-        if (!$app->AfterSubmitted()) {
-            $elements['submit'] = array('submit', array(
-                     'label' => $this->t('submit'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ));
-        } else {
-            if ($app->isSubmitted()) {
-                $elements = array_merge($elements, $this->getApproveElements());
+        if (!$app->readonly) {
+            if (!$app->AfterSubmitted()) {
                 $elements['submit'] = array('submit', array(
-                         'label' => $this->t('confirm'),
+                         'label' => $this->t('submit'),
                          'attributes' => array('class' => 'buttons'),
                          'order' => 100,
                      'field-wrapper' => 'div'
                      ));
+            } else {
+                if ($app->isSubmitted()) {
+                    $elements = array_merge($elements, $this->getApproveElements());
+                    $elements['submit'] = array('submit', array(
+                             'label' => $this->t('confirm'),
+                             'attributes' => array('class' => 'buttons'),
+                             'order' => 100,
+                         'field-wrapper' => 'div'
+                         ));
+                }
             }
         }
         $form = new DooForm(array(
@@ -204,21 +206,23 @@ class ApplicationHelper extends Helper {
              'content' => '',
              'element-wrapper' => 'div'
              ));
-        if ($app->beforeSubmitted()) {
-            $elements['submit'] = array('submit', array(
-                     'label' => $this->t('submit'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ));
-        } elseif ($app->isSubmitted()) {
-            $elements = array_merge($elements, $this->getApproveElements());
-            $elements['submit'] = array('submit', array(
-                     'label' => $this->t('submit'),
-                     'attributes' => array('class' => 'buttons'),
-                     'order' => 100,
-                 'field-wrapper' => 'div'
-                 ));
+        if (!$app->readonly) {
+            if ($app->beforeSubmitted()) {
+                $elements['submit'] = array('submit', array(
+                         'label' => $this->t('submit'),
+                         'attributes' => array('class' => 'buttons'),
+                         'order' => 100,
+                     'field-wrapper' => 'div'
+                     ));
+            } elseif ($app->isSubmitted()) {
+                $elements = array_merge($elements, $this->getApproveElements());
+                $elements['submit'] = array('submit', array(
+                         'label' => $this->t('submit'),
+                         'attributes' => array('class' => 'buttons'),
+                         'order' => 100,
+                     'field-wrapper' => 'div'
+                     ));
+            }
         }
 
         $form = new DooForm(array(

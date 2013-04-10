@@ -24,6 +24,7 @@ class Application extends DooSmartModel {
     public $updated;
 
     public $detail;
+    public $readonly = false;
     public $_table = 'application';
     public $_primarykey = 'id';
     public $_fields = array('id','user_id','type','status','assignee_id','executor_id','start_date','end_date','paid','submitted','confirmed','rejected','comment','created','updated');
@@ -79,7 +80,7 @@ class Application extends DooSmartModel {
         } elseif ($user->isExecutor()) {
             return false;
         } elseif ($user->isCustomer()) {
-            return $this->user_id= $user->id && $this->beforeSubmitted();
+            return $this->user_id= $user->id && $this->beforeSubmitted() && !$this->isRejected();
         }
         return false;
     }
