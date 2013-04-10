@@ -50,7 +50,7 @@ class User extends DooSmartModel{
         if ($this->isAdmin()) {
             return array('where'=>'1=1');
         } elseif ($this->isCounselor() || $this->isExecutor()) {
-            return array('where'=>'status<>\'inactive\' and activated_by='.$this->id);
+            return array('where'=>'user.status<>\'inactive\' and activated_by='.$this->id);
         } elseif ($this->isCustomer()) {
             return array('where'=>'id='.$this->id);
         }

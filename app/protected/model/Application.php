@@ -49,7 +49,7 @@ class Application extends DooSmartModel {
         if ($user->isAdmin()) {
             return array('where'=>'1=1');
         } elseif ($user->isCounselor()) {
-            return array('where'=>"status<>'archive' and assignee_id={$user->id}");
+            return array('where'=>"application.status<>'archive' and assignee_id={$user->id}");
         } elseif ($user->isExecutor()) {
             return array('where'=>"(application.status<>'archive' and (application.status='submitted' or application.executor_id={$user->id}))");
         } elseif ($user->isCustomer()) {
