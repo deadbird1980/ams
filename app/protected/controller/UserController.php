@@ -71,7 +71,7 @@ class UserController extends BaseController {
                 $this->data['orderType'] = 'desc';
             }
         }
-        $form = $this->helper->getActivateUserForm();
+        $form = $this->helper->getSearchUserForm();
         $this->data['form'] = $form->render();
         if ($this->auth->user->isAdmin()) {
             $this->renderAction('/admin/user/index');
@@ -155,6 +155,16 @@ class UserController extends BaseController {
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/user/activate');
+    }
+
+    public function search() {
+        $form = $this->helper->getSearchUserForm();
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $u = new User($POST);
+            $this->data['users'] = $this->db()->find($u);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/user/search');
     }
 
     private function setUser() {

@@ -4,9 +4,9 @@ class UserHelper extends Helper {
     public function getUserForm($u) {
         Doo::loadHelper('DooForm');
         if ($u->id) {
-            $action = Doo::conf()->APP_URL . 'index.php/'.$this->controller->getRange().'/users/'.$u->id;
+            $action = Doo::conf()->APP_URL . $this->controller->getRange().'/users/'.$u->id;
         } else {
-            $action = Doo::conf()->APP_URL . 'index.php/'.$this->controller->getRange().'/users/save';
+            $action = Doo::conf()->APP_URL . $this->controller->getRange().'/users/save';
         }
         $elements = array(
                  'token' => array('hidden', array(
@@ -141,6 +141,57 @@ class UserHelper extends Helper {
                  'field-wrapper' => 'div'
                  ))
              )
+        ));
+        return $form;
+    }
+
+    public function getSearchUserForm() {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = Doo::conf()->APP_URL . $this->controller->getRange().'/users';
+        $elements = array(
+                 'command' => array('hidden', array(
+                     'value' => 'search',
+                 )),
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'name' => array('text', array(
+                     'validators' => array(array('dbExist', 'user', 'confirm_code', $this->t('confirm_code_error'))),
+                     'label' => $this->t('name'),
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'status' => array('select', array(
+                     'required' => true,
+                     'multioptions' => array('registered'=>'注册', 'active'=>'激活', 'obsolete'=>'过期'),
+                     'label' => $this->t('status'),
+                     'value' => '',
+                     'attributes' => array('class' => 'control type validate[required]'),
+                     'element-wrapper' => 'div'
+                 )),
+             );
+        $elements['type'] = array('select', array(
+                     'required' => true,
+                     'multioptions' => array('' => '' , 'customer'=>'客户', 'counselor'=>'咨询员', 'executor'=>'执行员', 'admin'=>'管理员'),
+                     'label' => 'Type:',
+                     'value' => '',
+                     'attributes' => array('class' => 'control type validate[required]'),
+                     'element-wrapper' => 'div'
+                 ));
+        $elements['submit'] = array('submit', array(
+                     'label' => $this->t('search'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
         ));
         return $form;
     }
