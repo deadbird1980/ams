@@ -1,14 +1,25 @@
-    <div class="listmenu">
+    <div id="nav" class="listmenu">
         <h2>{{t('my')}}</h2>
-        <ul>
-            <li>
-                <a href="{{indexUrl}}/my/profile">{{t('profile')}}</a>
+        <ul class="top-level">
+            <li><a href="{{indexUrl}}/my/profile">{{t('profile')}}</a></li>
             <!-- if {{role}}!='customer' -->
+            <li>
                 <a href="{{indexUrl}}/my/users">{{t('user')}}</a>
-            <!-- endif -->
-                <a href="{{indexUrl}}/my/applications/">{{t('application')}}</a>
-                <a href="{{indexUrl}}/my/emails/">{{t('email')}}</a>
-                <a href="{{indexUrl}}/logout/">{{t('logout')}}</a>
+                <ul class="sub-level">
+                    <li> <a href="{{indexUrl}}/my/users/activate">{{t('create')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/my/users/activate">{{t('activate')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/my/users/search">{{t('search')}}</a> </li>
+                </ul>
             </li>
+            <!-- endif -->
+            <li>
+                <a href="{{indexUrl}}/my/applications/">{{t('application')}}</a>
+                <ul class="sub-level">
+                    <li> <a href="{{indexUrl}}/my/applications/search">{{t('search')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/my/profile">{{t('profile')}}</a> </li>
+                </ul>
+            </li>
+            <li><a href="{{indexUrl}}/my/emails/">{{t('email')}}</a></li>
+            <li><a href="{{indexUrl}}/logout/">{{t('logout')}}</a></li>
         </ul>
     </div>

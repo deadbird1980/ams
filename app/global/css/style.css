@@ -126,26 +126,67 @@ table.results td { padding: 5px; border: 1px solid #DEDEDE }
 table.results th { font-weight: bold }
 table.results thead td { background: #666; color: #FFF; font-weight: bold }
 
+.listmenu {font-size:0.85em; width:100px; margin-right:50px;}
 .listmenu ul {
-margin: 0 0 5px 0;
-padding: 0 0 2px 0;
-list-style-type: none;
-width:185px;}
- 
+  margin: 0 0 5px 0;
+  padding: 0 0 2px 0;
+  list-style-type: none;
+  width:100px;
+}
+.listmenu li {list-style: none;}
+
+.listmenu ul.sub-level {border:1px solid yellow;}
+ul.top-level {background:#FFFFFF;}
+ul.top-level li {
+  border-width: 1px;
+}
+
+ul.sub-level {
+  display: none;
+}
+.listmenu li {
+  position: relative;
+}
+.listmenu a:hover{
+ text-decoration:underline;
+}
+
+li:hover .sub-level {
+  background: #fff;
+  border: #fff solid;
+  border-width: 1px;
+  display: block;
+  position: absolute;
+  left: 45px;
+  top: 5px;
+  color:#fff;
+}
+ul.sub-level li {
+    border: none;
+    float:left;
+    width:100px;
+}
+.listmenu .sub-level {
+    background: #FFFFFF;
+}
+
 .listmenu li a {
-color: #333;
-display: block;
-border-left:3px solid #666;
-border-right:3px solid #666;
-height: 16px;
-padding: 4px 0 4px 14px;
-text-decoration: none;
-font-weight:bold;
-background-color:#fff;}
- 
+    color: #333;
+    display: block;
+    border-left:3px solid #666;
+    border-right:3px solid #666;
+    height: 16px;
+    padding: 4px 0 4px 14px;
+    text-decoration: none;
+    font-weight:bold;
+    /*background-color:#fff;*/
+}
+
 .listmenu li a:hover {
-background-color: #666;
-color:#fff;}
+    background-color: #666;
+    color:#fff;
+}
+
 .menu ul{
     margin: 0; padding: 0;
     float: left;}
@@ -258,6 +299,9 @@ label[for=action-2] {
 	width:530px;
 	padding-top:30px;
 	float:left;
+}
+#search {
+	width:530px;
 }
 #rightSide {
 	background-color:#fff;
