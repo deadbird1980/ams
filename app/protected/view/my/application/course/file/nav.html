@@ -1,0 +1,39 @@
+      <link rel="stylesheet" href="{{baseurl}}global/css/jquery-ui.css" id="theme">
+      <link rel="stylesheet" href="{{baseurl}}global/css/jquery.image-gallery.min.css">
+      <link rel="stylesheet" type="text/css" href="{{baseurl}}global/css/jquery.fileupload-ui.css" media="screen" />
+      <link rel="stylesheet" type="text/css" href="{{baseurl}}global/css/fileupload-style.css" media="screen" />
+<div class="content">
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a><br>
+{% } %}
+</script>
+<script src="{{baseurl}}global/js/jquery-ui.min.js"></script>
+<script src="{{baseurl}}global/js/tmpl.min.js"></script>
+<script src="{{baseurl}}global/js/load-image.min.js"></script>
+<script src="{{baseurl}}global/js/jquery.image-gallery.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    //'use strict';
+    var files_url = "{{baseurl}}index.php/files?course_application_id={{application.@id}}";
+    // Load existing files:
+    $.ajax({
+        url: files_url,
+        dataType: 'json',
+    }).done(function (result) {
+        $('#files-element').css({overflow:'hidden', height:'100%'});
+        if (result.files.length > 0) {
+            $('#files-element').append(tmpl("template-download", result));
+        } else {
+            $('#files-element').html("{{t('no_file')}}");
+        }
+    });
+
+    // Initialize the Image Gallery widget:
+    $('#files-element').imagegallery();
+});
+</script>
+    </div>

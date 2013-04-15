@@ -1,0 +1,59 @@
+  <!-- block:content -->
+  <link rel="stylesheet" href="{{baseurl}}global/css/jquery-ui.css" id="theme">
+  <link rel="stylesheet" href="{{baseurl}}global/css/jquery.image-gallery.min.css">
+    <div class="left">
+        <h1>{{t('file')}}</h1>
+<div class="message">
+    {{message}}
+</div>
+<div class="content">
+    <div class="container">
+  <div id="leftSide">
+        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+<script src="{{baseurl}}global/js/jquery-ui.min.js"></script>
+<script src="{{baseurl}}global/js/tmpl.min.js"></script>
+<script src="{{baseurl}}global/js/load-image.min.js"></script>
+<script src="{{baseurl}}global/js/jquery.image-gallery.min.js"></script>
+<script id="template-test" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+            <td class="preview">{% if (file.thumbnail_url) { %}
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+            {% } %}</td>
+            <td class="name">
+                <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" rel="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+            </td>
+            <td class="type">
+                {%=file.type%}
+            </td>
+            <td colspan="2"></td>
+    </tr>
+{% } %}
+</script>
+<script type="text/javascript">
+$(function () {
+    //'use strict';
+    var files_url = "{{baseurl}}index.php/files?course_application_id={{application.@id}}";
+    // Load existing files:
+    $.ajax({
+        url: files_url,
+        dataType: 'json',
+    }).done(function (result) {
+        $('#leftSide .files').append(tmpl("template-test", result));
+    });
+
+    // Initialize the Image Gallery widget:
+    $('#leftSide .files').imagegallery();
+});
+</script>
+</div>
+</div>
+</div>
+    </div>
+    <div class="right">
+        <!-- include '/my/sidebar' -->
+    </div>
+
+    <div style="clear: both;"> </div>
+  <!-- endblock -->

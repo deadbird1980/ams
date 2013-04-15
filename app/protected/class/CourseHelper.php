@@ -355,6 +355,53 @@ class CourseHelper extends Helper {
         return $form;
     }
 
+    public function getCourseConfirmForm($app) {
+        if ($app && $app->id) {
+            $action = DooUrlBuilder::url2('CourseController', 'reconfirm', array('id'=>$app->id), true);
+        }
+        $elements = array(
+                 'token' => array('hidden', array(
+                     'required' => true,
+                     'value' => $this->controller->getAuthenticityToken(),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'school' => array('display', array(
+                     'label' => $this->t('school'),
+                     'content' => $app->school,
+                     'element-wrapper' => 'div',
+                 )),
+                 'subject' => array('display', array(
+                     'label' => $this->t('subject'),
+                     'content' => $app->subject,
+                     'element-wrapper' => 'div',
+                 )),
+                 'course' => array('display', array(
+                     'label' => $this->t('course'),
+                     'content' => $app->course,
+                     'element-wrapper' => 'div',
+                 )),
+             );
+        $files_url = DooUrlBuilder::url2('CourseController', 'files', array('id'=>$app->id), true);
+        $elements['files'] = array('display', array(
+             'label' => "<a target='_blank' href='$files_url'>{$this->t('file')}</a>",
+             'content' => '',
+             'element-wrapper' => 'div'
+             ));
+        $elements['submit'] = array('submit', array(
+                 'label' => $this->t('submit'),
+                 'attributes' => array('class' => 'buttons'),
+                 'order' => 100,
+             'field-wrapper' => 'div'
+             ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements'=>$elements
+        ));
+        return $form;
+    }
+
     public function getEditCourseForm($app) {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);

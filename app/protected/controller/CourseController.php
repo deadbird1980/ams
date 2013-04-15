@@ -188,6 +188,23 @@ class CourseController extends BaseController {
         $this->renderAction('/my/application/course/reply');
     }
 
+    public function reconfirm() {
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
+        $form = $this->helper->getCourseConfirmForm($app);
+
+        if ($this->isPost() && $form->isValid($_POST)) {
+            $app->reconfirm();
+            //notify users
+            $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已确认", 'course_confirmed');
+
+            return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
+        }
+        $this->data['form'] = $form->render();
+        $this->renderAction('/my/application/course/confirm');
+    }
+
     public function finish() {
         $app = Doo::loadModel('CourseApplication', true);
         $app = $this->data['application'] = $app->getById_first($this->params['id']);
@@ -208,13 +225,18 @@ class CourseController extends BaseController {
             $a = new Application();
             $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users
-            $this->notifyAdmin("Course application {$app->id} is completed", "Course application compled with {$_POST['result']}");
-            $this->notifyUser($a->Assignee, "Course application {$app->id} is completed", "Course application completed with {$_POST['result']}");
+            $this->notifyUser($a->Assignee, "申请{$app->id}完成", 'completed');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/course/reply');
+    }
+
+    public function files() {
+        $app = Doo::loadModel('CourseApplication', true);
+        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        $this->renderAction('/my/application/course/file/view');
     }
 
     private function setApplication() {

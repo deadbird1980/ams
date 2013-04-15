@@ -279,7 +279,7 @@ class UploadHandler
                         $file->application_file_id = $at->id;
                         $file->mandatory = $at->mandatory;
                     } else {
-                        $file->$element = $attachment->$element;
+                        $file->$element = $att->$element;
                     }
                 }
             }
@@ -562,7 +562,9 @@ class UploadHandler
         $file->type = $type;
         // filln additional form data
         foreach($this->options['additional_elements'] as $element) {
-            $file->$element = $_POST[$element][$index];
+            if (isset($_POST[$element])) {
+                $file->$element = $_POST[$element][$index];
+            }
         }
         if ($this->options['upload_model']) {
             if ($this->options['upload_model']->fileExist($file)) {

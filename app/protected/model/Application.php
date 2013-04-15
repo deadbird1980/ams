@@ -33,10 +33,11 @@ class Application extends DooSmartModel {
     const CREATED = 'created';
     const IN_PROGRESS = 'in_progress';
     const SUBMITTED = 'submitted';
-    const REJECTED = 'rejected';
     const CONFIRMED = 'confirmed';
     const SENT = 'sent';
     const REPLIED = 'replied';
+    const REJECTED = 'rejected';
+    const RESUBMITTED = 'resubmitted';
     const DONE = 'done';
     const ARCHIVE = 'archive';
 
@@ -87,6 +88,10 @@ class Application extends DooSmartModel {
 
     public function isSubmitted() {
         return $this->status == Application::SUBMITTED;
+    }
+
+    public function isResubmitted() {
+        return $this->status == Application::RESUBMITTED;
     }
 
     public function isConfirmed() {
@@ -194,6 +199,8 @@ class Application extends DooSmartModel {
     public function todo() {
         if ($this->isSubmitted()) {
             return 'confirm';
+        } elseif ($this->isResubmitted()) {
+            return 'confirm';
         }
         return '';
     }
@@ -262,6 +269,21 @@ class Application extends DooSmartModel {
         return true;
     }
 
+    public function resubmit() {
+        if ($this->isResubmitted()) {
+            return;
+        }
+        $this->status = Application::RESUBMITTED;
+        $this->update();
+        return true;
+    }
+
+    public function finish() {
+        $this->status = CourseApplication::DONE;
+        $this->end_date = new DooDbExpression('NOW()');
+        return $this->update();
+    }
+
     public function assignee() {
         $u = Doo::loadModel('User', true);
         return $u->getById_first($this->assignee_id);
@@ -275,5 +297,6 @@ class Application extends DooSmartModel {
     public function needNotify() {
         return $this->find();
     }
+
 }
 ?>

@@ -108,7 +108,7 @@ class MyController extends BaseController {
         }
         if (!$app->canBeModified($this->auth->user)) {
             $app->readonly = true;
-            $form = $this->helper->getViewApplicationForm($app);
+            $form = $this->helper->getConfirmApplicationForm($app);
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/view');
         } else {
