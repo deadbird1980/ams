@@ -267,6 +267,11 @@ class Application extends DooSmartModel {
         return $u->getById_first($this->assignee_id);
     }
 
+    public function executor() {
+        $u = Doo::loadModel('User', true);
+        return $u->getById_first($this->executor_id);
+    }
+
     public function needNotify() {
         return $this->find();
     }

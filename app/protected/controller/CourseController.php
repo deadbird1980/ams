@@ -124,7 +124,7 @@ class CourseController extends BaseController {
             return array('no access', 404);
         }
         $app->send();
-        $this->notifyUser($app->application()->assignee(), 'sent');
+        $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已经发出", 'sent');
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
 
@@ -179,11 +179,8 @@ class CourseController extends BaseController {
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
             $handler->post(true);
-            $a = new Application();
-            $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users
-            $this->notifyAdmin("Course application {$app->id} is chosen", "Course application is chosen");
-            $this->notifyUser($a->Assignee, "Course application {$app->id} is chosen", "Course application is chosen");
+            $this->notifyUser($app->application()->executor(), "课程申请{$app->id}被选中", "chosen");
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
