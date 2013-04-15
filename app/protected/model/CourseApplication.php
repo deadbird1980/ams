@@ -27,6 +27,7 @@ class CourseApplication extends DooSmartModel{
     const SENT = 'sent';
     const REPLIED = 'replied';
     const CHOSEN = 'chosen';
+    const RECONFIRMED = 'reconfirmed';
     const RESENT = 'resent';
     const DONE = 'done';
 
@@ -60,6 +61,10 @@ class CourseApplication extends DooSmartModel{
         return $this->status == CourseApplication::CHOSEN;
     }
 
+    public function isReConfirmed() {
+        return $this->status == CourseApplication::RECONFIRMED;
+    }
+
     public function isResent() {
         return $this->status == CourseApplication::RESENT;
     }
@@ -89,7 +94,7 @@ class CourseApplication extends DooSmartModel{
 
     public function todo() {
         if ($this->isDone()) {
-            return '';
+            return 'files';
         } elseif ($this->isSent()) {
             return 'reply';
         } elseif ($this->isReplied()) {
@@ -101,6 +106,8 @@ class CourseApplication extends DooSmartModel{
                 return 'choose';
             }
         } elseif ($this->isChosen()) {
+            return 'reconfirm';
+        } elseif ($this->isReConfirmed()) {
             return 'resend';
         } elseif ($this->isResent()) {
             return 'finish';
@@ -141,6 +148,12 @@ class CourseApplication extends DooSmartModel{
             $app->status = CourseApplication::DONE;
             $app->update();
         }
+        $this->application()->resubmit();
+        return $this->update();
+    }
+
+    public function reconfirm() {
+        $this->status = CourseApplication::RECONFIRMED;
         return $this->update();
     }
 

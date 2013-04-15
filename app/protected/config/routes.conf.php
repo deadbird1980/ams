@@ -55,6 +55,7 @@ $route['*']['/admin/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:id'] = array('UserController', 'edit');
 $route['*']['/users/:code/active'] = array('UserController', 'active');
 $route['*']['/admin/users/create'] = array('UserController', 'create');
+$route['*']['/admin/users/search'] = array('UserController', 'search');
 $route['post']['/admin/users/save'] = array('UserController', 'save');
 
 // Emails
@@ -74,11 +75,11 @@ $route['*']['/my/applications/sort/:sortField/:orderType/page/:pindex'] = array(
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');
-$route['*']['/my/applications/:id/files/upload'] = array('MyController', 'uploadFile');
 $route['*']['/my/applications/:id/confirm'] = array('ApplicationController', 'confirm');
 $route['*']['/my/applications/:id/status'] = array('ApplicationController', 'status');
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
 $route['*']['/my/applications/:id/courses'] = array('CourseController', 'index');
+$route['*']['/my/applications/:id/email/:template'] = array('ApplicationController', 'email');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 
 // Courses
@@ -86,12 +87,14 @@ $route['*']['/my/courses/:id'] = array('CourseController', 'edit');
 $route['*']['/my/courses/:id/send'] = array('CourseController', 'send');
 $route['*']['/my/courses/:id/reply'] = array('CourseController', 'reply');
 $route['*']['/my/courses/:id/choose'] = array('CourseController', 'choose');
+$route['*']['/my/courses/:id/reconfirm'] = array('CourseController', 'reconfirm');
 $route['*']['/my/courses/:id/resend'] = array('CourseController', 'resend');
 $route['*']['/my/courses/:id/finish'] = array('CourseController', 'finish');
 $route['*']['/my/courses/:id/status'] = array('CourseController', 'status');
+$route['*']['/my/courses/:id/files'] = array('CourseController', 'files');
 
 // admin/counselor/executor
-$route['get']['/my/users'] = array('UserController', 'index');
+$route['*']['/my/users'] = array('UserController', 'index');
 $route['get']['/my/users/sort/:sortField/:orderType/page/:pindex'] = array('UserController', 'index');
 $route['*']['/my/users/:id'] = array('UserController', 'edit');
 $route['*']['/my/users/:user_id/applications'] = array('ApplicationController', 'index');
@@ -100,6 +103,7 @@ $route['*']['/my/users/:user_id/applications/sort/:sortField/:orderType/page/:pi
 $route['*']['/my/users/:user_id/applications/create'] = array('ApplicationController', 'create');
 $route['*']['/my/users/:user_id/applications/:id'] = array('ApplicationController', 'edit');
 $route['*']['/my/users/activate'] = array('UserController', 'activate');
+$route['*']['/my/users/search'] = array('UserController', 'search');
 $route['*']['/my/applications/:id/type'] = array('ApplicationController', 'editType');
 $route['*']['/admin/users/:user_id/applications'] = array('ApplicationController', 'index');
 $route['*']['/admin/users/:user_id/applications/create'] = array('ApplicationController', 'create');
