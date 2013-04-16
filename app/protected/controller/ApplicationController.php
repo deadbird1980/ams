@@ -238,6 +238,10 @@ class ApplicationController extends BaseController {
             return array('no access', 404);
         }
 
+        if ($app->isResubmitted()) {
+            return Doo::conf()->APP_URL . "my/courses/{$app->chosen()->id}/reconfirm";
+        }
+
         $this->data['application'] = $app;
 
         $form = $this->helper->getConfirmApplicationForm($app);

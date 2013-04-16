@@ -294,6 +294,11 @@ class Application extends DooSmartModel {
         return $u->getById_first($this->executor_id);
     }
 
+    public function chosen() {
+        $u = Doo::loadModel('CourseApplication', true);
+        return $u->find(array('where'=>"application_id={$this->id} and status='chosen'", 'limit'=>1));
+    }
+
     public function needNotify() {
         return $this->find();
     }
