@@ -21,8 +21,8 @@
                 <td>{{t(applications' value.@school)}}</td>
                 <td>{{t(applications' value.@subject)}}</td>
                 <td>{{t(applications' value.@course)}}</td>
-                <td>{{applications' value.@status}}</td>
-                <!-- if {{applications' value.@status=='replied'}} -->
+                <td>{{t(applications' value.@status)}}</td>
+                <!-- if {{applications' value.@status=='replied'}} || {{applications' value.@status=='done'}} -->
                 <td>{{t(applications' value.@result)}}</td>
                 <td>{{file_link(applications' value.@attachment!)}}</td>
                 <td><a href='{{baseurl}}index.php/my/courses/{{applications' value.@id}}/{{applications' value.@todo!}}'>{{t(applications' value.@todo!)}}</a></td>
