@@ -303,5 +303,15 @@ class Application extends DooSmartModel {
         return $this->find();
     }
 
+    public function updateType($hash) {
+        if ($this->isSchool()) {
+        } else {
+        }
+        if ($this->type != $hash['type']) {
+            $this->type = $hash['type'];
+            $this->update();
+        }
+    }
+
 }
 ?>

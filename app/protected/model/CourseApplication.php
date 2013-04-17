@@ -185,5 +185,9 @@ class CourseApplication extends DooSmartModel{
     public function canBeSeen($user) {
         return $this->application()->canBeSeen($user);
     }
+
+    public function needNotify() {
+        return $this->relateApplication(array('where'=>'submitted+ interval 1 day < now()'));
+    }
 }
 ?>

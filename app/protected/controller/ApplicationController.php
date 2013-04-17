@@ -116,6 +116,8 @@ class ApplicationController extends BaseController {
             if ($id = $app->create($_POST)) {
                 $hash = array('url'=>$id);
                 $this->data['message'] = $this->t('application_created', $hash);
+            } else {
+                $this->data['message'] = 'school must be filled in';
             }
             $this->renderAction('/my/application/created');
         } else {
@@ -126,19 +128,16 @@ class ApplicationController extends BaseController {
     }
 
     public function editType() {
-        $app = Doo::loadModel('Application', true);
-        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
         $form = $this->helper->getApplicationTypeForm($app);
-        $id = $app->id;
         if ($this->isPost()) {
             if ($app->canChangeTo($_POST['type'])) {
-                $app->update_attributes($_POST, array('where'=>"id=${id}"));
-                if ($app->isSchool()) {
-                    $app->getDetail()->update_attributes($_POST, array('where'=>"id=${id}"));
-                }
+                $app->updateType($_POST);
+                $this->leaveMessage($this->t('updated'));
             }
-            $this->leaveMessage($this->t('updated'));
-            return DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$id), true);
+            return DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$app->id), true);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/type');

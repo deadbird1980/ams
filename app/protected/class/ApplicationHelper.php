@@ -494,22 +494,7 @@ class ApplicationHelper extends Helper {
         Doo::loadHelper('DooUrlBuilder');
         $action = DooUrlBuilder::url2('ApplicationController', 'create', array('user_id'=>$this->controller->params['user_id']), true);
         //<optgroup label="----------"></optgroup>
-        $options = array( ''=>'',
-                          '----'.$this->t('visa').'----' => array(
-                         'visa_europe' => $this->t('visa_europe'),
-                         'visa_t1' => $this->t('visa_t1'),
-                         'visa_t2' => $this->t('visa_t2'),
-                         'visa_t4' => $this->t('visa_t4'),
-                         'visa_other' => $this->t('visa_other')),
-                         '----'.$this->t('school').'----' => array('language' => $this->t('language'),
-                         'gcse' => $this->t('gcse'),
-                         'a-level' => $this->t('a-level'),
-                         'pre-bachelor' => $this->t('pre-bachelor'),
-                         'bachelor' => $this->t('bachelor'),
-                         'pre-master' => $this->t('pre-master'),
-                         'master' => $this->t('master'),
-                         'doctor' => $this->t('doctor'))
-                        );
+        $options = $this->getApplicationTypeDropDown();
         $form = new DooForm(array(
              'method' => 'post',
              'action' => $action,
@@ -572,28 +557,9 @@ class ApplicationHelper extends Helper {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');
         $action = DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$app->id), true);
-        $options = array('' => '----------',
-                         'visa_europe' => $this->t('visa_europe'),
-                         '-' => '----'.$this->t('europe_visa').'----',
-                         'visa_t1' => $this->t('visa_t1'),
-                         'visa_t2' => $this->t('visa_t2'),
-                         'visa_t4' => $this->t('visa_t4'),
-                         'visa_other' => $this->t('visa_other'),
-                         '--' => '----'.$this->t('school').'----',
-                         'language' => $this->t('language'),
-                         'gcse' => $this->t('gcse'),
-                         'a-level' => $this->t('a-level'),
-                         'pre-bachelor' => $this->t('pre-bachelor'),
-                         'bachelor' => $this->t('bachelor'),
-                         'pre-master' => $this->t('pre-master'),
-                         'master' => $this->t('master'),
-                         'doctor' => $this->t('doctor'),
-                        );
-        $form = new DooForm(array(
-             'method' => 'post',
-             'action' => $action,
-             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
-             'elements' => array(
+        $options = $this->getApplicationTypeDropDown($app->isSchool()?'school':'visa');
+        $school_app = $app->createDetailApplication();
+        $elements = array(
                  'type' => array('select', array(
                      'label' => $this->t('type'),
                      'required' => true,
@@ -601,35 +567,61 @@ class ApplicationHelper extends Helper {
                      'multioptions' => $options,
                      'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
                  'element-wrapper' => 'div'
-                 )),
-                 'school' => array('text', array(
-                     'label' => $this->t('school'),
-                     'required' => false,
-                     'value' => $app->getDetail()->school,
-                     'attributes' => array('class' => 'control textbox'),
-                     'element-wrapper' => 'div',
-                 )),
-                 'subject' => array('text', array(
-                     'label' => $this->t('subject'),
-                     'required' => false,
-                     'value' => $app->getDetail()->subject,
-                     'attributes' => array('class' => 'control textbox'),
-                     'element-wrapper' => 'div',
-                 )),
-                 'course' => array('text', array(
-                     'label' => $this->t('course'),
-                     'required' => false,
-                     'value' => $app->getDetail()->course,
-                     'attributes' => array('class' => 'control textbox'),
-                     'element-wrapper' => 'div',
-                 )),
-                 'submit' => array('submit', array(
+                 )));
+        if ($app->isSchool()) {
+            $apps = $school_app->CourseApplication;
+            $i = 0;
+            foreach($apps as $course) {
+                $i++;
+                $elements['id'.$i] = array('hidden', array(
+                     'required' => true,
+                     'value' => $course->id,
+                     'attributes' => array('name'=>'course_ids[]'),
+                     'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                ));
+                $elements['school'.$i] = array('text', array(
+                         'label' => $this->t('school'),
+                         'required' => false,
+                         'value' => $course->school,
+                         'attributes' => array('name'=>'schools[]', 'class' => 'control textbox'),
+                         'element-wrapper' => 'div',
+                     ));
+                $elements['subject'.$i] = array('text', array(
+                         'label' => $this->t('subject'),
+                         'required' => false,
+                         'value' => $course->subject,
+                         'attributes' => array('name'=>'subjects[]', 'class' => 'control textbox'),
+                         'element-wrapper' => 'div',
+                     ));
+                $elements['course'.$i] = array('text', array(
+                         'label' => $this->t('course'),
+                         'required' => false,
+                         'value' => $course->course,
+                         'attributes' => array('class' => 'control textbox'),
+                         'element-wrapper' => 'div',
+                     ));
+
+            }
+            $elements['s1'] = array('display', array(
+                     'content' => '&nbsp;&nbsp',
+                     'attributes' => array('class' => 'hidden'),
+                 ));
+            $elements['add_link'] = array('display', array(
+                     'content' => '&nbsp;&nbsp<a id="add-school" href="#">'.$this->t('add_school').'</a>',
+                     'attributes' => array('class' => 'hidden'),
+                 ));
+        }
+        $elements['submit'] = array('submit', array(
                      'label' => $this->t('update'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
-                 ))
-             )
+                 ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
         ));
         $form->addDisplayGroup('group', array('school','course', 'subject'));
         return $form;
@@ -704,6 +696,30 @@ class ApplicationHelper extends Helper {
              'field-wrapper' => 'div'
              ));
         return $elements;
+    }
+
+    private function getApplicationTypeDropDown($type='') {
+        // type = school/visa
+        $options = array( ''=>'' );
+        if ($type == '' || $type == 'visa') {
+            $options['----'.$this->t('visa').'----'] = array(
+                         'visa_europe' => $this->t('visa_europe'),
+                         'visa_t1' => $this->t('visa_t1'),
+                         'visa_t2' => $this->t('visa_t2'),
+                         'visa_t4' => $this->t('visa_t4'),
+                         'visa_other' => $this->t('visa_other'));
+        }
+        if ($type == '' || $type == 'school') {
+             $options['----'.$this->t('school').'----'] = array('language' => $this->t('language'),
+                         'gcse' => $this->t('gcse'),
+                         'a-level' => $this->t('a-level'),
+                         'pre-bachelor' => $this->t('pre-bachelor'),
+                         'bachelor' => $this->t('bachelor'),
+                         'pre-master' => $this->t('pre-master'),
+                         'master' => $this->t('master'),
+                         'doctor' => $this->t('doctor'));
+        }
+        return $options;
     }
 }
 ?>
