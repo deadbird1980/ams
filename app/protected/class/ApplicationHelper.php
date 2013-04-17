@@ -540,7 +540,7 @@ class ApplicationHelper extends Helper {
                      'label' => $this->t('school'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('name'=>'schools[]', 'class' => 'control textbox hidden'),
+                     'attributes' => array('name'=>'schools[]', 'class' => 'control textbox hidden validate[required]'),
                      'element-wrapper' => 'div',
                  )),
                  'subject' => array('text', array(
@@ -554,7 +554,7 @@ class ApplicationHelper extends Helper {
                      'label' => $this->t('course'),
                      'required' => false,
                      'value' => '',
-                     'attributes' => array('name'=>'courses[]', 'class' => 'control textbox hidden'),
+                     'attributes' => array('name'=>'courses[]', 'class' => 'control textbox hidden validate[required]'),
                      'element-wrapper' => 'div',
                  )),
                  'submit' => array('submit', array(
