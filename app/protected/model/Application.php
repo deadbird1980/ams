@@ -304,6 +304,11 @@ class Application extends DooSmartModel {
         //return $this->find(array('where'=>"status='submitted' and submitted+interval 1 day < now()"));
     }
 
+    public function send() {
+        $this->status = CourseApplication::SENT;
+        return $this->update();
+    }
+
     public function updateType($hash) {
         if ($this->isSchool()) {
         } else {

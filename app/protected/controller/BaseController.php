@@ -71,8 +71,8 @@ class BaseController extends DooController {
 
     protected function setEmailHelper() {
         Doo::loadClass('EmailHelper');
-        if (isset($this->emailHelper)) {
-            $this->emailhelper = new EmailHelper($this);
+        if (!isset($this->emailHelper)) {
+            $this->emailHelper = new EmailHelper($this);
         }
     }
 
