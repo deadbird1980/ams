@@ -15,8 +15,7 @@ class EmailHelper extends Helper {
     }
 
     public function notifyAdmin($subject, $template) {
-        $u = new User();
-        $admins = $u->getByType('admin');
+        $users = User::_getByType(User::ADMIN);
         foreach($admins as $admin) {
             $this->notifyUser($admin, $subject, $template);
         }
@@ -24,8 +23,7 @@ class EmailHelper extends Helper {
     }
 
     public function notifyRole($role, $subject, $template) {
-        $u = new User();
-        $users = $u->getByGroup($role);
+        $users = User::_getByType($role);
         foreach($users as $user) {
             $this->notifyUser($user, $subject, $template);
         }
