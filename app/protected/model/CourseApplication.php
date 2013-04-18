@@ -93,11 +93,9 @@ class CourseApplication extends DooSmartModel{
         $this->application()->send();
     }
 
-    public function todo() {
+    public function todo4counselor() {
         if ($this->isDone()) {
             return 'files';
-        } elseif ($this->isSent()) {
-            return 'reply';
         } elseif ($this->isReplied()) {
             if ($this->result == CourseApplication::APPROVED) {
                 return 'choose';
@@ -106,6 +104,15 @@ class CourseApplication extends DooSmartModel{
             } elseif ($this->result == CourseApplication::CONDITION_APPROVED) {
                 return 'choose';
             }
+        }
+        return '';
+    }
+
+    public function todo4executor() {
+        if ($this->isDone()) {
+            return 'files';
+        } elseif ($this->isSent()) {
+            return 'reply';
         } elseif ($this->isChosen()) {
             return 'reconfirm';
         } elseif ($this->isReConfirmed()) {
@@ -162,17 +169,9 @@ class CourseApplication extends DooSmartModel{
         return $this->find(array('where'=>"application_id={$this->application_id} and id<>{$this->id}"));
     }
 
-    public function attachment() {
-        if ($this->isReplied()) {
-            $a = Doo::loadModel('CourseApplicationAttachment', true);
-            $a = $a->getByType__Course_application_id_first('reply', $this->id);
-            if ($a) {
-                return $a;
-            }
-        }
-        $a = new StdClass();
-        $a->id = null;
-        return $a;
+    public function attachments() {
+        $a = Doo::loadModel('CourseApplicationAttachment', true);
+        return $a->find(array('where'=>"course_application_id={$this->id}"));
     }
 
     public function application() {

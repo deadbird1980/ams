@@ -66,8 +66,12 @@ class CourseApplicationAttachment extends DooSmartModel{
         return $file;
     }
 
-    public function sameGroup() {
-        return $this->find(array('where'=>"course_application_id={$this->course_application_id}"));
+    public function sameGroup($type=null) {
+        $where = "course_application_id={$this->course_application_id}";
+        if (isset($type)) {
+            $where .= " and type='$type'";
+        }
+        return $this->find(array('where'=>$where));
     }
 
     public function getGroupPath() {

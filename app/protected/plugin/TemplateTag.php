@@ -84,11 +84,16 @@ function t($str){
     return Doo::getTranslator()->translate($str);
 }
 
-function file_link($attachment) {
+function file_link($attachments) {
+    if (!$attachments) return '';
     $html = "";
     $baseurl = Doo::conf()->APP_URL . 'index.php';
-    if (isset($attachment->id)) {
-        $html = "<a href='$baseurl/files?file={$attachment->file_name}&course_application_id={$attachment->course_application_id}&id={$attachment->id}&download=1'>{$attachment->file_name}</a>";
+    if (count($attachments) > 0) {
+        $attachment = $attachments[0];
+        $html .= "<a href='$baseurl/files?file={$attachment->file_name}&course_application_id={$attachment->course_application_id}&id={$attachment->id}&download=1'>{$attachment->file_name}</a><br>";
+        if (count($attachments)>1) {
+            $html .= "&nbsp;&nbsp<a href='$baseurl/my/courses/{$attachment->course_application_id}/files'>other files....</a>";
+        }
     }
     return $html;
 }
