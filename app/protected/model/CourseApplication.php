@@ -90,6 +90,7 @@ class CourseApplication extends DooSmartModel{
         $this->status = 'resent';
         $this->resent = new DooDbExpression('NOW()');
         $this->update();
+        $this->application()->send();
     }
 
     public function todo() {

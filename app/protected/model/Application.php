@@ -299,6 +299,11 @@ class Application extends DooSmartModel {
         return $u->find(array('where'=>"application_id={$this->id} and status='chosen'", 'limit'=>1));
     }
 
+    public function send() {
+        $this->status = CourseApplication::SENT;
+        return $this->update();
+    }
+
     public function needNotify() {
         return $this->find();
     }
