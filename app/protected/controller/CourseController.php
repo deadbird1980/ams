@@ -156,6 +156,10 @@ class CourseController extends BaseController {
             $handler = new UploadHandler($options, false);
             $handler->post(true);
             //notify users
+            $school_application = $app->application();
+            $this->data['student'] = $school_application->user();
+            $this->data['school_application'] = $school_application;
+            $this->data['course_title'] = $app->title();
             $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已回复", 'replied');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);

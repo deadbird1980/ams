@@ -245,6 +245,7 @@ class ApplicationController extends BaseController {
 
         $form = $this->helper->getConfirmApplicationForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
+            $this->data['student'] = $app->user();
             if ($_POST['action'] == '1') {
                 $app->confirm($this->auth->user);
                 $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed",'confirmed');
