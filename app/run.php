@@ -1,7 +1,10 @@
+#!/usr/bin/env php
 <?php
-include './protected/config/common.conf.php';
-include './protected/config/routes_cli.conf.php';
-include './protected/config/db.conf.php';
+chdir(dirname(__FILE__));
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR .'protected');
+include 'config/common_cli.conf.php';
+include 'config/routes_cli.conf.php';
+include 'config/db.conf.php';
 
 #Just include this for production mode
 //include $config['BASE_PATH'].'deployment/deploy.php';

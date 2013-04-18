@@ -299,8 +299,8 @@ class Application extends DooSmartModel {
         return $u->find(array('where'=>"application_id={$this->id} and status='chosen'", 'limit'=>1));
     }
 
-    public function needNotify() {
-        return $this->find();
+    public function needToSend() {
+        return $this->find(array('where'=>"status='submitted' and submitted+interval 1 day < now()"));
     }
 
     public function updateType($hash) {

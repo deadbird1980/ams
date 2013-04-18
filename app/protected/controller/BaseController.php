@@ -8,6 +8,7 @@ class BaseController extends DooController {
     protected $auth;
     protected $translator;
     protected $helper;
+    protected $emailHelper;
 
 	public function beforeRun($resource, $action){
 
@@ -39,6 +40,7 @@ class BaseController extends DooController {
         }
         $this->setTranslator();
         $this->setHelper();
+        $this->setEmailHelper();
         $this->pickMessage();
 	}
 
@@ -64,6 +66,13 @@ class BaseController extends DooController {
         if (isset($this->helper)) {
             Doo::loadClass($this->helper);
             $this->helper = new $this->helper($this);
+        }
+    }
+
+    protected function setEmailHelper() {
+        Doo::loadClass('EmailHelper');
+        if (isset($this->emailHelper)) {
+            $this->emailhelper = new EmailHelper($this);
         }
     }
 
@@ -129,29 +138,15 @@ class BaseController extends DooController {
     }
 
     public function notifyAdmin($subject, $template) {
-        Doo::loadModel('User');
-        $u = new User();
-        $admins = $u->getByType('admin');
-        $body = $this->renderEmail($template, $this->data);
-        foreach($admins as $admin) {
-            $this->sendMail($admin, $subject, $body);
-        }
-        return true;
+        $this->emailHelper->notifyAdmin($subject, $template);
     }
 
     public function notifyUser($user, $subject, $template) {
-        $this->data['user'] = $user;
-        $body = $this->renderEmail($template, $this->data);
-        $this->sendMail($user, $subject, $body);
+        $this->emailHelper->notifyUser($user, $subject, $template);
     }
 
     public function notifyRole($role, $subject, $template) {
-        Doo::loadHelper('DooMailer');
-        $u = Doo::loadModel('User', true);
-        $users = $u->getByGroup($role);
-        foreach($users as $user) {
-            $this->notifyUser($user, $subject, $template);
-        }
+        $this->emailHelper->notifyRole($role, $subject, $template);
     }
 
     public function sendMail($user, $subject, $body) {
@@ -185,6 +180,10 @@ class BaseController extends DooController {
         $data = ob_get_contents();
         ob_end_clean();
         return $data;
+    }
+
+    public function getData() {
+        return $this->data;
     }
 }
 ?>
