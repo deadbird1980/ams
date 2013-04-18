@@ -152,7 +152,9 @@ class CourseApplication extends DooSmartModel{
         $this->status = CourseApplication::DONE;
         $this->done = new DooDbExpression('NOW()');
         //update application
-        $this->application()->finish();
+        if ($this->count(array("where"=>"application_id={$this->application_id} and status<>'done' and id<>{$this->id}")) == 0) {
+            $this->application()->finish();
+        }
         return $this->update();
     }
 
