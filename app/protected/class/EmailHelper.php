@@ -4,6 +4,7 @@ class EmailHelper extends Helper {
     public function __construct($controller) {
         Doo::loadHelper('DooMailer');
         Doo::loadModel('User');
+        Doo::loadCore('view/DooView');
         parent::__construct($controller);
     }
 
@@ -15,7 +16,8 @@ class EmailHelper extends Helper {
     }
 
     public function notifyAdmin($subject, $template) {
-        $users = User::_getByType(User::ADMIN);
+        $u = new User();
+        $users = $u->getByType(User::ADMIN);
         foreach($admins as $admin) {
             $this->notifyUser($admin, $subject, $template);
         }
@@ -23,7 +25,8 @@ class EmailHelper extends Helper {
     }
 
     public function notifyRole($role, $subject, $template) {
-        $users = User::_getByType($role);
+        $u = new User();
+        $users = $u->getByType($role);
         foreach($users as $user) {
             $this->notifyUser($user, $subject, $template);
         }

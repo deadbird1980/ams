@@ -319,5 +319,10 @@ class Application extends DooSmartModel {
         }
     }
 
+    public function user() {
+        $u = Doo::loadModel('User', true);
+        return $u->getById_first($this->user_id);
+    }
+
 }
 ?>

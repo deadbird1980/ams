@@ -233,7 +233,7 @@ class ApplicationController extends BaseController {
     }
 
     public function confirm() {
-        if (!($app = $this->setApplication())) {
+        if (!($app = $this->setApplication()) || !$app->canBeModified($this->auth->user)) {
             return array('no access', 404);
         }
 
@@ -266,7 +266,7 @@ class ApplicationController extends BaseController {
 
         if ($app->isFilesReady()) {
             $app->submit();
-
+            $this->data['student'] = $app->user();
             $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "submitted");
             $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "submitted");
             $this->data['message'] = $this->t('application_submitted');

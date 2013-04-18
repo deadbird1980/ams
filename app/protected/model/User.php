@@ -164,5 +164,8 @@ class User extends DooSmartModel{
         return false;
     }
 
+    public function fullName() {
+        return "{$this->last_name}{$this->first_name}";
+    }
 }
 ?>

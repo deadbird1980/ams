@@ -92,6 +92,7 @@ class MyController extends BaseController {
         if ($app->isFilesReady()) {
             $app->submit();
 
+            $this->data['student'] = $app->user();
             $this->notifyRole(User::EXECUTOR, "申请{$app->id} 已经提交", "submitted");
             $this->notifyUser($app->assignee(), "申请 {$app->id} 已经提交", "submitted");
             $this->data['message'] = $this->t('application_submitted');
