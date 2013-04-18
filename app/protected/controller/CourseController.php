@@ -1,5 +1,6 @@
 <?php
 require_once 'BaseController.php';
+Doo::loadModel('CourseApplication');
 
 class CourseController extends BaseController {
 
@@ -64,19 +65,16 @@ class CourseController extends BaseController {
 
     public function create() {
         if ($this->isPost()) {
-            Doo::loadModel('Application');
-            $app = new Application($_POST);
-            $app->user_id = $this->params['user_id'];
-            $app->type = $_POST['type'];
-            $app->assignee_id = $this->auth->user->id;
-            $app->status = Application::CREATED;
+            $app = new CourseApplication();
             if ($id = $app->create($_POST)) {
                 $hash = array('url'=>$id);
                 $this->data['message'] = $this->t('application_created', $hash);
             }
             $this->renderAction('/my/application/created');
         } else {
-            $form = $this->helper->getNewApplicationForm();
+            $app = new CourseApplication();
+            $app->application_id = $this->params['id'];
+            $form = $this->helper->getCourseEditForm($app);
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/type');
         }
@@ -124,6 +122,10 @@ class CourseController extends BaseController {
             return array('no access', 404);
         }
         $app->send();
+        $school_application = $app->application();
+        $this->data['student'] = $school_application->user();
+        $this->data['school_application'] = $school_application;
+        $this->data['course_title'] = $app->title();
         $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已经发出", 'sent');
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }

@@ -25,8 +25,10 @@ class UserController extends BaseController {
         $u = new User;
         $scope = $user->scopeSeenByMe();
         // operations
-        if ($this->isPost() && isset($_POST['operation'])) {
-            if ($_POST['operation'] == 'delete') {
+        if ($this->isPost() && isset($_POST['command'])) {
+            if ($_POST['command'] == 'search') {
+                //search
+            } elseif ($_POST['operation'] == 'delete') {
                 foreach($_POST['users'] as $id) {
                     $u = $user->getById_first($id);
                     $u->destroy();

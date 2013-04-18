@@ -78,8 +78,8 @@ class Application extends DooSmartModel {
             return true;
         } elseif ($user->isCounselor()) {
             return $this->assignee_id == $user->id && ($this->beforeSubmitted() || $this->isRejected());
-        } elseif ($user->isExecutor()) {
-            return false;
+        } elseif ($user->isExecutor() && $this->isSubmitted()) {
+            return true;
         } elseif ($user->isCustomer()) {
             return $this->user_id= $user->id && $this->beforeSubmitted() && !$this->isRejected();
         }

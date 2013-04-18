@@ -74,6 +74,11 @@ class CourseApplication extends DooSmartModel{
         return $this->status == CourseApplication::DONE;
     }
 
+    public function create($hash) {
+        $app = new CourseApplication($hash);
+        return $app->insert();
+    }
+
     public function send() {
         if ($this->status == 'sent') {
             return;
@@ -188,6 +193,10 @@ class CourseApplication extends DooSmartModel{
 
     public function needNotify() {
         return $this->relateApplication(array('where'=>'submitted+ interval 1 day < now()'));
+    }
+
+    public function title() {
+        return "{$this->school} {$this->subject} {$this->course}";
     }
 }
 ?>
