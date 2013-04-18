@@ -118,6 +118,10 @@ class CourseApplication extends DooSmartModel{
             return 'files';
         } elseif ($this->isSent()) {
             return 'reply';
+        } elseif ($this->isReplied()) {
+            if ($this->result == CourseApplication::REFUSED) {
+                return 'finish';
+            }
         } elseif ($this->isChosen()) {
             return 'reconfirm';
         } elseif ($this->isReConfirmed()) {
