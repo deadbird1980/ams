@@ -87,7 +87,7 @@ class Application extends DooSmartModel {
     }
 
     public function isSubmitted() {
-        return $this->status == Application::SUBMITTED;
+        return $this->status == Application::SUBMITTED || $this->status == Application::RESUBMITTED;
     }
 
     public function isResubmitted() {

@@ -178,7 +178,7 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
-            $handler->post(true);
+            $handler->post(false);
             //notify users
             $this->setEmailTags($app);
             $this->notifyUser($app->application()->executor(), "课程申请{$app->id}被选中", "chosen");
@@ -223,7 +223,7 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
-            $handler->post(true);
+            $handler->post(false);
             $a = new Application();
             $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users
