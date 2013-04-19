@@ -50,10 +50,6 @@ class CourseApplicationAttachment extends DooSmartModel{
     }
 
     public function fileExist($file) {
-        $fnd = $this->db()->find($this, array('limit'=>1));
-        if ($fnd) {
-            return true;
-        }
         return false;
     }
 
