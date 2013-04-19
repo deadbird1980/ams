@@ -123,9 +123,7 @@ class CourseController extends BaseController {
         }
         $app->send();
         $school_application = $app->application();
-        $this->data['student'] = $school_application->user();
-        $this->data['school_application'] = $school_application;
-        $this->data['course_title'] = $app->title();
+        $this->setEmailTags($app);
         $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已经发出", 'sent');
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
@@ -154,14 +152,10 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
-            $handler->post(true);
+            $handler->post(false);
             //notify users
-            $school_application = $app->application();
-            $this->data['student'] = $school_application->user();
-            $this->data['school_application'] = $school_application;
-            $this->data['course_title'] = $app->title();
+            $this->setEmailTags($app);
             $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已回复", 'replied');
-
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();
@@ -186,6 +180,7 @@ class CourseController extends BaseController {
             $handler = new UploadHandler($options, false);
             $handler->post(true);
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($app->application()->executor(), "课程申请{$app->id}被选中", "chosen");
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
@@ -203,6 +198,7 @@ class CourseController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             $app->reconfirm();
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已确认", 'course_confirmed');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
@@ -231,6 +227,7 @@ class CourseController extends BaseController {
             $a = new Application();
             $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($a->Assignee, "申请{$app->id}完成", 'completed');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
@@ -253,6 +250,12 @@ class CourseController extends BaseController {
             $app = null;
         }
         return $app;
+    }
+
+    private function setEmailTags($app) {
+        $this->data['school_application'] = $app->application();
+        $this->data['student'] = $this->data['school_application']->user();
+        $this->data['course_title'] = $app->title();
     }
 }
 ?>
