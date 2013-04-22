@@ -12,7 +12,7 @@ class EmailHelper extends Helper {
         $data = $this->controller->getData();
         $data['user'] = $user;
         $body = $this->renderEmail($template, $data);
-        $this->sendMail($user, $subject, $body);
+        return $this->sendMail($user, $subject, $body);
     }
 
     public function notifyAdmin($subject, $template) {
@@ -44,13 +44,14 @@ class EmailHelper extends Helper {
     protected function sendMail($user, $subject, $body) {
         $mail = new DooMailer();
         $mail->addTo($user->email, $user->first_name);
-        $mail->setSubject($subject);
+        $mail->setSubject($subject, true);
         $mail->setBodyText($body);
         $mail->setBodyHtml($body);
         $mail->setFrom(Doo::conf()->support_email, 'no reply');
         if ($mail->send()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 }

@@ -12,7 +12,7 @@ class TaskController extends DooCliController {
     }
 
     public function checkCourse() {
-        //$this->notifyApplication2Send();
+        $this->notifyApplication2Send();
         $this->notifyApplication2Reply();
     }
 
@@ -23,13 +23,14 @@ class TaskController extends DooCliController {
     protected function notifyApplication2Send() {
         Doo::loadModel('Application');
         $app = new Application();
-        $apps = $app->needToSend();
-        foreach($apps as $app) {
-            $this->data['application'] = $app;
-            if ($app->executor_id) {
-                $this->emailHelper->notifyUser($app->executor(), "{$app->User->first_name}的申请需要24小时内发送", 'need2send');
-            } else {
-                $this->emailHelper->notifyRole(User::EXECUTOR, "{$app->User->first_name}的申请需要24小时内发送", 'need2send');
+        if ($apps = $app->needToSend()) {
+            foreach($apps as $app) {
+                $this->data['application'] = $app;
+                if ($app->executor_id) {
+                    $this->emailHelper->notifyUser($app->executor(), "{$app->User->first_name}的申请需要24小时内发送", 'need2send');
+                } else {
+                    $this->emailHelper->notifyRole(User::EXECUTOR, "{$app->User->first_name}的申请需要24小时内发送", 'need2send');
+                }
             }
         }
     }
@@ -37,13 +38,16 @@ class TaskController extends DooCliController {
     protected function notifyApplication2Reply() {
         Doo::loadModel('CourseApplication');
         $app = new CourseApplication();
-        $apps = $app->needToReply();
-        foreach($apps as $app) {
-            $this->data['application'] = $app;
-            $this->data['school_application'] = $app->application();
-            $this->data['student'] = $this->data['school_application']->user();
-            $this->data['course_title'] = $app->title();
-            $this->emailHelper->notifyUser($this->data['school_application']->executor(), "{$this->data['student']->first_name}的申请需要48小时内回复", 'need2reply');
+        if ($apps = $app->needToReply()) {
+            foreach($apps as $app) {
+                $this->data['application'] = $app;
+                $this->data['school_application'] = $app->application();
+                $this->data['student'] = $this->data['school_application']->user();
+                $this->data['course_title'] = $app->title();
+                if (!$this->emailHelper->notifyUser($this->data['school_application']->executor(), "{$this->data['student']->first_name}的申请需要48小时内回复", 'need2reply')) {
+                    print "failed to send need2reply email to user {$this->data['school_application']->executor_id}";
+                }
+            }
         }
     }
 }

@@ -300,7 +300,7 @@ class Application extends DooSmartModel {
     }
 
     public function needToSend() {
-        return $this->relateUser(array('where'=>"status='submitted' and submitted+interval 1 day < now()"));
+        return $this->relateUser(array('where'=>"application.status='submitted' and application.submitted+interval 1 day < now()"));
     }
 
     public function send() {
