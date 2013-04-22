@@ -24,10 +24,14 @@ class UserController extends BaseController {
         $user = $this->auth->user;
         $u = new User;
         $scope = $user->scopeSeenByMe();
+        $form = $this->helper->getSearchUserForm();
         // operations
         if ($this->isPost() && isset($_POST['command'])) {
             if ($_POST['command'] == 'search') {
                 //search
+                if ($form->isValid($_POST)) {
+                    $scope['where'] = $scope['where'] . " and position('{$_POST['name']}' in concat(first_name,last_name,first_name_alphabet,last_name_alphabet))>0";
+                }
             } elseif ($_POST['operation'] == 'delete') {
                 foreach($_POST['users'] as $id) {
                     $u = $user->getById_first($id);
@@ -73,7 +77,6 @@ class UserController extends BaseController {
                 $this->data['orderType'] = 'desc';
             }
         }
-        $form = $this->helper->getSearchUserForm();
         $this->data['form'] = $form->render();
         if ($this->auth->user->isAdmin()) {
             $this->renderAction('/admin/user/index');
@@ -163,7 +166,7 @@ class UserController extends BaseController {
         $form = $this->helper->getSearchUserForm();
         if ($this->isPost() && $form->isValid($_POST)) {
             $u = new User($POST);
-            $this->data['users'] = $this->db()->find($u);
+            $this->data['users'] = $this->db()->search($_POST['name']);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/user/search');

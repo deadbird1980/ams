@@ -159,28 +159,29 @@ class UserHelper extends Helper {
                      'validators' => array(array('custom', array($this->controller,'isValidToken'))),
                  )),
                  'name' => array('text', array(
-                     'validators' => array(array('dbExist', 'user', 'confirm_code', $this->t('confirm_code_error'))),
                      'label' => $this->t('name'),
                      'attributes' => array('class' => 'control textbox validate[required]'),
                  'element-wrapper' => 'div'
                  )),
-                 'status' => array('select', array(
-                     'required' => true,
-                     'multioptions' => array('registered'=>'注册', 'active'=>'激活', 'obsolete'=>'过期'),
-                     'label' => $this->t('status'),
-                     'value' => '',
-                     'attributes' => array('class' => 'control type validate[required]'),
-                     'element-wrapper' => 'div'
-                 )),
              );
-        $elements['type'] = array('select', array(
-                     'required' => true,
-                     'multioptions' => array('' => '' , 'customer'=>'客户', 'counselor'=>'咨询员', 'executor'=>'执行员', 'admin'=>'管理员'),
-                     'label' => 'Type:',
-                     'value' => '',
-                     'attributes' => array('class' => 'control type validate[required]'),
-                     'element-wrapper' => 'div'
-                 ));
+        if ($this->controller->isAdmin()) {
+            $elements['status'] = array('select', array(
+                 'required' => true,
+                 'multioptions' => array('registered'=>'注册', 'active'=>'激活', 'obsolete'=>'过期'),
+                 'label' => $this->t('status'),
+                 'value' => '',
+                 'attributes' => array('class' => 'control type validate[required]'),
+                 'element-wrapper' => 'div'
+             ));
+            $elements['type'] = array('select', array(
+                         'required' => true,
+                         'multioptions' => array('' => '' , 'customer'=>'客户', 'counselor'=>'咨询员', 'executor'=>'执行员', 'admin'=>'管理员'),
+                         'label' => 'Type:',
+                         'value' => '',
+                         'attributes' => array('class' => 'control type validate[required]'),
+                         'element-wrapper' => 'div'
+                     ));
+        }
         $elements['submit'] = array('submit', array(
                      'label' => $this->t('search'),
                      'attributes' => array('class' => 'buttons'),
