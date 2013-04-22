@@ -627,6 +627,38 @@ class ApplicationHelper extends Helper {
         return $form;
     }
 
+    public function getApplicationSearchForm() {
+        Doo::loadHelper('DooForm');
+        Doo::loadHelper('DooUrlBuilder');
+        $action = DooUrlBuilder::url2('ApplicationController', 'index', array(), true);
+        $elements = array(
+                 'command' => array('hidden', array(
+                     'value' => 'search',
+                 )),
+                 'type' => array('select', array(
+                     'label' => $this->t('type'),
+                     'required' => true,
+                     'value' => '',
+                     'multioptions' => $this->getApplicationTypeDropDown(),
+                     'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
+                 'element-wrapper' => 'div'
+                 )));
+        $elements['submit'] = array('submit', array(
+                     'label' => $this->t('search'),
+                     'attributes' => array('class' => 'buttons'),
+                     'order' => 100,
+                 'field-wrapper' => 'div'
+                 ));
+        $form = new DooForm(array(
+             'method' => 'post',
+             'action' => $action,
+             'attributes'=> array('id'=>'form', 'name'=>'form', 'class'=>'Zebra_Form'),
+             'elements' => $elements
+        ));
+        $form->addDisplayGroup('group', array('school','course', 'subject'));
+        return $form;
+    }
+
     public function getApplicationStatusForm($app) {
         Doo::loadHelper('DooForm');
         Doo::loadHelper('DooUrlBuilder');

@@ -69,9 +69,9 @@ $route['*']['/admin/emails/:id'] = array('EmailController', 'edit');
 //-------------
 $route['*']['/my'] = array('MyController', 'home');
 $route['*']['/my/profile'] = array('MyController', 'profile');
-$route['*']['/my/applications'] = array('MyController', 'listApplications');
-$route['*']['/my/applications/page/:pindex'] = array('MyController', 'listApplications');
-$route['*']['/my/applications/sort/:sortField/:orderType/page/:pindex'] = array('MyController', 'listApplications');
+$route['*']['/my/applications'] = array('ApplicationController', 'index');
+$route['*']['/my/applications/page/:pindex'] = array('ApplicationController', 'index');
+$route['*']['/my/applications/sort/:sortField/:orderType/page/:pindex'] = array('ApplicationController', 'index');
 $route['*']['/my/applications/create/:type'] = array('MyController', 'apply');
 $route['*']['/my/applications/:id'] = array('MyController', 'editApplication');
 $route['*']['/my/applications/:id/files'] = array('MyController', 'uploadFiles');

@@ -13,6 +13,7 @@ class ApplicationController extends BaseController {
         Doo::loadHelper('DooPager');
         $app = new Application();
         $options = $app->scopeSeenByUser($this->auth->user);
+        $form = $this->helper->getApplicationSearchForm();
         if(isset($this->params['user_id'])) {
             if ($u = $this->auth->user->getById_first($this->params['user_id'])) {
                 if ($u->isAvailabeTo($this->auth->user)) {
@@ -29,8 +30,11 @@ class ApplicationController extends BaseController {
             $u = $this->auth->user;
         }
         // operations
-        if ($this->isPost() && isset($_POST['operation'])) {
-            if ($_POST['operation'] == 'delete') {
+        if ($this->isPost()) {
+            if (isset($_POST['command']) && $_POST['command'] == 'search' && $form->isValid($_POST)) {
+                //search
+                $options['where'] = "{$options['where']} and application.type='{$_POST['type']}'";
+            } elseif (isset($_POST['operation']) && $_POST['operation'] == 'delete') {
                 foreach($_POST['applications'] as $app_id) {
                     $app2delete = $app->getById_first($app_id);
                     $app2delete->delete();
@@ -99,6 +103,7 @@ class ApplicationController extends BaseController {
             $this->data['sortField'] = $this->sortField;
         }
 
+        $this->data['form'] = $form->render();
         if ($this->auth->user->isAdmin()) {
             $this->renderAction('/admin/application/index');
         } else {
