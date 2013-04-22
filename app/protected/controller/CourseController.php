@@ -1,5 +1,6 @@
 <?php
 require_once 'BaseController.php';
+Doo::loadModel('CourseApplication');
 
 class CourseController extends BaseController {
 
@@ -64,19 +65,16 @@ class CourseController extends BaseController {
 
     public function create() {
         if ($this->isPost()) {
-            Doo::loadModel('Application');
-            $app = new Application($_POST);
-            $app->user_id = $this->params['user_id'];
-            $app->type = $_POST['type'];
-            $app->assignee_id = $this->auth->user->id;
-            $app->status = Application::CREATED;
+            $app = new CourseApplication();
             if ($id = $app->create($_POST)) {
                 $hash = array('url'=>$id);
                 $this->data['message'] = $this->t('application_created', $hash);
             }
             $this->renderAction('/my/application/created');
         } else {
-            $form = $this->helper->getNewApplicationForm();
+            $app = new CourseApplication();
+            $app->application_id = $this->params['id'];
+            $form = $this->helper->getCourseEditForm($app);
             $this->data['form'] = $form->render();
             $this->renderAction('/my/application/type');
         }
@@ -124,6 +122,8 @@ class CourseController extends BaseController {
             return array('no access', 404);
         }
         $app->send();
+        $school_application = $app->application();
+        $this->setEmailTags($app);
         $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已经发出", 'sent');
         return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
     }
@@ -152,10 +152,10 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
-            $handler->post(true);
+            $handler->post(false);
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已回复", 'replied');
-
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
         }
         $this->data['form'] = $form->render();
@@ -178,8 +178,9 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
-            $handler->post(true);
+            $handler->post(false);
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($app->application()->executor(), "课程申请{$app->id}被选中", "chosen");
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
@@ -197,6 +198,7 @@ class CourseController extends BaseController {
         if ($this->isPost() && $form->isValid($_POST)) {
             $app->reconfirm();
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($app->application()->assignee(), "课程申请{$app->id}已确认", 'course_confirmed');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
@@ -221,10 +223,11 @@ class CourseController extends BaseController {
             $options['upload_dir'] = Doo::conf()->UPLOAD_PATH;
             Doo::loadClass('UploadHandler');
             $handler = new UploadHandler($options, false);
-            $handler->post(true);
+            $handler->post(false);
             $a = new Application();
             $a = $a->relateAssignee_first(array('where'=>"application.id={$app->application_id}"));
             //notify users
+            $this->setEmailTags($app);
             $this->notifyUser($a->Assignee, "申请{$app->id}完成", 'completed');
 
             return DooUrlBuilder::url2('CourseController', 'index', array('id'=>$app->application_id), true);
@@ -247,6 +250,12 @@ class CourseController extends BaseController {
             $app = null;
         }
         return $app;
+    }
+
+    private function setEmailTags($app) {
+        $this->data['school_application'] = $app->application();
+        $this->data['student'] = $this->data['school_application']->user();
+        $this->data['course_title'] = $app->title();
     }
 }
 ?>

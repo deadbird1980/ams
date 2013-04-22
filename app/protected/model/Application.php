@@ -78,8 +78,8 @@ class Application extends DooSmartModel {
             return true;
         } elseif ($user->isCounselor()) {
             return $this->assignee_id == $user->id && ($this->beforeSubmitted() || $this->isRejected());
-        } elseif ($user->isExecutor()) {
-            return false;
+        } elseif ($user->isExecutor() && $this->isSubmitted()) {
+            return true;
         } elseif ($user->isCustomer()) {
             return $this->user_id= $user->id && $this->beforeSubmitted() && !$this->isRejected();
         }
@@ -87,7 +87,7 @@ class Application extends DooSmartModel {
     }
 
     public function isSubmitted() {
-        return $this->status == Application::SUBMITTED;
+        return $this->status == Application::SUBMITTED || $this->status == Application::RESUBMITTED;
     }
 
     public function isResubmitted() {
@@ -294,8 +294,33 @@ class Application extends DooSmartModel {
         return $u->getById_first($this->executor_id);
     }
 
-    public function needNotify() {
-        return $this->find();
+    public function chosen() {
+        $u = Doo::loadModel('CourseApplication', true);
+        return $u->find(array('where'=>"application_id={$this->id} and status='chosen'", 'limit'=>1));
+    }
+
+    public function needToSend() {
+        return $this->relateUser(array('where'=>"application.status='submitted' and application.submitted+interval 1 day < now()"));
+    }
+
+    public function send() {
+        $this->status = CourseApplication::SENT;
+        return $this->update();
+    }
+
+    public function updateType($hash) {
+        if ($this->isSchool()) {
+        } else {
+        }
+        if ($this->type != $hash['type']) {
+            $this->type = $hash['type'];
+            $this->update();
+        }
+    }
+
+    public function user() {
+        $u = Doo::loadModel('User', true);
+        return $u->getById_first($this->user_id);
     }
 
 }

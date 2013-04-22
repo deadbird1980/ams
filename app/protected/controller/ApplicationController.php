@@ -116,6 +116,8 @@ class ApplicationController extends BaseController {
             if ($id = $app->create($_POST)) {
                 $hash = array('url'=>$id);
                 $this->data['message'] = $this->t('application_created', $hash);
+            } else {
+                $this->data['message'] = 'school must be filled in';
             }
             $this->renderAction('/my/application/created');
         } else {
@@ -126,19 +128,16 @@ class ApplicationController extends BaseController {
     }
 
     public function editType() {
-        $app = Doo::loadModel('Application', true);
-        $app = $this->data['application'] = $app->getById_first($this->params['id']);
+        if (!($app = $this->setApplication())) {
+            return array('no access', 404);
+        }
         $form = $this->helper->getApplicationTypeForm($app);
-        $id = $app->id;
         if ($this->isPost()) {
             if ($app->canChangeTo($_POST['type'])) {
-                $app->update_attributes($_POST, array('where'=>"id=${id}"));
-                if ($app->isSchool()) {
-                    $app->getDetail()->update_attributes($_POST, array('where'=>"id=${id}"));
-                }
+                $app->updateType($_POST);
+                $this->leaveMessage($this->t('updated'));
             }
-            $this->leaveMessage($this->t('updated'));
-            return DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$id), true);
+            return DooUrlBuilder::url2('ApplicationController', 'editType', array('id'=>$app->id), true);
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/type');
@@ -234,14 +233,19 @@ class ApplicationController extends BaseController {
     }
 
     public function confirm() {
-        if (!($app = $this->setApplication())) {
+        if (!($app = $this->setApplication()) || !$app->canBeModified($this->auth->user)) {
             return array('no access', 404);
+        }
+
+        if ($app->isResubmitted()) {
+            return Doo::conf()->APP_URL . "my/courses/{$app->chosen()->id}/reconfirm";
         }
 
         $this->data['application'] = $app;
 
         $form = $this->helper->getConfirmApplicationForm($app);
         if ($this->isPost() && $form->isValid($_POST)) {
+            $this->data['student'] = $app->user();
             if ($_POST['action'] == '1') {
                 $app->confirm($this->auth->user);
                 $this->notifyUser($app->assignee(), "Applicatioin {$app->id} is confirmed",'confirmed');
@@ -263,7 +267,7 @@ class ApplicationController extends BaseController {
 
         if ($app->isFilesReady()) {
             $app->submit();
-
+            $this->data['student'] = $app->user();
             $this->notifyRole(User::EXECUTOR, "Application {$app->id} submitted", "submitted");
             $this->notifyUser($app->assignee(), "Application {$app->id} submitted", "submitted");
             $this->data['message'] = $this->t('application_submitted');

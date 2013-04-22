@@ -9,7 +9,8 @@ $acl['anonymous']['allow'] = array(
 
 $acl['customer']['allow'] = array(
 							'MyController'=>'*',
-							'AccountController'=>'*'
+							'AccountController'=>'*',
+							'ApplicationController'=>array('confirm'),
 						);
 $acl['counselor']['allow'] = array(
 							'MyController'=>'*',

@@ -272,13 +272,17 @@ class CourseHelper extends Helper {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
         } else {
-            $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
+            $action = DooUrlBuilder::url2('CourseController', 'create', array('id'=>$app->application_id), true);
         }
         $elements = array(
                  'token' => array('hidden', array(
                      'required' => true,
                      'value' => $this->controller->getAuthenticityToken(),
                      'validators' => array(array('custom', array($this->controller,'isValidToken'))),
+                 )),
+                 'application_id' => array('hidden', array(
+                     'required' => true,
+                     'value' => $app->application_id,
                  )),
                  'school' => array('text', array(
                      'label' => $this->t('school'),
@@ -304,7 +308,7 @@ class CourseHelper extends Helper {
              );
         $i = 1;
         $elements['submit'] = array('submit', array(
-                     'label' => $this->t('next'),
+                     'label' => $this->t('submit'),
                      'attributes' => array('class' => 'buttons'),
                      'order' => 100,
                  'field-wrapper' => 'div'
@@ -322,7 +326,7 @@ class CourseHelper extends Helper {
         if ($app && $app->id) {
             $action = DooUrlBuilder::url2('MyController', 'editApplication', array('id'=>$app->id), true);
         } else {
-            $action = DooUrlBuilder::url2('MyController', 'apply', array('type'=>$app->type), true);
+            $action = DooUrlBuilder::url2('CourseController', 'create', array('id'=>$app->application_id), true);
         }
         $elements = array(
                  'token' => array('hidden', array(

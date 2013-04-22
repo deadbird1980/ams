@@ -74,6 +74,11 @@ class CourseApplication extends DooSmartModel{
         return $this->status == CourseApplication::DONE;
     }
 
+    public function create($hash) {
+        $app = new CourseApplication($hash);
+        return $app->insert();
+    }
+
     public function send() {
         if ($this->status == 'sent') {
             return;
@@ -90,13 +95,12 @@ class CourseApplication extends DooSmartModel{
         $this->status = 'resent';
         $this->resent = new DooDbExpression('NOW()');
         $this->update();
+        $this->application()->send();
     }
 
-    public function todo() {
+    public function todo4counselor() {
         if ($this->isDone()) {
             return 'files';
-        } elseif ($this->isSent()) {
-            return 'reply';
         } elseif ($this->isReplied()) {
             if ($this->result == CourseApplication::APPROVED) {
                 return 'choose';
@@ -104,6 +108,19 @@ class CourseApplication extends DooSmartModel{
                 return 'finish';
             } elseif ($this->result == CourseApplication::CONDITION_APPROVED) {
                 return 'choose';
+            }
+        }
+        return '';
+    }
+
+    public function todo4executor() {
+        if ($this->isDone()) {
+            return 'files';
+        } elseif ($this->isSent()) {
+            return 'reply';
+        } elseif ($this->isReplied()) {
+            if ($this->result == CourseApplication::REFUSED) {
+                return 'finish';
             }
         } elseif ($this->isChosen()) {
             return 'reconfirm';
@@ -135,7 +152,9 @@ class CourseApplication extends DooSmartModel{
         $this->status = CourseApplication::DONE;
         $this->done = new DooDbExpression('NOW()');
         //update application
-        $this->application()->finish();
+        if ($this->count(array("where"=>"application_id={$this->application_id} and status<>'done' and id<>{$this->id}")) == 0) {
+            $this->application()->finish();
+        }
         return $this->update();
     }
 
@@ -161,17 +180,9 @@ class CourseApplication extends DooSmartModel{
         return $this->find(array('where'=>"application_id={$this->application_id} and id<>{$this->id}"));
     }
 
-    public function attachment() {
-        if ($this->isReplied()) {
-            $a = Doo::loadModel('CourseApplicationAttachment', true);
-            $a = $a->getByType__Course_application_id_first('reply', $this->id);
-            if ($a) {
-                return $a;
-            }
-        }
-        $a = new StdClass();
-        $a->id = null;
-        return $a;
+    public function attachments() {
+        $a = Doo::loadModel('CourseApplicationAttachment', true);
+        return $a->find(array('where'=>"course_application_id={$this->id}"));
     }
 
     public function application() {
@@ -184,6 +195,18 @@ class CourseApplication extends DooSmartModel{
 
     public function canBeSeen($user) {
         return $this->application()->canBeSeen($user);
+    }
+
+    public function needNotify() {
+        return $this->relateApplication(array('where'=>'submitted+ interval 1 day < now()'));
+    }
+
+    public function title() {
+        return "{$this->school} {$this->subject} {$this->course}";
+    }
+
+    public function needToReply() {
+        return $this->find(array('where'=>"status='sent' and sent+interval 2 day < now()"));
     }
 }
 ?>

@@ -22,6 +22,11 @@
               if (type=='' || type.indexOf('visa_') >= 0) {
                   $("dd").addClass('hidden');
                   for(var i=0; i<elements.length; i++) {
+                      if ($("#"+elements[i]+"-element").val()=='') {
+                          $("#"+elements[i]+"-element").val('&');
+                      }
+                  }
+                  for(var i=0; i<elements.length; i++) {
                       $("label[for='"+elements[i]+"-element']").hide();
                       $("#"+elements[i]+"-element-wrapper").hide();
                       if (schools_count > 1) {
@@ -42,6 +47,9 @@
                               $("#"+elements[i]+"-element-wrapper-"+j).show();
                           }
                       }
+                      if ($("#"+elements[i]+"-element").val()=='&') {
+                          $("#"+elements[i]+"-element").val('');
+                      }
                   }
               }
           }
@@ -58,6 +66,8 @@
                       validate_on_the_fly:false,
                       validate_all:false,
                       error_messages:{"type-element":{"required":required_error},
+                                      "school-element":{"required":required_error},
+                                      "course-element":{"required":required_error},
               }});
               $("#type-element").bind('change', function() {
                   checkApplicationType();
