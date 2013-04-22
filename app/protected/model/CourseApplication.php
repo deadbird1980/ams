@@ -204,5 +204,9 @@ class CourseApplication extends DooSmartModel{
     public function title() {
         return "{$this->school} {$this->subject} {$this->course}";
     }
+
+    public function needToReply() {
+        return $this->find(array('where'=>"status='sent' and sent+interval 2 day < now()"));
+    }
 }
 ?>

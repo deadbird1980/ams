@@ -300,8 +300,7 @@ class Application extends DooSmartModel {
     }
 
     public function needToSend() {
-        return $this->relateUser(array('where'=>'executor_id is not null','limit'=>2));
-        //return $this->find(array('where'=>"status='submitted' and submitted+interval 1 day < now()"));
+        return $this->relateUser(array('where'=>"status='submitted' and submitted+interval 1 day < now()"));
     }
 
     public function send() {
