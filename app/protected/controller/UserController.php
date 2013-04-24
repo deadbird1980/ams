@@ -19,6 +19,22 @@ class UserController extends BaseController {
         }
     }
 
+    private function getSearch($hash) {
+        $where = '1=1 ';
+        if (strlen($hash['name']) > 0) {
+            $where .= " and position('{$hash['name']}' in concat(first_name,last_name,first_name_alphabet,last_name_alphabet))>0";
+        }
+
+        if (strlen($hash['type']) > 0) {
+            $where .= " and type='{$hash['type']}'";
+        }
+
+        if (strlen($hash['status']) > 0) {
+            $where .= " and status='{$hash['status']}'";
+        }
+        return $where;
+    }
+
 	public function index() {
         Doo::loadHelper('DooPager');
         $user = $this->auth->user;
@@ -30,7 +46,7 @@ class UserController extends BaseController {
             if ($_POST['command'] == 'search') {
                 //search
                 if ($form->isValid($_POST)) {
-                    $scope['where'] = $scope['where'] . " and position('{$_POST['name']}' in concat(first_name,last_name,first_name_alphabet,last_name_alphabet))>0";
+                    $scope['where'] = $scope['where'] . " and " . $this->getSearch($_POST);
                 }
             } elseif ($_POST['operation'] == 'delete') {
                 foreach($_POST['users'] as $id) {

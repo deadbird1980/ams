@@ -3,10 +3,30 @@
         <ul>
             <li>
                 <a href="{{indexUrl}}/my/profile">{{t('profile')}}</a>
-                <a href="{{indexUrl}}/admin/users/">{{t('user')}}</a>
+            </li>
+            <li>
+                <a href="{{indexUrl}}/admin/users">{{t('user')}}</a>
+                <ul class="sub-level">
+                    <li> <a href="{{indexUrl}}/admin/users/create">{{t('create')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/admin/users/activate">{{t('activate')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/admin/users/search">{{t('search')}}</a> </li>
+                </ul>
+            </li>
+            <li>
                 <a href="{{indexUrl}}/admin/applications/">{{t('application')}}</a>
+                <ul class="sub-level">
+                    <li> <a href="{{indexUrl}}/admin/applications/create">{{t('create')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/admin/applications/activate">{{t('activate')}}</a> </li>
+                    <li> <a href="{{indexUrl}}/admin/users/search">{{t('search')}}</a> </li>
+                </ul>
+            </li>
+            <li>
                 <a href="{{indexUrl}}/admin/application_files/">{{t('application_file')}}</a>
+            </li>
+            <li>
                 <a href="{{indexUrl}}/admin/emails/">{{t('email')}}</a>
+            </li>
+            <li>
                 <a href="{{indexUrl}}/logout/">{{t('logout')}}</a>
             </li>
         </ul>
