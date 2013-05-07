@@ -684,9 +684,9 @@ class ApplicationHelper extends Helper {
                  )),
                  'paid' => array('select', array(
                      'required' => true,
-                     'multioptions' => array('true'=>$this->t('yes'), '0'=>$this->t('no')),
+                     'multioptions' => array('1'=>$this->t('yes'), '0'=>$this->t('no')),
                      'label' => $this->t('paid'),
-                     'value' => $app->status,
+                     'value' => $app->paid,
                      'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
                  )),

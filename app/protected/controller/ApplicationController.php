@@ -193,22 +193,11 @@ class ApplicationController extends BaseController {
             return array('no access', 404);
         }
 
-        $app = new Application();
-        $this->data['application'] = $app;
-        if (isset($this->params['id'])) {
-            $app = $this->data['application'] = $app->getById_first($this->params['id']);
-        } else {
-        }
         $form = $this->helper->getApplicationStatusForm($app);
 
         if ($this->isPost() && $form->isValid($_POST)) {
-            $id = $this->params['id'];
-            $app = new Application();
-            $app = $app->getById_first($id);
-            $visaapp = $app->createDetailApplication();
-            $app->update_attributes($_POST, array('where'=>"id=${id}"));
-            Doo::loadHelper('DooUrlBuilder');
-            return DooUrlBuilder::url2('MyController', 'listApplications', array('id'=>$id), true);
+            $app->update_attributes($_POST, array('where'=>"id={$app->id}"));
+            return Doo::conf()->APP_URL.$this->data['range'].'/applications/';
         }
         $this->data['form'] = $form->render();
         $this->renderAction('/my/application/status');
