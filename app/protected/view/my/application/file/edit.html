@@ -210,9 +210,8 @@ $(function () {
                 }
             }
             files_required_uploaded = cnt;
-            if (files_uploaded >= files.length) {
-                $('#fileupload span.next').show();
-            } else if (files_required_uploaded >= files_required.length) {
+
+            if (requiredFilesUploaded()) {
                 $('#fileupload span.next').show();
             } else {
                 $('#fileupload span.next').hide();
@@ -239,13 +238,11 @@ $(function () {
         var inputs = data.context.find(':input');
         var f = inputs.filter('[required]').first().children("option").filter(":selected").val();
         files_uploaded++;
-        if (files_uploaded >= files.length) {
-            $('span.next', this).show();
-        } else if (jQuery.inArray(f+'', files_required) != -1) {
+        if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded++;
-            if (files_required_uploaded >= files_required.length) {
-                $('span.next', this).show();
-            }
+        }
+        if (requiredFilesUploaded()) {
+            $('span.next', this).show();
         }
     });
 
