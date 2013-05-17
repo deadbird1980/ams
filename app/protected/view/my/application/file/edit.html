@@ -240,7 +240,6 @@ $(function () {
         var f = inputs.filter('[required]').first().children("option").filter(":selected").val();
         files_uploaded++;
         if (files_uploaded >= files.length) {
-            $('#fileupload #uploadbars').hide();
             $('span.next', this).show();
         } else if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded++;
@@ -253,7 +252,6 @@ $(function () {
     $('#fileupload').bind('fileuploaddestroy', function (e, data) {
         var inputs = data.context.find(':input');
         var f = inputs.filter('[required]').first().val();
-        $('#fileupload #uploadbars').show();
         files_uploaded--;
         if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded--;
