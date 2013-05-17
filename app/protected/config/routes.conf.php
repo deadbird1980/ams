@@ -80,6 +80,7 @@ $route['*']['/my/applications/:id/confirm'] = array('ApplicationController', 'co
 $route['*']['/my/applications/:id/status'] = array('ApplicationController', 'status');
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
 $route['*']['/my/applications/:id/courses'] = array('CourseController', 'index');
+$route['*']['/my/applications/:application_id/courses/:id'] = array('CourseController', 'edit');
 $route['*']['/my/applications/:id/courses/create'] = array('CourseController', 'create');
 $route['*']['/my/applications/:id/email/:template'] = array('ApplicationController', 'email');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
