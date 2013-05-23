@@ -56,7 +56,7 @@ class ApplicationAttachment extends DooSmartModel{
         $a->application_id = $this->application_id;
         if (isset($file->application_file)) {
             $att = Doo::loadModel('ApplicationFile', true);
-            $att = $att->getById_first($this->application_file_id);
+            $att = $att->getById_first($file->application_file);
             if (!($att && $att->mandatory)) {
                 return false;
             }
