@@ -270,6 +270,11 @@ class DooAuth {
     }
 
     ////////////////// Magic ////////////////////
+    public function  __isset($name) {
+        if (!isset ($this->appSession->AuthData))
+            throw new DooAuthException("authentication data not initialized");
+        return isset($this->appSession->AuthData[$name]);
+    }
     public function  __set($name,  $value) {
         if (!isset ($this->appSession->AuthData))
             throw new DooAuthException("authentication data not initialized");

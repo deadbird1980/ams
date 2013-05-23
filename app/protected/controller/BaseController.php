@@ -45,7 +45,7 @@ class BaseController extends DooController {
 	}
 
     protected function pickMessage() {
-        if (strlen($this->auth->message) > 0) {
+        if (isset($this->auth->message) && strlen($this->auth->message) > 0) {
             $this->data['message'] = $this->auth->message;
             unset($this->auth->message);
         }
