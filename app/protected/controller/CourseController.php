@@ -16,6 +16,7 @@ class CourseController extends BaseController {
         if (!$app->canBeSeen($this->auth->user)) {
             return array('not available', 404);
         }
+        $this->data['application'] = $app;
         $options = array('where' => "application_id={$app->id}");
         $app = Doo::loadModel('CourseApplication', true);
         // operations
