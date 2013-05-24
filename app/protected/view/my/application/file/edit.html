@@ -150,14 +150,14 @@
 var files = {{files}};
 var files_required = jQuery.map(files, function(n, i){ if (n.mandatory==1) {return n.id;} });
 var files_required_uploaded = 0;
-var files_uploaded = 0;
 
-function allFilesUploaded() {
-    return files_uploaded >= files.length;
+function filesRequiredUploaded() {
+    return files_required_uploaded >= files_required.length;
 }
 
-function requiredFilesUploaded() {
-    return files_required_uploaded >= files_required.length;
+function getFilesRequiredUploaded(fs) {
+    var applicationFiles = jQuery.map(fs, function(n, i){ if (n.mandatory==1) {return n.applicationFile;} });
+    return $.unique(applicationFiles).length;
 }
 
 $(function () {
@@ -202,16 +202,9 @@ $(function () {
         }).done(function (result) {
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
-            files_uploaded = result.files.length;
-            var cnt = 0;
-            for (var i in result.files) {
-                if (result.files[i].mandatory == '1') {
-                    cnt++;
-                }
-            }
-            files_required_uploaded = cnt;
+            files_required_uploaded = getFilesRequiredUploaded(result.files);
 
-            if (requiredFilesUploaded()) {
+            if (filesRequiredUploaded()) {
                 $('#fileupload span.next').show();
             } else {
                 $('#fileupload span.next').hide();
@@ -237,11 +230,10 @@ $(function () {
     $('#fileupload').bind('fileuploaddone', function (e, data) {
         var inputs = data.context.find(':input');
         var f = inputs.filter('[required]').first().children("option").filter(":selected").val();
-        files_uploaded++;
         if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded++;
         }
-        if (requiredFilesUploaded()) {
+        if (filesRequiredUploaded()) {
             $('span.next', this).show();
         }
     });
@@ -249,7 +241,6 @@ $(function () {
     $('#fileupload').bind('fileuploaddestroy', function (e, data) {
         var inputs = data.context.find(':input');
         var f = inputs.filter('[required]').first().val();
-        files_uploaded--;
         if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded--;
             $('span.next', this).hide();
