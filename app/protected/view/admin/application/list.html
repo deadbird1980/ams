@@ -38,7 +38,17 @@
                 <td>{{applications' value.@start_date}}</td>
                 <td>{{applications' value.@end_date}}</td>
                 <td><a href="{{baseurl}}admin/applications/{{applications' value.@id}}/status">{{t(applications' value.@status)}}</a></td>
-                <td><a href="{{baseurl}}my/applications/{{applications' value.@id}}/courses">{{count(applications' value.@CourseApplication)}}</a></td>
+                <td>
+                    <!-- if {{applications' value.@isSchool!}} -->
+                    <!-- if {{count(applications' value.@CourseApplication)}}==0 -->
+<a href="{{baseurl}}my/applications/{{applications' value.@id}}/courses/create">{{t('create')}}</a></td>
+                    <!-- else -->
+                    <a href="{{baseurl}}my/applications/{{applications' value.@id}}/courses">{{count(applications' value.@CourseApplication)}}</a>
+                    <!-- endif -->
+                    <!-- else -->
+                    -
+                    <!-- endif -->
+                </td>
                 <td>{{applications' value.@paid}}</td>
                 </tr>
                 <!-- endloop -->
