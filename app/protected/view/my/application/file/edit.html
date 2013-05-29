@@ -58,6 +58,7 @@
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <br>
+        <div class="message">{{t('files_upload_result')}}<span id="upload_result"></span></div>
         <br>
         <div class="row fileupload-buttonbar">
             <div class="span7">
@@ -203,7 +204,7 @@ $(function () {
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
             files_required_uploaded = getFilesRequiredUploaded(result.files);
-
+            $('#upload_result').html(files_required_uploaded + '/' + files_required.length);
             if (filesRequiredUploaded()) {
                 $('#fileupload span.next').show();
             } else {
@@ -232,6 +233,7 @@ $(function () {
         if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded++;
         }
+        $('#upload_result').html(files_required_uploaded + '/' + files_required.length);
         if (filesRequiredUploaded()) {
             $('span.next', this).show();
         }
@@ -242,6 +244,7 @@ $(function () {
         var f = inputs.filter('[required]').first().val();
         if (jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded--;
+            $('#upload_result').html(files_required_uploaded + '/' + files_required.length);
             $('span.next', this).hide();
         }
     });
