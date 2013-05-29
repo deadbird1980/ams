@@ -156,7 +156,7 @@ function filesRequiredUploaded() {
 }
 
 function getFilesRequiredUploaded(fs) {
-    var applicationFiles = jQuery.map(fs, function(n, i){ if (n.mandatory==1) {return n.applicationFile;} });
+    var applicationFiles = jQuery.map(fs, function(n, i){ if (n.mandatory==1) {return n.application_file_id;} });
     return $.unique(applicationFiles).length;
 }
 
@@ -221,7 +221,6 @@ $(function () {
         // duplicated selection
         var f = inputs.filter('[required]').first().children("option").filter(":selected").text();
         if ($('td.type span:contains("'+f+'")', this).length > 0) {
-            alert("{{t('duplicated_application_file')}}");
             return false;
         }
         data.formData = inputs.serializeArray();
