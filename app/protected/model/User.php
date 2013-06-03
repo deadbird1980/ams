@@ -101,6 +101,10 @@ class User extends DooSmartModel{
         return false;
     }
 
+    public function isActive() {
+        return $this->status == User::ACTIVE;
+    }
+
     public function shouldHaveCustomers() {
         return $this->isCounselor() || $this->isExecutor();
     }
