@@ -83,8 +83,10 @@ class ApplicationFileController extends BaseController {
             $appFile = new ApplicationFile($_POST);
             if ($id) {
               $appFile->update_attributes($_POST, array('where'=>"id=${id}"));
+              $this->leaveMessage($this->t('updated'));
             } else {
               $id = $appFile->insert();
+              $this->leaveMessage($this->t('created'));
             }
             return Doo::conf()->APP_URL . "index.php/admin/application_files/{$id}";
         }

@@ -58,6 +58,7 @@
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <br>
+        <div class="message">{{t('files_upload_result')}}<span id="upload_result"></span></div>
         <br>
         <div class="row fileupload-buttonbar">
             <div class="span7">
@@ -148,16 +149,34 @@
 <script type="text/javascript">
 
 var files = {{files}};
-var files_required = jQuery.map(files, function(n, i){ if (n.mandatory==1) {return n.id;} });
+var files_required = jQuery.map(files, function(n, i){ if (n.mandatory==1) {return n.id }});
 var files_required_uploaded = 0;
-var files_uploaded = 0;
+var files_required_missing;
 
-function allFilesUploaded() {
-    return files_uploaded >= files.length;
+function filesRequiredUploaded() {
+    return files_required_uploaded >= files_required.length;
 }
 
-function requiredFilesUploaded() {
-    return files_required_uploaded >= files_required.length;
+function update_summary() {
+    var summary = files_required_uploaded + '/' + files_required.length;
+    if (files_required_missing.length > 0 && files_required_missing.length < 4) {
+      summary = summary + ' ('+files_required_missing.join(',')+')';
+    }
+    $('#upload_result').html(summary);
+}
+
+function filterRequired(fs) {
+    var applicationFiles = jQuery.map(fs, function(n, i){ if (n.mandatory==1) {return n.application_file_id;} });
+    return $.unique(applicationFiles);
+}
+
+function getFilesRequiredUploaded(fs) {
+    return filterRequired(fs).length;
+}
+
+function getFilesMissing(fs) {
+    var uploaded = filterRequired(fs);
+    return jQuery.map(files, function(n, i){ if (n.mandatory==1 && jQuery.inArray(n.id,uploaded)==-1) {return n.name;} });
 }
 
 $(function () {
@@ -202,18 +221,10 @@ $(function () {
         }).done(function (result) {
             $(this).fileupload('option', 'done')
                 .call(this, null, {result: result});
-            files_uploaded = result.files.length;
-            var cnt = 0;
-            for (var i in result.files) {
-                if (result.files[i].mandatory == '1') {
-                    cnt++;
-                }
-            }
-            files_required_uploaded = cnt;
-            if (files_uploaded >= files.length) {
-                $('#fileupload span.next').show();
-                $('#fileupload #uploadbars').hide();
-            } else if (files_required_uploaded >= files_required.length) {
+            files_required_uploaded = getFilesRequiredUploaded(result.files);
+            files_required_missing = getFilesMissing(result.files);
+            update_summary();
+            if (filesRequiredUploaded()) {
                 $('#fileupload span.next').show();
             } else {
                 $('#fileupload span.next').hide();
@@ -230,7 +241,6 @@ $(function () {
         // duplicated selection
         var f = inputs.filter('[required]').first().children("option").filter(":selected").text();
         if ($('td.type span:contains("'+f+'")', this).length > 0) {
-            alert("{{t('duplicated_application_file')}}");
             return false;
         }
         data.formData = inputs.serializeArray();
@@ -238,14 +248,16 @@ $(function () {
 
     $('#fileupload').bind('fileuploaddone', function (e, data) {
         var inputs = data.context.find(':input');
-        var f = inputs.filter('[required]').first().children("option").filter(":selected").val();
-        files_uploaded++;
-        if (files_uploaded >= files.length) {
-            $('#fileupload #uploadbars').hide();
-            $('span.next', this).show();
-        } else if (jQuery.inArray(f+'', files_required) != -1) {
+        var selected = inputs.filter('[required]').first().children("option").filter(":selected");
+        var f = selected.val();
+        if (!data.result.files[0].error && jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded++;
-            if (files_required_uploaded >= files_required.length) {
+            var fn = selected.text();
+            files_required_missing = $.grep(files_required_missing, function(value) {
+                return '*'+value != fn;
+            });
+            update_summary();
+            if (filesRequiredUploaded()) {
                 $('span.next', this).show();
             }
         }
@@ -253,11 +265,18 @@ $(function () {
 
     $('#fileupload').bind('fileuploaddestroy', function (e, data) {
         var inputs = data.context.find(':input');
-        var f = inputs.filter('[required]').first().val();
-        $('#fileupload #uploadbars').show();
-        files_uploaded--;
-        if (jQuery.inArray(f+'', files_required) != -1) {
+        var error = data.context.find('.error');
+        var selected = inputs.filter('[required]').first();
+        var f = selected.val();
+        if (error.length==0 && jQuery.inArray(f+'', files_required) != -1) {
             files_required_uploaded--;
+            var removed = $.grep(files, function(e) {
+                return e.mandatory==1 && e.id== f;
+            });
+            if (removed.length == 1) {
+              files_required_missing.push(removed[0].name);
+              update_summary();
+            }
             $('span.next', this).hide();
         }
     });

@@ -65,7 +65,7 @@ class UserController extends BaseController {
         //if default, no sorting defined by user, show this as pager link
             $page_size = $this->getPageSize();
             $pages = $this->getPages();
-            if($this->sortField=='email' && $this->orderType=='desc'){
+            if($this->sortField=='id' && $this->orderType=='desc'){
                 $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange().'/users/page', $user_count, $page_size, $pages);
             }else{
                 $pager = new DooPager(Doo::conf()->APP_URL.$this->getRange()."/users/sort/{$this->sortField}/{$this->orderType}/page", $user_count, $page_size, $pages);

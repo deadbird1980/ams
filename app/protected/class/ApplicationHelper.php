@@ -194,7 +194,17 @@ class ApplicationHelper extends Helper {
                  'element-wrapper' => 'div'
                  )),
                  'visa' => array('display', array(
-                     'content' => '当前签证状态:',
+                     'content' => $this->t('visa_status'),
+                 )),
+                 'visa_start_date' => array('display', array(
+                     'label' => $this->t('visa_start_date'),
+                     'content' => $this->convertDateFromDB($visaapp->visa_start_date),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa_end_date' => array('display', array(
+                     'label' => $this->t('visa_end_date'),
+                     'content' => $this->convertDateFromDB($visaapp->visa_end_date),
+                 'element-wrapper' => 'div'
                  )),
                  'address' => array('display', array(
                      'label' => $this->t('cn_address'),
@@ -431,6 +441,20 @@ class ApplicationHelper extends Helper {
                      'label' => $this->t('passport_end_date'),
                      'required' => true,
                      'value' => $this->convertDateFromDB($school_app->passport_end_date),
+                     'attributes' => array('class' => $this->dateClass),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa_start_date' => array('text', array(
+                     'label' => $this->t('visa_start_date'),
+                     'required' => true,
+                     'value' => $this->convertDateFromDB($school_app->visa_start_date),
+                     'attributes' => array('class' => $this->dateClass),
+                 'element-wrapper' => 'div'
+                 )),
+                 'visa_end_date' => array('text', array(
+                     'label' => $this->t('visa_end_date'),
+                     'required' => true,
+                     'value' => $this->convertDateFromDB($school_app->visa_end_date),
                      'attributes' => array('class' => $this->dateClass),
                  'element-wrapper' => 'div'
                  )),
@@ -692,9 +716,9 @@ class ApplicationHelper extends Helper {
                  )),
                  'paid' => array('select', array(
                      'required' => true,
-                     'multioptions' => array('true'=>$this->t('yes'), '0'=>$this->t('no')),
+                     'multioptions' => array('1'=>$this->t('yes'), '0'=>$this->t('no')),
                      'label' => $this->t('paid'),
-                     'value' => $app->status,
+                     'value' => $app->paid,
                      'attributes' => array('class' => 'control type validate[required]'),
                      'element-wrapper' => 'div'
                  )),

@@ -37,6 +37,7 @@ $route['*']['/admin/applications/sort/:sortField/:orderType/page/:pindex'] = arr
 $route['*']['/admin/applications/:id'] = array('AdminController', 'editApplication');
 $route['*']['/admin/applications/:id/files'] = array('AdminController', 'uploadFiles');
 $route['*']['/admin/applications/:id/confirm'] = array('AdminController', 'confirmApplication');
+$route['*']['/admin/applications/:id/status'] = array('ApplicationController', 'status');
 $route['*']['/admin/files'] = array('FileController', 'index');
 $route['*']['/admin/emails'] = array('EmailController', 'index');
 
@@ -80,6 +81,7 @@ $route['*']['/my/applications/:id/status'] = array('ApplicationController', 'sta
 $route['*']['/my/applications/:id/submit'] = array('MyController', 'submitApplication');
 $route['*']['/my/applications/:id/courses'] = array('CourseController', 'index');
 $route['*']['/my/applications/:id/courses/create'] = array('CourseController', 'create');
+$route['*']['/my/applications/:application_id/courses/:id'] = array('CourseController', 'edit');
 $route['*']['/my/applications/:id/email/:template'] = array('ApplicationController', 'email');
 $route['*']['/apply/visa/:type'] = array('MyController', 'applyVisa');
 

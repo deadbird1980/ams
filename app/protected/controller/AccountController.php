@@ -104,7 +104,7 @@ class AccountController extends BaseController{
             if(!empty($_POST['email']) && !empty($_POST['password'])){
                 $user = Doo::loadModel('User', true);
                 $user = $user->getByEmail_first($_POST['email']);
-                if($user && ($this->isDev() || $user->confirmPassword($_POST['password']))) {
+                if($user && $user->isActive() && ($this->isDev() || $user->confirmPassword($_POST['password']))) {
                     if ($user->isRegistered()) {
                         $this->data['message'] = $this->t('not_activated');
                     } else {
