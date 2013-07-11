@@ -169,7 +169,6 @@ class UserHelper extends Helper {
                  'required' => true,
                  'multioptions' => array('registered'=>'注册', 'active'=>'激活', 'obsolete'=>'过期'),
                  'label' => $this->t('status'),
-                 'value' => '',
                  'attributes' => array('class' => 'control type validate[required]'),
                  'element-wrapper' => 'div'
              ));
@@ -177,7 +176,6 @@ class UserHelper extends Helper {
                          'required' => true,
                          'multioptions' => array('' => '' , 'customer'=>'客户', 'counselor'=>'咨询员', 'executor'=>'执行员', 'admin'=>'管理员'),
                          'label' => 'Type:',
-                         'value' => '',
                          'attributes' => array('class' => 'control type validate[required]'),
                          'element-wrapper' => 'div'
                      ));
