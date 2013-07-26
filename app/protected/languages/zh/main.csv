@@ -165,3 +165,5 @@ resend|"重新发送"
 finish|"完成"
 files|"文件"
 comment|"评论"
+
+fail_to_send_email|"发送邮件失败!"

@@ -176,7 +176,7 @@ class AccountHelper extends Helper {
                  'confirm_code' => array('hidden', array(
                      'required' => true,
                      'value' => $this->controller->params['confirm_code'],
-                     'validators' => array(array('confirm_code'), array('dbExist', 'user', 'confirm_code', $this->t('confirm_code error'))),
+                     'validators' => array(array('dbExist', 'user', 'confirm_code', $this->t('confirm_code_error'))),
                  )),
                  'password' => array('password', array(
                      'required' => true,
