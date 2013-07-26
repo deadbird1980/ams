@@ -44,6 +44,7 @@ class AccountController extends BaseController{
                 $u->resetPassword ($_POST['password']);
                 $this->data['message'] = $this->t('updated');
                 $this->renderAction('registered');
+                return;
             }
         } else if (isset($_GET['confirm_code'])) {
             $this->params['confirm_code'] = $_GET['confirm_code'];

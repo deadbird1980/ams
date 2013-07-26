@@ -138,11 +138,11 @@ class BaseController extends DooController {
     }
 
     public function notifyAdmin($subject, $template) {
-        $this->emailHelper->notifyAdmin($subject, $template);
+        return $this->emailHelper->notifyAdmin($subject, $template);
     }
 
     public function notifyUser($user, $subject, $template) {
-        $this->emailHelper->notifyUser($user, $subject, $template);
+        return $this->emailHelper->notifyUser($user, $subject, $template);
     }
 
     public function notifyRole($role, $subject, $template) {
