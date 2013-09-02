@@ -661,12 +661,22 @@ class ApplicationHelper extends Helper {
                  )),
                  'type' => array('select', array(
                      'label' => $this->t('type'),
-                     'required' => true,
-                     'value' => '',
                      'multioptions' => $this->getApplicationTypeDropDown(),
                      'attributes' => array('class' => 'control textbox validate[required,not_empty]'),
                  'element-wrapper' => 'div'
-                 )));
+                 )),
+                 'user_name' => array('text', array(
+                     'label' => $this->t('user_name'),
+                     'attributes' => array('class' => 'control textbox validate[required]'),
+                 'element-wrapper' => 'div'
+                 )),
+                 'start_date' => array('text', array(
+                     'label' => $this->t('plan_start_date'),
+                     //'validators' => array(array('date', $this->dateFormat)),
+                     'attributes' => array('class' => $this->dateClass),
+                 'element-wrapper' => 'div'
+                 )),
+         );
         $elements['submit'] = array('submit', array(
                      'label' => $this->t('search'),
                      'attributes' => array('class' => 'buttons'),

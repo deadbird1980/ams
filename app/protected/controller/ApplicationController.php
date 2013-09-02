@@ -14,6 +14,7 @@ class ApplicationController extends BaseController {
         $app = new Application();
         $options = $app->scopeSeenByUser($this->auth->user);
         $form = $this->helper->getApplicationSearchForm();
+        // support filter by user id
         if(isset($this->params['user_id'])) {
             if ($u = $this->auth->user->getById_first($this->params['user_id'])) {
                 if ($u->isAvailabeTo($this->auth->user)) {
@@ -31,9 +32,14 @@ class ApplicationController extends BaseController {
         }
         // operations
         if ($this->isPost()) {
-            if (isset($_POST['command']) && $_POST['command'] == 'search' && $form->isValid($_POST)) {
-                //search
-                $options['where'] = "{$options['where']} and application.type='{$_POST['type']}'";
+            if (isset($_POST['command']) && $_POST['command'] == 'search') {
+                if ($form->isValid($_POST)) {
+                    //search
+                    $options['where'] = "{$options['where']} and application.type='{$_POST['type']}'";
+                    if (isset($_POST['user_name']) && strlen(trim($_POST['user_name'])) > 0) {
+                        $options['where'] = "{$options['where']} and concat(first_name,last_name,first_name_alphabet,last_name_alphabet) like '%{$_POST['user_name']}%'";
+                    }
+                }
             } elseif (isset($_POST['operation']) && $_POST['operation'] == 'delete') {
                 foreach($_POST['applications'] as $app_id) {
                     $app2delete = $app->getById_first($app_id);
@@ -55,7 +61,8 @@ class ApplicationController extends BaseController {
             }
         }
 
-        if (($count = $app->count($options)) > 0) {
+        //if (($count = $app->count($options)) > 0) {
+        if (($count = count($app->relateMany(array('User'),array('User'=>$options)))) > 0) {
             if (isset($this->params['sortField'])) {
                 $this->sortField = $this->params['sortField'];
             }

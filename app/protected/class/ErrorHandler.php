@@ -7,7 +7,7 @@ function ams_error_handler($number, $message, $file, $line, $vars)
         <p> $message </p>";
     $email .= "<pre>" . print_r($vars, 1) . "</pre>";
     if ($session = Doo::session('ams')) {
-        $email .= "<p>User ID:{$session->user['id']}</p>";
+        $email .= "<p>User ID:{$session->user->id}</p>";
     }
     $error_email = Doo::conf()->error_email;
     $headers = 'Content-type: text/html; charset=iso-8859-1' . "\r\n";

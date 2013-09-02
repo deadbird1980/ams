@@ -32,6 +32,7 @@ class FileHelper extends Helper {
             $file = new StdClass();
             $file->id = $af->id;
             $file->mandatory = $af->mandatory;
+            $file->name = $af->name;
             $files[] = $file;
         }
         return json_encode($files);
