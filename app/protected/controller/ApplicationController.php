@@ -35,9 +35,12 @@ class ApplicationController extends BaseController {
             if (isset($_POST['command']) && $_POST['command'] == 'search') {
                 if ($form->isValid($_POST)) {
                     //search
-                    $options['where'] = "{$options['where']} and application.type='{$_POST['type']}'";
+                    if (strlen($_POST['type']) > 0) {
+                        $options['where'] = "{$options['where']} and application.type='{$_POST['type']}'";
+                    }
                     if (isset($_POST['user_name']) && strlen(trim($_POST['user_name'])) > 0) {
                         $options['where'] = "{$options['where']} and concat(first_name,last_name,first_name_alphabet,last_name_alphabet) like '%{$_POST['user_name']}%'";
+                        $options['filters'] = array(array('model'=>'User'));
                     }
                 }
             } elseif (isset($_POST['operation']) && $_POST['operation'] == 'delete') {
@@ -61,8 +64,9 @@ class ApplicationController extends BaseController {
             }
         }
 
-        //if (($count = $app->count($options)) > 0) {
-        if (($count = count($app->relateMany(array('User'),array('User'=>$options)))) > 0) {
+        if (($count = $app->count($options)) > 0) {
+            // unset filters for relateMany call
+            unset($options['filters']);
             if (isset($this->params['sortField'])) {
                 $this->sortField = $this->params['sortField'];
             }
