@@ -28,3 +28,4 @@ register|"Register"
 
 email_invalid|"Email seems to be invalid!"
 password_length|"The password must have between 6 and 12 characters!"
+fail_to_send_email"Failed to send email!"

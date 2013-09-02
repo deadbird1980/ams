@@ -16,7 +16,7 @@ class AccountHelper extends Helper {
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('password'),
-                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                 'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
@@ -96,7 +96,7 @@ class AccountHelper extends Helper {
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('password'),
-                 'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                 'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
                  'element-wrapper' => 'div'
                  )),
                  'email' => array('text', array(
@@ -176,20 +176,20 @@ class AccountHelper extends Helper {
                  'confirm_code' => array('hidden', array(
                      'required' => true,
                      'value' => $this->controller->params['confirm_code'],
-                     'validators' => array(array('confirm_code'), array('dbExist', 'user', 'confirm_code', $this->t('confirm_code error'))),
+                     'validators' => array(array('dbExist', 'user', 'confirm_code', $this->t('confirm_code_error'))),
                  )),
                  'password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('password'),
-                     'attributes' => array('class' => 'control password validate[required,length(6,10)]'),
+                     'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
                      'element-wrapper' => 'div'
                  )),
                  'confirm_password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('confirm_password'),
-                     'attributes' => array('class' => 'control password validate[required,length(6,10),compare(password-element)]'),
+                     'attributes' => array('class' => 'control password validate[required,length(6,12),compare(password-element)]'),
                      'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(

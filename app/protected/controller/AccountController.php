@@ -41,11 +41,10 @@ class AccountController extends BaseController{
                 $u = new User();
                 $u->confirm_code = $_POST['confirm_code'];
                 $u = $this->db()->find($u, array('limit'=>1));
-                $u->setPassword ($_POST['password']);
-                $u->status = $_POST['status'];
-                $u->update(array('where'=>"id={$u->id}"));
+                $u->resetPassword ($_POST['password']);
                 $this->data['message'] = $this->t('updated');
                 $this->renderAction('registered');
+                return;
             }
         } else if (isset($_GET['confirm_code'])) {
             $this->params['confirm_code'] = $_GET['confirm_code'];
@@ -63,8 +62,8 @@ class AccountController extends BaseController{
                 Doo::loadModel('User');
                 $user = new User();
                 $user = $user->getByEmail_first($_POST['email']);
-                $url = Doo::conf()->APP_URL.'reset_password?confirm_code='.$user->confirm_code;
-                $msg = "请点击<a href=$url>这里</a>重置密码！";
+                $user->resetConfirmCode();
+                $this->data['url'] = Doo::conf()->APP_URL.'reset_password?confirm_code='.$user->confirm_code;
                 $this->data['forgotten_password_user'] = $user;
                 if ($this->notifyUser($user, $this->t('forgotten_password'), 'forgotten_password')) {
                     $this->data['message'] = $this->t('forgotten_password_email_sent');

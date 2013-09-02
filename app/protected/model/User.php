@@ -101,6 +101,19 @@ class User extends DooSmartModel{
         return false;
     }
 
+    public function resetPassword($password) {
+        $this->setPassword($password);
+        $this->confirm_code = '';
+        $this->update();
+        return true;
+    }
+
+    public function resetConfirmCode() {
+        $this->confirm_code = md5($this->email . '@' . Doo::conf()->SITE_ID.'@' . time());
+        $this->update();
+        return true;
+    }
+
     public function isActive() {
         return $this->status == User::ACTIVE;
     }
