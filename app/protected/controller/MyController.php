@@ -254,7 +254,7 @@ class MyController extends BaseController {
                      'validators' => array('password'),
                      'label' => $this->t('password'),
                      'value' => $u->password,
-                 'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
+                 'attributes' => array('class' => 'control password validate[required,length(6,20)]'),
                  'element-wrapper' => 'div'
                  )),
                  'email' => array('text', array(

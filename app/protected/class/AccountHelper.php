@@ -16,7 +16,7 @@ class AccountHelper extends Helper {
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('password'),
-                 'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
+                 'attributes' => array('class' => 'control password validate[required,length(6,20)]'),
                  'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
@@ -96,7 +96,7 @@ class AccountHelper extends Helper {
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('password'),
-                 'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
+                 'attributes' => array('class' => 'control password validate[required,length(6,20)]'),
                  'element-wrapper' => 'div'
                  )),
                  'email' => array('text', array(
@@ -182,14 +182,14 @@ class AccountHelper extends Helper {
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('password'),
-                     'attributes' => array('class' => 'control password validate[required,length(6,12)]'),
+                     'attributes' => array('class' => 'control password validate[required,length(6,20)]'),
                      'element-wrapper' => 'div'
                  )),
                  'confirm_password' => array('password', array(
                      'required' => true,
                      'validators' => array('password'),
                      'label' => $this->t('confirm_password'),
-                     'attributes' => array('class' => 'control password validate[required,length(6,12),compare(password-element)]'),
+                     'attributes' => array('class' => 'control password validate[required,length(6,20),compare(password-element)]'),
                      'element-wrapper' => 'div'
                  )),
                  'submit' => array('submit', array(
