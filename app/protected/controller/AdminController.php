@@ -4,7 +4,7 @@ require_once 'BaseController.php';
 class AdminController extends BaseController {
 
     //Default sort by createtime field
-    public $sortField = 'email';
+    public $sortField = 'id';
     public $orderType = 'desc';
     public static $tags;
     protected $helper = 'ApplicationHelper';
@@ -20,7 +20,7 @@ class AdminController extends BaseController {
         //if default, no sorting defined by user, show this as pager link
         $page_size = $this->getPageSize();
         $pages = $this->getPages();
-        if($this->sortField=='email' && $this->orderType=='desc'){
+        if($this->sortField=='id' && $this->orderType=='desc'){
             $pager = new DooPager(Doo::conf()->APP_URL.'admin/users/page', $u->count(), $page_size, $pages);
         }else{
             $pager = new DooPager(Doo::conf()->APP_URL."admin/users/sort/$this->sortField/$this->orderType/page", $u->count(), $page_size, $pages);
