@@ -39,7 +39,7 @@ $acl['executor']['deny'] = array(
 						);
 
 
-$acl['admin']['allow'] = '*';
+$acl['admin']['allow'] = array('*');
 
 $acl['customer']['failRoute'] = array(
 								'_default'=>'/error/user',	//if not found this will be used
